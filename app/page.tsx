@@ -1,5 +1,6 @@
 import ProgressBar from "@/components/ProgressBar";
 import CursorSound from "@/components/CursorSound";
+import ScrollMotion from "@/components/ScrollMotion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
@@ -17,14 +18,17 @@ export default function Home() {
       {/* Top Reading Progress Bar */}
       <ProgressBar />
 
-      {/* Interactive Cursor & Sound FX Synthesizer */}
+      {/* Kinetic Inertia Scroll Skew & Velocity Engine */}
+      <ScrollMotion />
+
+      {/* Interactive Velocity-Stretching Cursor & Sound FX */}
       <CursorSound />
 
       {/* Global Navigation Header */}
       <Header />
 
-      {/* Main Content Sections */}
-      <main className="relative z-10">
+      {/* Main Content Sections with Fluid Scroll Skew */}
+      <main className="relative z-10 scroll-skew-layer">
         {/* Konrad Makowski Stretch Folio Hero */}
         <Hero />
 

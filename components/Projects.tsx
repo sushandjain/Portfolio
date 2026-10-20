@@ -228,8 +228,18 @@ export default function Projects() {
           {filteredProjects.map((project, idx) => (
             <div
               key={project.id}
-              className="glass-panel rounded-3xl border border-[var(--border-subtle)] hover:border-indigo-500/40 transition-all duration-300 overflow-hidden flex flex-col justify-between group cursor-pointer"
+              className="glass-panel rounded-3xl border border-[var(--border-subtle)] hover:border-indigo-500/40 transition-all duration-300 overflow-hidden flex flex-col justify-between group cursor-pointer perspective-card"
               onClick={() => openModal(project)}
+              onMouseMove={(e) => {
+                const card = e.currentTarget;
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                card.style.transform = `perspective(1000px) rotateX(${(-y * 8).toFixed(2)}deg) rotateY(${(x * 8).toFixed(2)}deg) translateY(-4px)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)";
+              }}
             >
               {/* Browser Window Frame Mockup */}
               <div className="p-3 bg-[var(--bg-secondary)] border-b border-[var(--border-subtle)] flex items-center justify-between">

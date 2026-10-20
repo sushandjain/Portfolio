@@ -4,94 +4,158 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
-import { ArrowDown, Copy, Check, Terminal, Sliders, Sparkles, Activity } from "lucide-react";
+import { ArrowDown, Copy, Check, Terminal, Sliders, Sparkles, Activity, Waves } from "lucide-react";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
   const [stretchValue, setStretchValue] = useState<number>(100);
-  const [stretchMode, setStretchMode] = useState<"pointer" | "rubber" | "wide" | "compact" | "manual">("pointer");
+  const [stretchMode, setStretchMode] = useState<"wave" | "elastic" | "wide" | "compact" | "manual">("wave");
   const heroRef = useRef<HTMLDivElement>(null);
   const title1Ref = useRef<HTMLHeadingElement>(null);
   const title2Ref = useRef<HTMLHeadingElement>(null);
+  const charRefs1 = useRef<(HTMLSpanElement | null)[]>([]);
+  const charRefs2 = useRef<(HTMLSpanElement | null)[]>([]);
   const lastMousePos = useRef({ x: 0, time: 0 });
-  const velocity = useRef(0);
+  const mouseInHero = useRef(false);
+  const isIdle = useRef(false);
+  const idleTimer = useRef<NodeJS.Timeout | null>(null);
 
   const line1 = "SUSHAN".split("");
   const line2 = "JAIN".split("");
 
-  // Update DOM styles directly for ultra-smooth 60+ FPS motion
-  const applyStretch = useCallback((val: number) => {
+  // Update overall title stretch
+  const applyGlobalStretch = useCallback((val: number) => {
     const clamped1 = Math.max(50, Math.min(150, val));
     const clamped2 = Math.max(50, Math.min(150, 205 - val));
 
-    if (title1Ref.current) {
-      title1Ref.current.style.setProperty("--stretch", clamped1.toFixed(1));
-    }
-    if (title2Ref.current) {
-      title2Ref.current.style.setProperty("--stretch", clamped2.toFixed(1));
-    }
+    if (title1Ref.current) title1Ref.current.style.setProperty("--stretch", clamped1.toFixed(1));
+    if (title2Ref.current) title2Ref.current.style.setProperty("--stretch", clamped2.toFixed(1));
+
+    // Clear individual overrides if manual/wide/compact
+    charRefs1.current.forEach((el) => el?.style.removeProperty("--char-stretch"));
+    charRefs2.current.forEach((el) => el?.style.removeProperty("--char-stretch"));
   }, []);
 
+  // Harmonic Letter-by-Letter Wave Physics Engine
   useEffect(() => {
-    if (stretchMode !== "pointer") return;
-
-    let targetStretch = 100;
-    let currentStretch = 100;
     let rafId = 0;
+    let targetX = -1000;
+    let currentX = -1000;
 
     const onPointerMove = (e: PointerEvent) => {
-      const now = performance.now();
-      const dt = Math.max(1, now - lastMousePos.current.time);
-      const dx = e.clientX - lastMousePos.current.x;
+      targetX = e.clientX;
+      mouseInHero.current = true;
+      isIdle.current = false;
 
-      velocity.current = Math.min(45, (Math.abs(dx) / dt) * 12);
-      lastMousePos.current = { x: e.clientX, time: now };
-
-      // Map cursor X across window: 0 to 1 -> stretch from 55% to 150%
-      const normalizedX = Math.max(0, Math.min(1, e.clientX / window.innerWidth));
-      const baseStretch = 55 + normalizedX * 95;
-
-      // Add velocity spring overshoot
-      targetStretch = dx > 0 ? baseStretch + velocity.current * 0.4 : baseStretch - velocity.current * 0.4;
+      if (idleTimer.current) clearTimeout(idleTimer.current);
+      idleTimer.current = setTimeout(() => {
+        isIdle.current = true;
+      }, 2500);
     };
 
-    const updateLoop = () => {
-      // Fluid spring lerp
-      currentStretch += (targetStretch - currentStretch) * 0.12;
-      setStretchValue(Math.round(currentStretch));
-      applyStretch(currentStretch);
-      rafId = requestAnimationFrame(updateLoop);
+    const onPointerLeave = () => {
+      mouseInHero.current = false;
+    };
+
+    const updateLetterWave = () => {
+      const now = performance.now();
+
+      // Fluid spring lerp for pointer tracking
+      currentX += (targetX - currentX) * 0.16;
+
+      if (stretchMode === "wave") {
+        if (!isIdle.current && targetX > 0) {
+          // PROXIMITY WAVE: Calculate distance of each letter from cursor
+          charRefs1.current.forEach((charEl, idx) => {
+            if (!charEl) return;
+            const rect = charEl.getBoundingClientRect();
+            const charCenterX = rect.left + rect.width / 2;
+            const dist = Math.abs(currentX - charCenterX);
+            const radius = 220; // Influence field width
+
+            // Gaussian bell curve stretch
+            const influence = Math.exp(-Math.pow(dist / radius, 2));
+            const calculatedStretch = 60 + influence * 90; // 60% to 150%
+            charEl.style.setProperty("--char-stretch", calculatedStretch.toFixed(1));
+
+            // Subtle vertical wave lift
+            const lift = influence * -6;
+            charEl.style.transform = `translateY(${lift.toFixed(1)}px)`;
+          });
+
+          // Inverse wave for Line 2 (JAIN) - Creates dynamic accordion interplay
+          charRefs2.current.forEach((charEl, idx) => {
+            if (!charEl) return;
+            const rect = charEl.getBoundingClientRect();
+            const charCenterX = rect.left + rect.width / 2;
+            const dist = Math.abs(currentX - charCenterX);
+            const radius = 220;
+
+            const influence = Math.exp(-Math.pow(dist / radius, 2));
+            const calculatedStretch = 150 - influence * 85; // Counter-accordion
+            charEl.style.setProperty("--char-stretch", calculatedStretch.toFixed(1));
+
+            const lift = influence * 4;
+            charEl.style.transform = `translateY(${lift.toFixed(1)}px)`;
+          });
+        } else {
+          // AMBIENT OCEAN BREATHE: Smooth continuous harmonic sine wave when idle
+          charRefs1.current.forEach((charEl, idx) => {
+            if (!charEl) return;
+            const wave = 100 + Math.sin(now * 0.0025 + idx * 0.7) * 42;
+            charEl.style.setProperty("--char-stretch", wave.toFixed(1));
+            charEl.style.transform = `translateY(${Math.sin(now * 0.0025 + idx * 0.7) * -3}px)`;
+          });
+
+          charRefs2.current.forEach((charEl, idx) => {
+            if (!charEl) return;
+            const wave = 105 - Math.sin(now * 0.0025 + idx * 0.8) * 42;
+            charEl.style.setProperty("--char-stretch", wave.toFixed(1));
+            charEl.style.transform = `translateY(${Math.cos(now * 0.0025 + idx * 0.8) * 3}px)`;
+          });
+        }
+      } else if (stretchMode === "elastic") {
+        // Continuous elastic pulse
+        charRefs1.current.forEach((charEl, idx) => {
+          if (!charEl) return;
+          const val = 100 + Math.sin(now * 0.004 + idx * 0.6) * 48;
+          charEl.style.setProperty("--char-stretch", val.toFixed(1));
+        });
+        charRefs2.current.forEach((charEl, idx) => {
+          if (!charEl) return;
+          const val = 100 - Math.sin(now * 0.004 + idx * 0.6) * 48;
+          charEl.style.setProperty("--char-stretch", val.toFixed(1));
+        });
+      }
+
+      rafId = requestAnimationFrame(updateLetterWave);
     };
 
     window.addEventListener("pointermove", onPointerMove);
-    rafId = requestAnimationFrame(updateLoop);
+    window.addEventListener("pointerleave", onPointerLeave);
+    rafId = requestAnimationFrame(updateLetterWave);
 
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", onPointerLeave);
       cancelAnimationFrame(rafId);
+      if (idleTimer.current) clearTimeout(idleTimer.current);
     };
-  }, [stretchMode, applyStretch]);
+  }, [stretchMode]);
 
   // Handle Preset Stretch Modes
-  const handleModeChange = (mode: "pointer" | "rubber" | "wide" | "compact") => {
+  const handleModeChange = (mode: "wave" | "elastic" | "wide" | "compact") => {
     setStretchMode(mode);
     playPop();
 
     if (mode === "wide") {
       setStretchValue(150);
-      applyStretch(150);
+      applyGlobalStretch(150);
     } else if (mode === "compact") {
       setStretchValue(60);
-      applyStretch(60);
-    } else if (mode === "rubber") {
-      let step = 0;
-      const interval = setInterval(() => {
-        step += 0.18;
-        const val = 100 + Math.sin(step) * 48;
-        setStretchValue(Math.round(val));
-        applyStretch(val);
-        if (step > Math.PI * 4) clearInterval(interval);
-      }, 30);
+      applyGlobalStretch(60);
+    } else {
+      setStretchValue(100);
     }
   };
 
@@ -100,7 +164,7 @@ export default function Hero() {
     const val = Number(e.target.value);
     setStretchMode("manual");
     setStretchValue(val);
-    applyStretch(val);
+    applyGlobalStretch(val);
   };
 
   const handleCopyEmail = () => {
@@ -123,10 +187,10 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-[92vh] pt-32 pb-16 px-4 sm:px-6 lg:px-8 flex flex-col justify-between overflow-hidden"
+      className="relative min-h-[92vh] flex flex-col justify-between pt-28 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
-      {/* Background Kinetic Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-gradient-to-tr from-indigo-600/15 via-purple-600/10 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
       {/* Top Controller Dock / Konrad Makowski Stretch Playground */}
@@ -141,34 +205,22 @@ export default function Hero() {
         {/* Stretch Mode Dock */}
         <div className="flex flex-wrap items-center gap-3 glass-panel px-4 py-2 rounded-2xl shadow-sm text-xs font-mono">
           <div className="flex items-center gap-2">
-            <Sliders size={14} className="text-indigo-400" />
-            <span className="text-[var(--text-faint)]">STRETCH:</span>
-            <span className="text-indigo-400 font-bold min-w-[42px]">{stretchValue}%</span>
+            <Waves size={14} className="text-indigo-400 animate-pulse" />
+            <span className="text-[var(--text-faint)]">KINETIC MODE:</span>
           </div>
 
-          {/* Interactive Range Slider */}
-          <input
-            type="range"
-            min="50"
-            max="150"
-            value={stretchValue}
-            onChange={handleSliderChange}
-            aria-label="Typography Stretch Slider"
-            className="w-24 sm:w-32 accent-indigo-500 cursor-pointer"
-          />
-
           {/* Mode Preset Buttons */}
-          <div className="flex items-center gap-1 border-l border-[var(--border-subtle)] pl-3">
+          <div className="flex items-center gap-1">
             {[
-              { id: "pointer", label: "Fluid Mouse" },
-              { id: "rubber", label: "Elastic" },
+              { id: "wave", label: "Harmonic Wave" },
+              { id: "elastic", label: "Elastic Pulse" },
               { id: "wide", label: "Wide" },
               { id: "compact", label: "Compact" },
             ].map((m) => (
               <button
                 key={m.id}
                 type="button"
-                onClick={() => handleModeChange(m.id as "pointer" | "rubber" | "wide" | "compact")}
+                onClick={() => handleModeChange(m.id as "wave" | "elastic" | "wide" | "compact")}
                 className={`px-2.5 py-1 rounded-lg text-[10px] uppercase font-bold tracking-wider transition-all cursor-pointer ${
                   stretchMode === m.id
                     ? "bg-indigo-600 text-white shadow-xs"
@@ -179,12 +231,27 @@ export default function Hero() {
               </button>
             ))}
           </div>
+
+          {/* Interactive Range Slider */}
+          <div className="flex items-center gap-2 border-l border-[var(--border-subtle)] pl-3">
+            <Sliders size={13} className="text-indigo-400" />
+            <input
+              type="range"
+              min="50"
+              max="150"
+              value={stretchValue}
+              onChange={handleSliderChange}
+              aria-label="Typography Stretch Slider"
+              className="w-20 sm:w-28 accent-indigo-500 cursor-pointer"
+            />
+            <span className="text-indigo-400 font-bold min-w-[36px] text-[11px]">{stretchValue}%</span>
+          </div>
         </div>
       </div>
 
       {/* Main Kinetic Stretch Folio Display Typography */}
       <div className="w-full max-w-7xl mx-auto my-auto select-none py-4">
-        {/* Line 1: SUSHAN (Solid High-Contrast) */}
+        {/* Line 1: SUSHAN (Solid High-Contrast, Letter-by-Letter Wave) */}
         <h1
           ref={title1Ref}
           className="stretch-title text-[var(--text-main)] cursor-default tracking-tighter"
@@ -193,6 +260,9 @@ export default function Hero() {
           {line1.map((char, i) => (
             <span
               key={i}
+              ref={(el) => {
+                charRefs1.current[i] = el;
+              }}
               className="stretch-char"
               onMouseEnter={() => playTick(700 + i * 50)}
             >
@@ -201,109 +271,85 @@ export default function Hero() {
           ))}
         </h1>
 
-        {/* Line 2: JAIN (Outlined Hollow Accordion Stroke) */}
-        <h2
-          ref={title2Ref}
-          className="stretch-title cursor-default tracking-tighter mt-1"
-          style={{
-            "--stretch": 205 - stretchValue,
-            color: "transparent",
-            WebkitTextStroke: "2.5px var(--text-main, #FFFFFF)",
-          } as React.CSSProperties}
-        >
-          {line2.map((char, i) => (
-            <span
-              key={i}
-              className="stretch-char"
-              style={{
-                WebkitTextStroke: "inherit",
-              }}
-              onMouseEnter={() => playTick(900 + i * 50)}
-            >
-              {char}
-            </span>
-          ))}
-        </h2>
+        {/* Line 2: JAIN (Inverted Stroke / Hollow Accordion) */}
+        <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mt-2">
+          <h2
+            ref={title2Ref}
+            className="stretch-title stretch-stroke text-transparent cursor-default tracking-tighter"
+            style={{ "--stretch": 205 - stretchValue } as React.CSSProperties}
+          >
+            {line2.map((char, i) => (
+              <span
+                key={i}
+                ref={(el) => {
+                  charRefs2.current[i] = el;
+                }}
+                className="stretch-char stretch-char-stroke"
+                onMouseEnter={() => playTick(800 + i * 60)}
+              >
+                {char}
+              </span>
+            ))}
+          </h2>
 
-        {/* Subtitle Bar */}
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          <span className="text-xs sm:text-sm font-mono uppercase tracking-[0.25em] text-indigo-400 font-bold flex items-center gap-2">
-            <Sparkles size={14} className="text-amber-400" />
-            CRAFTING RESILIENT ARCHITECTURES & VISCERAL INTERFACES
-          </span>
+          {/* Subtitle / Focus Callout */}
+          <div className="max-w-md space-y-2 text-right md:pb-4 self-end">
+            <p className="text-sm sm:text-base text-[var(--text-muted)] font-medium leading-relaxed">
+              <span className="text-[var(--text-main)] font-semibold">Systems Engineer at TCS</span> &amp;{" "}
+              <span className="text-indigo-400 font-semibold">Full-Stack Architect</span> crafting high-throughput REST APIs, progressive streaming engines, and resilient e-commerce platforms.
+            </p>
+            <div className="flex items-center justify-end gap-3 text-xs font-mono text-[var(--text-faint)]">
+              <span>BENGALURU, INDIA</span>
+              <span>✦</span>
+              <span>12.9716° N, 77.5946° E</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Hero Info & CTAs */}
-      <div className="w-full max-w-7xl mx-auto mt-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-        {/* Bio paragraph */}
-        <div className="lg:col-span-7 space-y-4">
-          <p className="text-base sm:text-lg text-[var(--text-muted)] max-w-2xl leading-relaxed">
-            Full-Stack Developer in Bengaluru building with <strong className="text-[var(--text-main)]">React.js</strong>,{" "}
-            <strong className="text-[var(--text-main)]">Node.js</strong>, and{" "}
-            <strong className="text-[var(--text-main)]">TypeScript</strong>. Creator of live platforms including{" "}
-            <span className="text-emerald-400 font-semibold">Malnad Direct</span> (Western Ghats D2C) and{" "}
-            <span className="text-indigo-400 font-semibold">TuneXIA</span> (Cloud Media). Currently ensuring 99.9% reliability and orchestrating REST API workflows as a{" "}
-            <strong className="text-[var(--text-main)]">Systems Engineer at TCS</strong>.
-          </p>
-
-          {/* Quick Stat Tags */}
-          <div className="flex flex-wrap gap-2 pt-2">
-            <span className="tech-pill">
-              <span className="text-emerald-400 font-bold">●</span> Malnad Direct Live
-            </span>
-            <span className="tech-pill">
-              <span className="text-indigo-400 font-bold">🎵</span> TuneXIA Music Live
-            </span>
-            <span className="tech-pill">
-              <span className="text-amber-400 font-bold">🏔️</span> Henjodi Stores Live
-            </span>
-            <span className="tech-pill">
-              <span className="text-amber-400 font-bold">🏆</span> TCS AI Hackathon #2
-            </span>
-            <span className="tech-pill font-mono">
-              BCA 8.92 CGPA
-            </span>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="lg:col-span-5 flex flex-wrap items-center lg:justify-end gap-3">
+      {/* Bottom Action Dock */}
+      <div className="w-full max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-[var(--border-subtle)]">
+        {/* Left: Quick Actions */}
+        <div className="flex items-center gap-3">
           <a
             href="#work"
             onClick={() => playPop()}
-            className="magnetic-btn magnetic-btn-primary"
+            className="magnetic-btn magnetic-btn-primary text-xs"
           >
             <span>Explore Works</span>
-            <ArrowDown size={16} />
+            <ArrowDown size={14} className="animate-bounce" />
           </a>
 
+          <a
+            href="#api-console"
+            onClick={() => playPop()}
+            className="magnetic-btn magnetic-btn-ghost text-xs"
+          >
+            <Terminal size={14} className="text-emerald-400" />
+            <span>Launch API Console</span>
+          </a>
+        </div>
+
+        {/* Right: Quick Copy Email Pill */}
+        <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={handleCopyEmail}
-            className="magnetic-btn magnetic-btn-ghost cursor-pointer"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-full bg-[var(--bg-card)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] hover:border-indigo-500/40 text-xs font-mono text-[var(--text-muted)] hover:text-[var(--text-main)] transition-all cursor-pointer shadow-xs"
           >
             {copied ? (
               <>
-                <Check size={16} className="text-emerald-400" />
-                <span className="text-emerald-400">Copied Email!</span>
+                <Check size={13} className="text-emerald-400" />
+                <span className="text-emerald-400 font-bold">Email Copied to Clipboard</span>
               </>
             ) : (
               <>
-                <Copy size={16} />
-                <span>Copy Email</span>
+                <Copy size={13} className="text-indigo-400" />
+                <span>{personalInfo.email}</span>
+                <span className="text-[10px] text-[var(--text-faint)] uppercase">(Copy)</span>
               </>
             )}
           </button>
-
-          <a
-            href="#systems"
-            onClick={() => playPop()}
-            className="magnetic-btn magnetic-btn-ghost font-mono text-xs"
-          >
-            <Terminal size={14} className="text-indigo-400" />
-            <span>API Console</span>
-          </a>
         </div>
       </div>
     </section>
