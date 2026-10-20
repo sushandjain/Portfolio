@@ -47,6 +47,7 @@ export const projects: Project[] = [
     previewGradient: "from-emerald-950 via-stone-900 to-amber-950",
     badgeColor: "#10B981",
     accentHex: "#10B981",
+    previewImage: "/projects/malnad-direct.png",
   },
   {
     id: "tunexia",
@@ -76,6 +77,7 @@ export const projects: Project[] = [
     previewGradient: "from-indigo-950 via-purple-950 to-slate-900",
     badgeColor: "#6366F1",
     accentHex: "#6366F1",
+    previewImage: "/projects/tunexia.png",
   },
   {
     id: "henjodi-stores",
@@ -105,6 +107,7 @@ export const projects: Project[] = [
     previewGradient: "from-amber-950 via-stone-900 to-orange-950",
     badgeColor: "#F59E0B",
     accentHex: "#F59E0B",
+    previewImage: "/projects/henjodi-stores.png",
   },
   {
     id: "kheti-bazaar",
@@ -134,6 +137,7 @@ export const projects: Project[] = [
     previewGradient: "from-emerald-950 via-teal-950 to-slate-900",
     badgeColor: "#10B981",
     accentHex: "#10B981",
+    previewImage: "/projects/kheti-bazaar-preview.gif",
   },
 ];
 
