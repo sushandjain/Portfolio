@@ -253,6 +253,7 @@ export const achievements = [
       "Engineered an AI-driven solution that parses unstructured business requirements and automatically converts them into structured, actionable engineering data insights and system specs.",
     icon: "trophy",
     badge: "Hackathon Winner",
+    driveUrl: "https://drive.google.com/file/d/1YRILSJmNRNpKXfT4Fdv1w9ffTBiSL6Z9/view?usp=drivesdk",
   },
   {
     title: "Runner-Up — National Level Coding Competition",

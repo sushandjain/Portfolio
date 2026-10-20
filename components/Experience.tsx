@@ -119,6 +119,19 @@ export default function Experience() {
                     <p className="text-xs text-[var(--text-muted)] mt-2 leading-relaxed">
                       {ach.description}
                     </p>
+                    {"driveUrl" in ach && ach.driveUrl && (
+                      <div className="mt-3">
+                        <a
+                          href={ach.driveUrl as string}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/50"
+                        >
+                          <span>Inspect Verified Certificate on Google Drive</span>
+                          <span>↗</span>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
