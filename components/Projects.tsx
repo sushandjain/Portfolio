@@ -24,6 +24,7 @@ export default function Projects() {
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [modalTab, setModalTab] = useState<"screenshot" | "live">("screenshot");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const categories = ["All", "Live Production", "E-Commerce & Logistics", "Media & Cloud"];
@@ -43,6 +44,7 @@ export default function Projects() {
 
   const openModal = (p: Project) => {
     setSelectedProject(p);
+    setModalTab("screenshot");
     playPop();
   };
 
@@ -440,31 +442,69 @@ export default function Projects() {
             {/* Visual Screenshot / Media Preview Window */}
             {selectedProject.previewImage && (
               <div className="rounded-2xl overflow-hidden border border-[var(--border-subtle)] mb-8 bg-black/50">
-                {/* Simulated Browser Bar */}
-                <div className="px-4 py-2.5 bg-[var(--bg-secondary)] border-b border-[var(--border-subtle)] flex items-center justify-between">
+                {/* Simulated Browser Bar with View Toggle */}
+                <div className="px-4 py-2.5 bg-[var(--bg-secondary)] border-b border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-1.5">
                     <span className="w-3 h-3 rounded-full bg-rose-500/80" />
                     <span className="w-3 h-3 rounded-full bg-amber-500/80" />
                     <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
                   </div>
+
                   <div className="px-4 py-1 rounded-md bg-[var(--bg-card)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-muted)] max-w-sm truncate flex items-center gap-1.5">
                     <Globe size={12} className="text-emerald-400" />
                     <span>{selectedProject.liveUrl || "https://github.com/sushandjain"}</span>
                   </div>
-                  <span className="text-xs font-mono text-emerald-400 font-bold flex items-center gap-1">
-                    <span className="pulse-green" /> REAL CAPTURE
-                  </span>
+
+                  {/* Mode switcher inside modal */}
+                  <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[var(--bg-card)] border border-[var(--border-subtle)]">
+                    <button
+                      type="button"
+                      onClick={() => setModalTab("screenshot")}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                        modalTab === "screenshot"
+                          ? "bg-indigo-600 text-white"
+                          : "text-[var(--text-muted)] hover:text-white"
+                      }`}
+                    >
+                      Capture
+                    </button>
+                    {selectedProject.liveUrl && selectedProject.id !== "henjodi-stores" && (
+                      <button
+                        type="button"
+                        onClick={() => setModalTab("live")}
+                        className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 ${
+                          modalTab === "live"
+                            ? "bg-emerald-600 text-white"
+                            : "text-[var(--text-muted)] hover:text-white"
+                        }`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        Live Embed
+                      </button>
+                    )}
+                  </div>
                 </div>
 
-                <div className="relative h-64 sm:h-96 w-full overflow-hidden">
-                  <Image
-                    src={selectedProject.previewImage}
-                    alt={selectedProject.name}
-                    fill
-                    className="object-cover object-top hover:object-bottom transition-all duration-1000 cursor-zoom-in"
-                    unoptimized
-                  />
-                </div>
+                {modalTab === "live" && selectedProject.liveUrl ? (
+                  <div className="relative h-80 sm:h-[480px] w-full bg-black">
+                    <iframe
+                      src={selectedProject.liveUrl}
+                      title={selectedProject.name}
+                      className="w-full h-full border-none"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative h-64 sm:h-96 w-full overflow-hidden">
+                    <Image
+                      src={selectedProject.previewImage}
+                      alt={selectedProject.name}
+                      fill
+                      className="object-cover object-top hover:object-bottom transition-all duration-1000 cursor-zoom-in"
+                      unoptimized
+                    />
+                  </div>
+                )}
               </div>
             )}
 
