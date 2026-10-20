@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { playPop, playSuccess } from "@/lib/sound";
-import { Terminal, Play, Copy, Check, ShieldCheck, Activity, Server, Clock } from "lucide-react";
+import { Terminal, Play, Copy, Check, Activity, Server, Clock, ShieldCheck, Cpu } from "lucide-react";
 
 interface Endpoint {
   id: string;
@@ -10,8 +10,8 @@ interface Endpoint {
   method: "GET" | "POST";
   path: string;
   description: string;
-  defaultPayload?: Record<string, unknown>;
-  defaultParam?: string;
+  defaultParam: string;
+  paramLabel: string;
   responseGenerator: (param: string) => Record<string, unknown>;
 }
 
@@ -19,114 +19,160 @@ export default function ApiConsole() {
   const endpoints: Endpoint[] = [
     {
       id: "malnad-speedpost",
-      name: "Malnad Direct — Speed Post API",
+      name: "Malnad Direct — Postal Calculator",
       method: "POST",
       path: "/api/v1/shipping/speedpost-estimate",
       description: "Computes postal transit time and delivery eligibility from Kalasa (PIN 577124) to any Indian destination.",
       defaultParam: "560001",
-      responseGenerator: (pincode: string) => ({
-        status: 200,
-        success: true,
-        origin: {
-          hub: "Kalasa Sub-Post Office",
-          pincode: "577124",
-          district: "Chikkamagaluru, Karnataka",
-        },
-        destination: {
-          pincode: pincode || "560001",
-          state: pincode.startsWith("5") ? "Karnataka" : "Interstate Hub",
-        },
-        deliveryMethod: "India Post Speed Post Direct",
-        estimatedDays: pincode.startsWith("5") ? "2-3 business days" : "4-5 business days",
-        rate: {
-          standardRateINR: 65,
-          orderThresholdFreeShippingINR: 750,
-          currentOrderDiscount: "FREE on orders > ₹750",
-        },
-        packaging: "Biodegradable Samse Valley jute pouches",
-        trackingType: "S10 13-digit alphanumeric barcode with live SMS",
-      }),
+      paramLabel: "Delivery Pincode",
+      responseGenerator: (pincode: string) => {
+        const pin = pincode.trim() || "560001";
+        const isKarnataka = pin.startsWith("5");
+        return {
+          status: 200,
+          success: true,
+          originHub: {
+            postOffice: "Kalasa Sub-Post Office",
+            pincode: "577124",
+            taluk: "Mudigere / Kalasa",
+            district: "Chikkamagaluru, Western Ghats, Karnataka",
+          },
+          destination: {
+            pincode: pin,
+            zone: isKarnataka ? "Intra-State Karnataka Hub" : "Interstate Speed Post Corridor",
+            estimatedDays: isKarnataka ? "2-3 business days" : "4-5 business days",
+          },
+          shippingMethod: "India Post Speed Post Tracked",
+          charges: {
+            baseRateINR: 65,
+            orderDiscount: "FREE Shipping on orders over ₹750",
+            packaging: "Eco-friendly Samse Valley Jute Pouches",
+          },
+          tracking: {
+            type: "S10 13-digit barcode with live SMS notifications",
+            apiIntegration: "Direct Postal Integration",
+          },
+        };
+      },
     },
     {
       id: "tunexia-stream",
-      name: "Tunexia — Audio Stream API",
+      name: "TuneXIA — Audio Streaming Engine",
       method: "GET",
       path: "/api/v1/tracks/stream",
-      description: "Fetches progressive chunk metadata, signed Cloudinary CDN URLs, and role-based permissions.",
-      defaultParam: "peaberry-acoustic-01",
+      description: "Generates progressive chunked byte-range URLs, signed Cloudinary CDN tokens, and audio buffer metrics.",
+      defaultParam: "mountain-mist-sessions",
+      paramLabel: "Track Identifier",
       responseGenerator: (trackId: string) => ({
         status: 200,
-        trackId: trackId || "peaberry-acoustic-01",
-        title: "Mountain Mist Harmonies",
-        artist: "Western Ghats Sessions",
-        format: "audio/mpeg",
-        bitrateKbps: 320,
-        streamingMode: "Progressive Chunked Byte-Range",
-        cdnEndpoint: "https://res.cloudinary.com/tunexia/video/upload/v1729/tracks/master.mp3",
-        auth: {
-          type: "JWT Bearer",
-          role: "User",
-          issuedAt: new Date().toISOString(),
-          expiresIn: "24h",
-        },
-        telemetry: {
+        trackId: trackId || "mountain-mist-sessions",
+        title: "Western Ghats Acoustic Harmonies",
+        artist: "Kalasa Mountain Sessions",
+        audioEngine: {
+          codec: "audio/mp3",
+          bitrate: "320 kbps High-Fidelity",
+          streamingMode: "Byte-Range Progressive Chunking",
+          cdnUrl: "https://res.cloudinary.com/tunexia/video/upload/v1729/tracks/master.mp3",
           bufferingLagMs: 14,
-          cacheHit: true,
+        },
+        security: {
+          authType: "JWT Bearer Token",
+          roleAccess: "User / Premium Subscriber",
+          tokenExpiresIn: "24h",
+          sessionVerified: true,
+        },
+        analytics: {
+          instantPlayLatencyMs: 28,
+          cacheHitRate: "99.4%",
         },
       }),
     },
     {
-      id: "tcs-health",
+      id: "henjodi-trek",
+      name: "Henjodi Stores — Trek Permits API",
+      method: "POST",
+      path: "/api/v1/expeditions/kudremukh-permit",
+      description: "Validates Western Ghats forest department permits, guide allocations, and homestay slots in Balagal, Kalasa.",
+      defaultParam: "Kudremukh Peak",
+      paramLabel: "Peak / Trail Name",
+      responseGenerator: (trail: string) => ({
+        status: 200,
+        trailName: trail || "Kudremukh Peak Expedition",
+        baseHub: {
+          store: "Henjodi Stores & Spices",
+          location: "Balagal Junction, Kalasa Main Road",
+          coordinates: "13.184369° N, 75.319509° E",
+          hotline: "+91 80731 78851 (Direct WhatsApp Dispatch)",
+        },
+        permits: {
+          forestDepartmentPermit: "Mandatory Online Quota Allocated",
+          guideAllocated: "Local Certified Forest Guide Included",
+          trekDistanceKm: 22,
+          altitudeMeters: 1894,
+        },
+        bookingDispatch: {
+          status: "CONFIRMED_ONLINE",
+          leadTime: "Immediate WhatsApp Handshake",
+          homestayAccommodation: "Samse & Kalasa Valley Available",
+        },
+      }),
+    },
+    {
+      id: "tcs-telemetry",
       name: "TCS — Enterprise Systems Health",
       method: "GET",
       path: "/api/v1/enterprise/systems/health",
-      description: "Real-time production service mesh monitoring, API triage status, and incident root cause telemetry.",
-      defaultParam: "prod-gateway-blr",
-      responseGenerator: (gateway: string) => ({
+      description: "Real-time production service mesh telemetry, API request/response triage, and incident root cause analysis (RCA).",
+      defaultParam: "prod-gateway-blr-01",
+      paramLabel: "Cluster Node ID",
+      responseGenerator: (cluster: string) => ({
+        clusterId: cluster || "prod-gateway-blr-01",
         systemStatus: "OPERATIONAL",
-        cluster: gateway || "prod-gateway-blr",
-        slaUptime: "99.985%",
-        activeMicroservices: 18,
-        activeWorkflows: 1420,
-        incidentMetrics: {
-          openIncidents: 0,
-          meanTimeToResolutionMinutes: 18.4,
-          rootCauseAnalysisStatus: "ALL_SYSTEMS_OPTIMAL",
+        productionUptime: "99.985% High Availability",
+        activeMicroservices: 24,
+        requestMetrics: {
+          throughputRPS: 14250,
+          averageLatencyMs: 36.4,
+          errorRatePercent: 0.002,
         },
-        apiThroughputRPS: 12450,
-        averageLatencyMs: 38.2,
-        tcsEngineerOnCall: "Sushan D Jain (Systems Engineer)",
+        incidentManagement: {
+          openIncidents: 0,
+          meanTimeToResolutionMinutes: 16.2,
+          rootCauseAnalysis: "ALL_SYSTEMS_VERIFIED_OPTIMAL",
+          itilProcessCompliance: "STRICT_ENTERPRISE_STANDARDS",
+        },
+        monitoringRole: "Sushan D Jain (Systems Engineer, TCS Bengaluru)",
       }),
     },
   ];
 
   const [activeEndpoint, setActiveEndpoint] = useState<Endpoint>(endpoints[0]);
-  const [paramInput, setParamInput] = useState<string>(endpoints[0].defaultParam || "");
+  const [paramInput, setParamInput] = useState<string>(endpoints[0].defaultParam);
   const [loading, setLoading] = useState(false);
-  const [latency, setLatency] = useState<number>(34);
+  const [latency, setLatency] = useState<number>(32);
   const [copied, setCopied] = useState(false);
   const [responseData, setResponseData] = useState<Record<string, unknown>>(
-    endpoints[0].responseGenerator(endpoints[0].defaultParam || "")
+    endpoints[0].responseGenerator(endpoints[0].defaultParam)
   );
 
   const handleSelectEndpoint = (ep: Endpoint) => {
     setActiveEndpoint(ep);
-    setParamInput(ep.defaultParam || "");
-    setResponseData(ep.responseGenerator(ep.defaultParam || ""));
+    setParamInput(ep.defaultParam);
+    setResponseData(ep.responseGenerator(ep.defaultParam));
     playPop();
   };
 
   const handleExecute = () => {
     setLoading(true);
     playPop();
-    const randomizedLatency = Math.floor(24 + Math.random() * 32);
+    const randomizedLatency = Math.floor(22 + Math.random() * 26);
 
     setTimeout(() => {
       setLatency(randomizedLatency);
       setResponseData(activeEndpoint.responseGenerator(paramInput));
       setLoading(false);
       playSuccess();
-    }, 280);
+    }, 240);
   };
 
   const handleCopy = () => {
@@ -142,31 +188,31 @@ export default function ApiConsole() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>02 / INTERACTIVE CONSOLE</span>
+            <span>03 / INTERACTIVE SYSTEMS CONSOLE</span>
             <span>✦</span>
-            <span>REST ARCHITECTURE & SYSTEMS OPS</span>
+            <span>ENTERPRISE BACKEND SIMULATION</span>
           </div>
           <h2
             className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-[var(--text-main)]"
             style={{ fontFamily: "var(--font-d)" }}
           >
-            SYSTEMS PLAYGROUND
+            SYSTEMS &amp; API PLAYGROUND
           </h2>
         </div>
-        <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-md font-mono">
-          Simulate live API payloads from Tunexia, Malnad Direct, and TCS Systems Engineering environments.
+        <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-md font-mono leading-relaxed">
+          Simulate live request payloads from TuneXIA, Malnad Direct, Henjodi Stores, and TCS production systems.
         </p>
       </div>
 
-      {/* Terminal Container */}
+      {/* Terminal Window Container */}
       <div className="terminal-window">
         {/* Terminal Header Bar */}
         <div className="terminal-header">
           <div className="flex items-center gap-2">
             <div className="traffic-dots">
-              <span className="traffic-dot bg-rose-500/80" />
-              <span className="traffic-dot bg-amber-500/80" />
-              <span className="traffic-dot bg-emerald-500/80" />
+              <span className="traffic-dot bg-rose-500/80 cursor-pointer" onClick={() => playPop()} />
+              <span className="traffic-dot bg-amber-500/80 cursor-pointer" onClick={() => playPop()} />
+              <span className="traffic-dot bg-emerald-500/80 cursor-pointer" onClick={() => playPop()} />
             </div>
             <span className="text-xs text-[var(--text-muted)] font-mono ml-2 hidden sm:inline">
               sushan@tcs-systems-workstation: ~/api-mesh
@@ -174,9 +220,9 @@ export default function ApiConsole() {
           </div>
 
           <div className="flex items-center gap-3 text-xs font-mono">
-            <span className="flex items-center gap-1.5 text-emerald-400">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
               <Activity size={13} className="animate-pulse" />
-              <span>CLUSTER HEALTHY</span>
+              <span>CLUSTER OPERATIONAL</span>
             </span>
             <span className="text-[var(--text-faint)]">|</span>
             <span className="text-indigo-400 font-bold">{latency}ms</span>
@@ -195,7 +241,7 @@ export default function ApiConsole() {
                 className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer ${
                   activeEndpoint.id === ep.id
                     ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
-                    : "bg-[#141824] text-[var(--text-muted)] hover:text-white hover:bg-[#1E2336]"
+                    : "bg-[#141826] text-[var(--text-muted)] hover:text-white hover:bg-[#1E2338]"
                 }`}
               >
                 <span
@@ -211,8 +257,8 @@ export default function ApiConsole() {
           </div>
 
           {/* Request Input & URL Bar */}
-          <div className="flex flex-col sm:flex-row items-stretch gap-2 bg-[#121622] p-2 rounded-xl border border-white/10 font-mono text-xs">
-            <div className="flex items-center gap-2 px-3 py-2 bg-[#1A1F30] rounded-lg text-emerald-400 font-bold shrink-0">
+          <div className="flex flex-col sm:flex-row items-stretch gap-2 bg-[#121624] p-2 rounded-xl border border-white/10 font-mono text-xs">
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#1A1F32] rounded-lg text-emerald-400 font-bold shrink-0">
               <span>{activeEndpoint.method}</span>
             </div>
             <div className="flex-1 flex items-center px-3 py-2 text-[var(--text-muted)] min-w-0 overflow-x-auto">
@@ -222,11 +268,11 @@ export default function ApiConsole() {
             <div className="flex items-center gap-2">
               <input
                 type="text"
-                aria-label="API Parameter Input"
+                aria-label={activeEndpoint.paramLabel}
                 value={paramInput}
                 onChange={(e) => setParamInput(e.target.value)}
-                placeholder="Parameter / Query"
-                className="bg-[#1A1F30] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 min-w-[140px]"
+                placeholder={activeEndpoint.paramLabel}
+                className="bg-[#1A1F32] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 min-w-[150px]"
               />
               <button
                 type="button"
@@ -235,24 +281,26 @@ export default function ApiConsole() {
                 className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
               >
                 <Play size={13} />
-                <span>{loading ? "Calling..." : "Send"}</span>
+                <span>{loading ? "Calling..." : "Execute"}</span>
               </button>
             </div>
           </div>
 
           {/* Description */}
-          <p className="text-xs text-[var(--text-muted)] font-mono">
-            {activeEndpoint.description}
-          </p>
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
+            <p>{activeEndpoint.description}</p>
+            <span className="hidden sm:inline text-indigo-400/80">Input: {activeEndpoint.paramLabel}</span>
+          </div>
 
           {/* Output Code Window */}
-          <div className="relative rounded-xl bg-[#080A0F] border border-white/10 p-4 font-mono text-xs overflow-x-auto">
+          <div className="relative rounded-xl bg-[#080A10] border border-white/10 p-4 font-mono text-xs overflow-x-auto">
             {/* Header info */}
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 text-[11px] text-[var(--text-faint)]">
               <div className="flex items-center gap-3">
                 <span className="text-emerald-400 font-bold">HTTP/2 200 OK</span>
                 <span>content-type: application/json</span>
                 <span>x-latency: {latency}ms</span>
+                <span className="hidden sm:inline">x-powered-by: Express / Next.js API Routes</span>
               </div>
               <button
                 type="button"
