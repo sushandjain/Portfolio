@@ -170,7 +170,7 @@ export default function Hero() {
           style={{
             "--stretch": stretchValue,
             color: "transparent",
-            WebkitTextStroke: "2.5px var(--text-main)",
+            WebkitTextStroke: "2.5px var(--text-main, #FFFFFF)",
           } as React.CSSProperties}
         >
           {line2.map((char, i) => (
