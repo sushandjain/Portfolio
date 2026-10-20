@@ -1,20 +1,26 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { projects, Project } from "@/lib/data";
 import { playPop, playTick } from "@/lib/sound";
-import { ArrowUpRight, ExternalLink, X, Sparkles, Layers, Zap, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, ExternalLink, X, Layers, Zap, CheckCircle2, ShieldCheck, Globe } from "lucide-react";
 import { GithubIcon } from "@/components/Icons";
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
-  const [filter, setFilter] = useState<"all" | "live">("all");
+  const [activeCategory, setActiveCategory] = useState<string>("All");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  const filteredProjects = filter === "live"
-    ? projects.filter((p) => p.status === "Live Production")
-    : projects;
+  const categories = ["All", "Live Production", "E-Commerce & Logistics", "Media & Cloud"];
+
+  const filteredProjects = projects.filter((p) => {
+    if (activeCategory === "All") return true;
+    if (activeCategory === "Live Production") return p.status === "Live Production";
+    if (activeCategory === "E-Commerce & Logistics") return p.category.includes("E-Commerce") || p.category.includes("Logistics");
+    if (activeCategory === "Media & Cloud") return p.category.includes("Media");
+    return true;
+  });
 
   const handleMouseMove = (e: React.MouseEvent) => {
     setMousePos({ x: e.clientX, y: e.clientY });
@@ -36,42 +42,37 @@ export default function Projects() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>01 / PORTFOLIO SHOWCASE</span>
+            <span>02 / SELECTED WORKS</span>
             <span>✦</span>
-            <span>STRETCH FOLIO EXPLORATIONS</span>
+            <span>STRETCH FOLIO SHOWCASE</span>
           </div>
           <h2
             className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-[var(--text-main)]"
             style={{ fontFamily: "var(--font-d)" }}
           >
-            SELECTED WORKS
+            LIVE CLIENT & PRODUCTION APPS
           </h2>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center gap-2 bg-[var(--bg-card)] p-1 rounded-full border border-[var(--border-subtle)]">
-          <button
-            type="button"
-            onClick={() => { setFilter("all"); playPop(); }}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase transition-all cursor-pointer ${
-              filter === "all"
-                ? "bg-indigo-600 text-white shadow-xs"
-                : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
-            }`}
-          >
-            All Works ({projects.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => { setFilter("live"); playPop(); }}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase transition-all cursor-pointer ${
-              filter === "live"
-                ? "bg-indigo-600 text-white shadow-xs"
-                : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
-            }`}
-          >
-            Live Production ({projects.filter((p) => p.status === "Live Production").length})
-          </button>
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2 bg-[var(--bg-card)] p-1.5 rounded-full border border-[var(--border-subtle)] shadow-sm">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => {
+                setActiveCategory(cat);
+                playPop();
+              }}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all cursor-pointer ${
+                activeCategory === cat
+                  ? "bg-indigo-600 text-white shadow-xs"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card-hover)]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -95,20 +96,27 @@ export default function Projects() {
                   0{index + 1}
                 </span>
                 <div>
-                  <h3 className="text-3xl sm:text-5xl lg:text-6xl text-[var(--text-main)] transition-all">
-                    {project.name}
-                  </h3>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h3 className="text-3xl sm:text-5xl lg:text-6xl text-[var(--text-main)] transition-all">
+                      {project.name}
+                    </h3>
+                    {project.liveUrl && (
+                      <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                        <Globe size={11} /> LIVE
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs sm:text-sm text-[var(--text-muted)] mt-1.5 font-medium line-clamp-1 max-w-xl">
                     {project.tagline}
                   </p>
                 </div>
               </div>
 
-              {/* Right: Category, Stack & Action */}
+              {/* Right: Category, Stack & Action Trigger */}
               <div className="flex items-center justify-between lg:justify-end gap-4 sm:gap-8 shrink-0">
                 {/* Status Badge */}
                 <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wide border"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wide border shadow-2xs"
                   style={{
                     backgroundColor: `${project.badgeColor}15`,
                     borderColor: `${project.badgeColor}40`,
@@ -120,7 +128,7 @@ export default function Projects() {
                 </span>
 
                 {/* Arrow trigger button */}
-                <div className="w-10 h-10 rounded-full border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-muted)] group-hover:text-white group-hover:bg-indigo-600 group-hover:border-indigo-600 group-hover:scale-110 transition-all duration-300">
+                <div className="w-11 h-11 rounded-full border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-muted)] group-hover:text-white group-hover:bg-indigo-600 group-hover:border-indigo-600 group-hover:scale-110 transition-all duration-300">
                   <ArrowUpRight size={18} />
                 </div>
               </div>
@@ -146,42 +154,53 @@ export default function Projects() {
       {/* Floating Cursor Preview (Desktop Only) */}
       {hoveredProject && (
         <div
-          className="fixed pointer-events-none z-40 hidden md:block w-72 rounded-2xl overflow-hidden glass-panel p-4 shadow-2xl transition-opacity duration-200 -translate-x-1/2 -translate-y-full -mt-4 border border-indigo-500/30"
+          className="fixed pointer-events-none z-40 hidden md:block w-80 rounded-2xl overflow-hidden glass-panel p-4 shadow-2xl transition-opacity duration-200 -translate-x-1/2 -translate-y-full -mt-4 border border-indigo-500/40"
           style={{
             left: `${mousePos.x}px`,
             top: `${mousePos.y}px`,
           }}
         >
-          <div className={`h-24 rounded-xl bg-gradient-to-br ${hoveredProject.previewGradient} flex items-center justify-center p-4 text-center relative overflow-hidden`}>
-            <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px]" />
+          <div className={`h-28 rounded-xl bg-gradient-to-br ${hoveredProject.previewGradient} flex flex-col items-center justify-center p-4 text-center relative overflow-hidden`}>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
             <div className="relative z-10 text-white">
-              <span className="text-[10px] uppercase font-mono tracking-widest opacity-80">
+              <span className="text-[10px] uppercase font-mono tracking-widest opacity-80 block mb-1">
                 {hoveredProject.category}
               </span>
-              <p className="font-extrabold text-base tracking-tight" style={{ fontFamily: "var(--font-d)" }}>
+              <p className="font-extrabold text-lg tracking-tight" style={{ fontFamily: "var(--font-d)" }}>
                 {hoveredProject.name}
               </p>
+              {hoveredProject.liveUrl && (
+                <span className="text-[10px] font-mono text-emerald-300 flex items-center justify-center gap-1 mt-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  {hoveredProject.liveUrl.replace("https://", "").replace("http://", "").replace("/", "")}
+                </span>
+              )}
             </div>
           </div>
+
           <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] font-mono">
             {hoveredProject.metrics.slice(0, 2).map((m, i) => (
-              <div key={i} className="bg-[var(--bg-secondary)] p-1.5 rounded-lg">
+              <div key={i} className="bg-[var(--bg-secondary)] p-2 rounded-lg border border-[var(--border-subtle)]">
                 <span className="text-[var(--text-faint)] block">{m.label}</span>
                 <span className="text-indigo-400 font-bold">{m.value}</span>
               </div>
             ))}
           </div>
+
           <div className="mt-2 text-center text-[10px] font-mono text-[var(--text-faint)]">
-            Click to inspect full architecture ↗
+            Click row to view architecture case study ↗
           </div>
         </div>
       )}
 
-      {/* Detailed Project Modal Drawer */}
+      {/* In-Depth Project Modal Drawer */}
       {selectedProject && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
+          onClick={closeModal}
+        >
           <div
-            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/30 shadow-2xl"
+            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/40 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
@@ -226,7 +245,8 @@ export default function Projects() {
                   onClick={() => playPop()}
                   className="magnetic-btn magnetic-btn-primary text-xs py-2.5 px-5"
                 >
-                  <span>Launch Live Site</span>
+                  <Globe size={14} />
+                  <span>Launch Live Platform</span>
                   <ExternalLink size={14} />
                 </a>
               )}
@@ -239,7 +259,7 @@ export default function Projects() {
                   className="magnetic-btn magnetic-btn-ghost text-xs py-2.5 px-5"
                 >
                   <GithubIcon size={14} />
-                  <span>View Repository</span>
+                  <span>View Source Code</span>
                 </a>
               )}
             </div>
@@ -254,8 +274,8 @@ export default function Projects() {
               ))}
             </div>
 
-            {/* Description */}
-            <div className="space-y-4 text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
+            {/* Description & Technical Points */}
+            <div className="space-y-5 text-sm sm:text-base text-[var(--text-muted)] leading-relaxed">
               <p>{selectedProject.description}</p>
 
               <div>
@@ -277,7 +297,7 @@ export default function Projects() {
               <div>
                 <h4 className="text-xs font-mono uppercase tracking-wider text-[var(--text-main)] font-bold mb-3 flex items-center gap-2">
                   <Layers size={14} className="text-indigo-400" />
-                  Technology Stack
+                  Engineered With
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {selectedProject.stack.map((s) => (
