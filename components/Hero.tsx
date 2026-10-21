@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import Image from "next/image";
 import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
@@ -200,23 +199,11 @@ export default function Hero() {
 
       {/* Top Controller Dock / Konrad Makowski Stretch Playground */}
       <div className="w-full max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 mb-8">
-        <div className="inline-flex items-center gap-2.5 p-1.5 pr-4 rounded-full glass-panel text-xs font-mono text-[var(--text-muted)] shadow-sm border border-[var(--border-subtle)] hover:border-amber-400/40 transition-all group">
-          <div className="relative w-7 h-7 rounded-full overflow-hidden ring-1.5 ring-amber-400/80 shadow-xs shrink-0">
-            <Image
-              src="/sushan.jpg"
-              alt="Sushan D Jain"
-              fill
-              sizes="28px"
-              className="object-cover object-top transition-transform duration-300 group-hover:scale-110"
-              priority
-            />
-            <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-400 ring-1 ring-[var(--bg-primary)] animate-pulse" />
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-[var(--text-main)]">AVAILABLE FOR PRODUCTION ROLES</span>
-            <span className="text-[var(--text-faint)]">·</span>
-            <span>SYSTEMS ENGINEER @ TCS</span>
-          </div>
+        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel text-xs font-mono text-[var(--text-muted)] shadow-sm">
+          <span className="pulse-green" />
+          <span className="font-bold text-[var(--text-main)]">AVAILABLE FOR PRODUCTION ROLES</span>
+          <span className="text-[var(--text-faint)]">·</span>
+          <span>SYSTEMS ENGINEER @ TCS</span>
         </div>
 
         {/* Stretch Mode Dock */}
@@ -309,45 +296,16 @@ export default function Hero() {
             ))}
           </h2>
 
-          {/* Subtitle / Focus Callout with Featured Portrait */}
-          <div className="max-w-xl self-start md:self-end md:pb-3">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-2xl glass-panel border border-[var(--border-subtle)] hover:border-amber-400/40 transition-all duration-300 shadow-lg shadow-black/10 group backdrop-blur-md">
-              {/* Interactive Portrait Photo Card */}
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden shrink-0 border-2 border-amber-400/50 shadow-md shadow-amber-500/20 group-hover:border-amber-400 group-hover:shadow-amber-500/30 transition-all duration-300">
-                <Image
-                  src="/sushan.jpg"
-                  alt="Sushan D Jain — Full-Stack Developer & Systems Engineer"
-                  fill
-                  sizes="(max-width: 640px) 80px, 96px"
-                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  priority
-                />
-                <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded-full bg-black/75 backdrop-blur-xs text-[9px] font-mono font-bold text-amber-300 flex items-center gap-1 border border-amber-400/40">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>ONLINE</span>
-                </div>
-              </div>
-
-              {/* Bio Details */}
-              <div className="space-y-1.5 text-left">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold tracking-wider uppercase text-[var(--text-main)]">
-                    Sushan D Jain
-                  </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 font-semibold">
-                    TCS Engineer
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-[var(--text-muted)] font-medium leading-relaxed">
-                  <span className="text-[var(--text-main)] font-semibold">Systems Engineer at TCS</span> &amp;{" "}
-                  <span className="text-indigo-400 font-semibold">Full-Stack Architect</span> crafting high-throughput REST APIs, progressive streaming engines, and resilient e-commerce platforms.
-                </p>
-                <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--text-faint)]">
-                  <span>Bengaluru, India</span>
-                  <span>✦</span>
-                  <span>12.9716° N, 77.5946° E</span>
-                </div>
-              </div>
+          {/* Subtitle / Focus Callout */}
+          <div className="max-w-md space-y-2 text-left md:text-right self-start md:self-end md:pb-4">
+            <p className="text-sm sm:text-base text-[var(--text-muted)] font-medium leading-relaxed">
+              <span className="text-[var(--text-main)] font-semibold">Systems Engineer at TCS</span> &amp;{" "}
+              <span className="text-indigo-400 font-semibold">Full-Stack Architect</span> crafting high-throughput REST APIs, progressive streaming engines, and resilient e-commerce platforms.
+            </p>
+            <div className="flex items-center justify-start md:justify-end gap-3 text-xs font-mono text-[var(--text-faint)]">
+              <span>BENGALURU, INDIA</span>
+              <span>✦</span>
+              <span>12.9716° N, 77.5946° E</span>
             </div>
           </div>
         </div>

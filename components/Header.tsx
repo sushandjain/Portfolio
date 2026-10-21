@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { personalInfo } from "@/lib/data";
 import { isSoundEnabled, toggleSound, playPop } from "@/lib/sound";
 import { Volume2, VolumeX, Moon, Sun, ArrowUpRight, Sparkles } from "lucide-react";
@@ -89,8 +90,15 @@ export default function Header() {
             onMouseLeave={() => setLogoHovered(false)}
             onClick={() => playPop()}
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-indigo-500/20 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3">
-              <span>S</span>
+            <div className="relative w-10 h-10 rounded-xl overflow-hidden ring-2 ring-indigo-500/40 group-hover:ring-amber-400 shadow-md shadow-indigo-500/20 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3 shrink-0">
+              <Image
+                src="/sushan.jpg"
+                alt="Sushan D Jain"
+                fill
+                sizes="40px"
+                className="object-cover object-top"
+                priority
+              />
             </div>
             <div className="flex flex-col">
               <span
