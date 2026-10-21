@@ -5,6 +5,7 @@ import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
 import { ArrowDown, Copy, Check, Terminal, Sliders, Sparkles, Activity, Waves } from "lucide-react";
+import HeroCanvasMesh from "@/components/HeroCanvasMesh";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
@@ -189,6 +190,9 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-[92vh] flex flex-col justify-between pt-28 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
+      {/* Interactive Ambient Particle Constellation Canvas */}
+      <HeroCanvasMesh />
+
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute bottom-10 right-10 w-[350px] h-[350px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10" />

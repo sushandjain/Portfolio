@@ -35,7 +35,7 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [viewMode, setViewMode] = useState<"list" | "grid" | "showcase">("list");
+  const [viewMode, setViewMode] = useState<"list" | "grid" | "showcase">("showcase");
   const [modalTab, setModalTab] = useState<"cinema" | "live" | "architecture">("cinema");
   const [activeMediaIdx, setActiveMediaIdx] = useState<number>(0);
   const [videoPlaying, setVideoPlaying] = useState<boolean>(true);
