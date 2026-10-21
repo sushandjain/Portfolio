@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
 import Projects from "@/components/Projects";
-import ApiConsole from "@/components/ApiConsole";
 import Experience from "@/components/Experience";
 import SkillsMatrix from "@/components/SkillsMatrix";
 import Education from "@/components/Education";
@@ -37,9 +36,6 @@ export default function Home() {
 
         {/* Selected Works - Stretch Folio Showcase */}
         <Projects />
-
-        {/* Interactive REST API & Systems Playground */}
-        <ApiConsole />
 
         {/* Enterprise Experience & Hackathon Honors */}
         <Experience />

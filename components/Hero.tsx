@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
-import { ArrowDown, Copy, Check, Terminal, Sliders, Sparkles, Activity, Waves } from "lucide-react";
+import { ArrowDown, Copy, Check, Briefcase, Sliders, Sparkles, Activity, Waves } from "lucide-react";
 import HeroCanvasMesh from "@/components/HeroCanvasMesh";
 
 export default function Hero() {
@@ -325,12 +325,12 @@ export default function Hero() {
           </a>
 
           <a
-            href="#systems"
+            href="#experience"
             onClick={() => playPop()}
             className="magnetic-btn magnetic-btn-ghost text-xs"
           >
-            <Terminal size={14} className="text-emerald-400" />
-            <span>Launch API Console</span>
+            <Briefcase size={14} className="text-indigo-400" />
+            <span>Career & Honors</span>
           </a>
         </div>
 

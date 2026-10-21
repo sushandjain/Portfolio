@@ -42,7 +42,7 @@ export default function Education() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>06 / ACADEMIC FOUNDATION & CREDENTIALS</span>
+            <span>05 / ACADEMIC FOUNDATION & CREDENTIALS</span>
             <span>✦</span>
             <span>VERIFIED INDUSTRY HONORS</span>
           </div>

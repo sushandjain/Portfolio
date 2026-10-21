@@ -12,7 +12,7 @@ export default function Experience() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>04 / CAREER TRAJECTORY</span>
+            <span>03 / CAREER TRAJECTORY</span>
             <span>✦</span>
             <span>ENTERPRISE SYSTEMS & RECOGNITION</span>
           </div>

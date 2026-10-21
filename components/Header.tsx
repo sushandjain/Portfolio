@@ -113,9 +113,8 @@ export default function Header() {
         <nav className="hidden lg:flex items-center gap-1.5 bg-[var(--bg-card)]/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-[var(--border-subtle)] shadow-sm">
           {[
             { label: "Work", href: "#work" },
-            { label: "API Console", href: "#systems" },
             { label: "Experience", href: "#experience" },
-            { label: "Stack", href: "#stack" },
+            { label: "Arsenal", href: "#stack" },
             { label: "Education", href: "#education" },
             { label: "Contact", href: "#contact" },
           ].map((item) => (
