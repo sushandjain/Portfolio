@@ -67,7 +67,7 @@ export default function Contact() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>06 / GET IN TOUCH</span>
+            <span>07 / GET IN TOUCH</span>
             <span>✦</span>
             <span>START A CONVERSATION</span>
           </div>

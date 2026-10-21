@@ -142,7 +142,7 @@ export default function CursorSound() {
       {/* Fluid Trailing Velocity-Stretching Ring / Morphing Badge */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 flex items-center justify-center font-mono font-bold text-[9px] uppercase tracking-widest ${
+        className={`fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-[background-color,border-color,width,height,padding,color] duration-150 flex items-center justify-center font-mono font-bold text-[9px] uppercase tracking-widest ${
           isExpanded
             ? "px-3 py-1.5 rounded-full bg-white text-black shadow-2xl border-none"
             : "w-8 h-8 rounded-full border border-white/30 bg-white/5"

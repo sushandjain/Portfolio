@@ -3,6 +3,7 @@
 import { experience, achievements } from "@/lib/data";
 import { playPop } from "@/lib/sound";
 import { Briefcase, Trophy, Award, CheckCircle2, ChevronRight, Building, Sparkles } from "lucide-react";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 export default function Experience() {
   return (
@@ -11,7 +12,7 @@ export default function Experience() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>03 / CAREER TRAJECTORY</span>
+            <span>04 / CAREER TRAJECTORY</span>
             <span>✦</span>
             <span>ENTERPRISE SYSTEMS & RECOGNITION</span>
           </div>
@@ -36,9 +37,11 @@ export default function Experience() {
           </h3>
 
           {experience.map((exp, idx) => (
-            <div
+            <SpotlightCard
               key={idx}
-              className="glass-panel p-6 sm:p-8 rounded-3xl border border-indigo-500/20 hover:border-indigo-500/40 transition-all duration-300 relative overflow-hidden"
+              className="glass-panel p-6 sm:p-8 border border-indigo-500/25 hover:border-indigo-500/50 transition-all duration-300 relative overflow-hidden"
+              spotlightColor="rgba(99, 102, 241, 0.15)"
+              borderColor="rgba(129, 140, 248, 0.5)"
             >
               <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-600/10 rounded-full blur-2xl pointer-events-none" />
 
@@ -83,7 +86,7 @@ export default function Experience() {
                   </span>
                 ))}
               </div>
-            </div>
+            </SpotlightCard>
           ))}
         </div>
 
@@ -96,9 +99,11 @@ export default function Experience() {
 
           <div className="space-y-4">
             {achievements.map((ach, idx) => (
-              <div
+              <SpotlightCard
                 key={idx}
-                className="glass-panel p-6 rounded-2xl border border-[var(--border-subtle)] hover:border-amber-500/40 transition-all duration-300 group"
+                className="glass-panel p-6 border border-[var(--border-subtle)] hover:border-amber-500/40 transition-all duration-300 group"
+                spotlightColor="rgba(245, 158, 11, 0.12)"
+                borderColor="rgba(245, 158, 11, 0.45)"
               >
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-500/30 text-amber-400">
@@ -134,7 +139,7 @@ export default function Experience() {
                     )}
                   </div>
                 </div>
-              </div>
+              </SpotlightCard>
             ))}
 
             {/* Quick Summary Pill */}

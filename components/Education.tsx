@@ -18,6 +18,7 @@ import {
   BookOpen,
   ArrowUpRight,
 } from "lucide-react";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 type FilterTab = "all" | "certs" | "degrees";
 
@@ -41,7 +42,7 @@ export default function Education() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>05 / ACADEMIC FOUNDATION & CREDENTIALS</span>
+            <span>06 / ACADEMIC FOUNDATION & CREDENTIALS</span>
             <span>✦</span>
             <span>VERIFIED INDUSTRY HONORS</span>
           </div>
@@ -123,9 +124,11 @@ export default function Education() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {certificates.map((cert) => (
-              <div
+              <SpotlightCard
                 key={cert.id}
-                className="glass-panel p-6 sm:p-7 rounded-3xl border border-indigo-500/20 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
+                className="glass-panel p-6 sm:p-7 border border-indigo-500/20 hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
+                spotlightColor="rgba(99, 102, 241, 0.12)"
+                borderColor="rgba(129, 140, 248, 0.45)"
               >
                 {/* Subtle background glow */}
                 <div className="absolute top-0 right-0 w-36 h-36 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-indigo-500/10 transition-all" />
@@ -202,7 +205,7 @@ export default function Education() {
                     <ArrowUpRight size={13} />
                   </a>
                 </div>
-              </div>
+              </SpotlightCard>
             ))}
           </div>
         </div>
@@ -223,9 +226,11 @@ export default function Education() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {education.map((item, idx) => (
-              <div
+              <SpotlightCard
                 key={idx}
-                className="glass-panel p-6 sm:p-7 rounded-3xl border border-[var(--border-subtle)] hover:border-amber-500/30 transition-all duration-300 flex flex-col justify-between group"
+                className="glass-panel p-6 sm:p-7 border border-[var(--border-subtle)] hover:border-amber-500/35 transition-all duration-300 flex flex-col justify-between group"
+                spotlightColor="rgba(245, 158, 11, 0.1)"
+                borderColor="rgba(245, 158, 11, 0.4)"
               >
                 <div>
                   {/* Top meta */}
@@ -263,7 +268,7 @@ export default function Education() {
                   <span>DEGREE STATUS</span>
                   <span className="text-emerald-400 font-bold">VERIFIED AUTHENTIC</span>
                 </div>
-              </div>
+              </SpotlightCard>
             ))}
           </div>
         </div>

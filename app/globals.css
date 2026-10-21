@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@300..800&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ==========================================================================
    DESIGN TOKENS & RESET
    ========================================================================== */
@@ -464,12 +468,41 @@ button, input, textarea {
   color: var(--accent-primary);
 }
 
-/* Kinetic Scroll Skew Layer */
+/* Inverted Stroke Hollow Typography for Line 2 (JAIN) */
+.stretch-stroke {
+  -webkit-text-stroke: 1.5px rgba(244, 246, 251, 0.5);
+  color: transparent !important;
+}
+
+[data-theme="light"] .stretch-stroke {
+  -webkit-text-stroke: 1.5px rgba(12, 15, 29, 0.5);
+  color: transparent !important;
+}
+
+.stretch-char-stroke {
+  -webkit-text-stroke: 1.5px rgba(244, 246, 251, 0.5);
+  color: transparent !important;
+  transition: -webkit-text-stroke 0.25s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.25s ease;
+}
+
+.stretch-char-stroke:hover {
+  -webkit-text-stroke: 1.5px var(--accent-primary) !important;
+  color: rgba(99, 102, 241, 0.2) !important;
+}
+
+[data-theme="light"] .stretch-char-stroke {
+  -webkit-text-stroke: 1.5px rgba(12, 15, 29, 0.5);
+  color: transparent !important;
+}
+
+[data-theme="light"] .stretch-char-stroke:hover {
+  -webkit-text-stroke: 1.5px var(--accent-primary) !important;
+  color: rgba(55, 66, 250, 0.2) !important;
+}
+
+/* Kinetic Scroll Skew Layer - Disabled skew distortion to maintain crisp vertical alignment across all cards */
 .scroll-skew-layer {
-  transform: skewY(var(--scroll-skew, 0deg));
-  transform-origin: center center;
-  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: transform;
+  transform: none !important;
 }
 
 /* 3D Perspective Card Tilt */
@@ -650,4 +683,59 @@ button, input, textarea {
   width: 100%;
   transform-origin: 0 0;
   z-index: 100;
+}
+
+/* ==========================================================================
+   CINEMA MEDIA REEL & SCROLL UTILITIES
+   ========================================================================== */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.cinema-reel-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  gap: 1.25rem;
+  padding: 0.5rem 0.25rem 1rem 0.25rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cinema-reel-card {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 82vw;
+  max-width: 460px;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #090C15;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.cinema-reel-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+.cinema-reel-card.active-media {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-primary), 0 16px 36px rgba(99, 102, 241, 0.35);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

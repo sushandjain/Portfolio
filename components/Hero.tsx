@@ -293,12 +293,12 @@ export default function Hero() {
           </h2>
 
           {/* Subtitle / Focus Callout */}
-          <div className="max-w-md space-y-2 text-right md:pb-4 self-end">
+          <div className="max-w-md space-y-2 text-left md:text-right self-start md:self-end md:pb-4">
             <p className="text-sm sm:text-base text-[var(--text-muted)] font-medium leading-relaxed">
               <span className="text-[var(--text-main)] font-semibold">Systems Engineer at TCS</span> &amp;{" "}
               <span className="text-indigo-400 font-semibold">Full-Stack Architect</span> crafting high-throughput REST APIs, progressive streaming engines, and resilient e-commerce platforms.
             </p>
-            <div className="flex items-center justify-end gap-3 text-xs font-mono text-[var(--text-faint)]">
+            <div className="flex items-center justify-start md:justify-end gap-3 text-xs font-mono text-[var(--text-faint)]">
               <span>BENGALURU, INDIA</span>
               <span>✦</span>
               <span>12.9716° N, 77.5946° E</span>
@@ -321,7 +321,7 @@ export default function Hero() {
           </a>
 
           <a
-            href="#api-console"
+            href="#systems"
             onClick={() => playPop()}
             className="magnetic-btn magnetic-btn-ghost text-xs"
           >

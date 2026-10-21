@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { playTick } from "@/lib/sound";
 
 export default function Ticker() {
-  const [scrollBoost, setScrollBoost] = useState(1);
+  const track1Ref = useRef<HTMLDivElement>(null);
+  const track2Ref = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const lastTime = useRef(performance.now());
 
@@ -26,9 +27,15 @@ export default function Ticker() {
     };
 
     const loop = () => {
-      targetBoost += (1 - targetBoost) * 0.08;
-      currentBoost += (targetBoost - currentBoost) * 0.15;
-      setScrollBoost(Number(currentBoost.toFixed(2)));
+      targetBoost += (1 - targetBoost) * 0.06;
+      currentBoost += (targetBoost - currentBoost) * 0.12;
+
+      if (track1Ref.current) {
+        track1Ref.current.style.animationDuration = `${(32 / currentBoost).toFixed(2)}s`;
+      }
+      if (track2Ref.current) {
+        track2Ref.current.style.animationDuration = `${(38 / currentBoost).toFixed(2)}s`;
+      }
       rafId = requestAnimationFrame(loop);
     };
 
@@ -68,15 +75,13 @@ export default function Ticker() {
     "FULL-STACK ARCHITECTURE",
   ];
 
-  const duration1 = (32 / scrollBoost).toFixed(2);
-  const duration2 = (38 / scrollBoost).toFixed(2);
-
   return (
     <div className="w-full py-8 border-y border-[var(--border-subtle)] bg-[var(--bg-secondary)] overflow-hidden select-none space-y-3">
       {/* Track 1: Scrolling Left with Dynamic Velocity Acceleration */}
       <div
+        ref={track1Ref}
         className="marquee-track marquee-animate-left flex items-center gap-8"
-        style={{ animationDuration: `${duration1}s` }}
+        style={{ animationDuration: "32s" }}
       >
         {[...row1, ...row1, ...row1].map((text, i) => (
           <div
@@ -97,8 +102,9 @@ export default function Ticker() {
 
       {/* Track 2: Scrolling Right with Dynamic Velocity Acceleration */}
       <div
+        ref={track2Ref}
         className="marquee-track marquee-animate-right flex items-center gap-8 opacity-75"
-        style={{ animationDuration: `${duration2}s` }}
+        style={{ animationDuration: "38s" }}
       >
         {[...row2, ...row2, ...row2].map((text, i) => (
           <div

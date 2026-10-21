@@ -1,3 +1,9 @@
+export interface ScreenshotItem {
+  url: string;
+  title: string;
+  caption: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -15,7 +21,9 @@ export interface Project {
   previewGradient: string;
   badgeColor: string;
   previewImage?: string;
+  videoUrl?: string;
   accentHex: string;
+  screenshots: ScreenshotItem[];
 }
 
 export const projects: Project[] = [
@@ -47,7 +55,45 @@ export const projects: Project[] = [
     previewGradient: "from-emerald-950 via-stone-900 to-amber-950",
     badgeColor: "#10B981",
     accentHex: "#10B981",
-    previewImage: "/projects/malnad-direct.png",
+    previewImage: "/malnaddirect/screenshot_1.png",
+    videoUrl: "/malnaddirect/malnadintro.mp4",
+    screenshots: [
+      {
+        url: "/malnaddirect/screenshot_1.png",
+        title: "Storefront & Harvest Hero",
+        caption: "Single-origin Western Ghats estate harvest direct from Kalasa with altitude indicators.",
+      },
+      {
+        url: "/malnaddirect/screenshot_2.png",
+        title: "Speed Post PIN SLA Calculator",
+        caption: "Instant delivery timeline and shipping fee calculation across all Indian postal zones.",
+      },
+      {
+        url: "/malnaddirect/screenshot_3.png",
+        title: "Estate Coffee & Orthodox Tea Catalog",
+        caption: "Filter by harvest elevation, roast intensity, and traditional Malnad processing methods.",
+      },
+      {
+        url: "/malnaddirect/screenshot_4.png",
+        title: "Instant Razorpay Checkout",
+        caption: "Seamless UPI, card, and net-banking checkout with zero-friction modal drawer.",
+      },
+      {
+        url: "/malnaddirect/screenshot_5.png",
+        title: "Heritage & Altitude Origins",
+        caption: "Showcasing Samse Valley, Kalasa terroir, and authentic smallholder farm traceability.",
+      },
+      {
+        url: "/malnaddirect/screenshot_6.png",
+        title: "Bilingual English & Kannada Interface",
+        caption: "Full dual-language toggle enabling local estate growers and national buyers to connect.",
+      },
+      {
+        url: "/malnaddirect/screenshot_7.png",
+        title: "Live Order Tracking & Reviews",
+        caption: "Speed Post barcode tracking integration and verified customer reviews.",
+      },
+    ],
   },
   {
     id: "tunexia",
@@ -77,7 +123,45 @@ export const projects: Project[] = [
     previewGradient: "from-indigo-950 via-purple-950 to-slate-900",
     badgeColor: "#6366F1",
     accentHex: "#6366F1",
-    previewImage: "/projects/tunexia.png",
+    previewImage: "/tunexia/screenshot_1.png",
+    videoUrl: "/tunexia/tunexia-intro.mp4",
+    screenshots: [
+      {
+        url: "/tunexia/screenshot_1.png",
+        title: "Progressive Audio Player",
+        caption: "Interactive visualizer, queue manager, and continuous progressive buffer engine.",
+      },
+      {
+        url: "/tunexia/screenshot_2.png",
+        title: "JWT User Library & Playlists",
+        caption: "Secure user authentication, private favorites collection, and custom playlist curation.",
+      },
+      {
+        url: "/tunexia/screenshot_3.png",
+        title: "Cloudinary CDN Asset Stream",
+        caption: "Cloud media delivery with byte-range chunking for instant playback latency under 30ms.",
+      },
+      {
+        url: "/tunexia/screenshot_4.png",
+        title: "Dynamic Playlist Orchestration",
+        caption: "Drag-and-drop track reordering, instant live fuzzy search, and playlist collaboration.",
+      },
+      {
+        url: "/tunexia/screenshot_5.png",
+        title: "High-Fidelity Audio Controls",
+        caption: "320kbps bitrate toggles, equalizer presets, and seamless volume attenuator.",
+      },
+      {
+        url: "/tunexia/screenshot_6.png",
+        title: "Admin Track Ingestion Console",
+        caption: "Role-gated management portal for bulk audio upload and streaming health telemetry.",
+      },
+      {
+        url: "/tunexia/screenshot_7.png",
+        title: "PWA Mobile Streaming Experience",
+        caption: "Touch-optimized mobile interface with background audio playback and offline queue.",
+      },
+    ],
   },
   {
     id: "henjodi-stores",
@@ -107,7 +191,45 @@ export const projects: Project[] = [
     previewGradient: "from-amber-950 via-stone-900 to-orange-950",
     badgeColor: "#F59E0B",
     accentHex: "#F59E0B",
-    previewImage: "/projects/henjodi-stores.png",
+    previewImage: "/henjodi/Henjodi-Stores-01-Landing.png",
+    videoUrl: "/henjodi/henjodiintro.mp4",
+    screenshots: [
+      {
+        url: "/henjodi/Henjodi-Stores-01-Landing.png",
+        title: "Official Trekking Booking Portal",
+        caption: "Balagal & Kalasa expedition gateway for Kudremukh and Western Ghats adventure tourism.",
+      },
+      {
+        url: "/henjodi/Henjodi-Stores-02-Trek-Options.png",
+        title: "Multi-Peak Expedition Packages",
+        caption: "Kudremukh Peak, Netravati, Kurinjal, and Ballalarayana Durga itinerary selectors.",
+      },
+      {
+        url: "/henjodi/Henjodi-Stores-03-Planning-Overview.png",
+        title: "Forest Department Permit Allocation",
+        caption: "Official government quota integration, certified mountain guides, and safety clearance.",
+      },
+      {
+        url: "/henjodi/Henjodi-Stores-04-Peak-Listings.png",
+        title: "Mountain Homestays & Balagal Hub",
+        caption: "Local traditional homestay accommodations, authentic Malnad food, and base camp supplies.",
+      },
+      {
+        url: "/henjodi/Henjodi-Stores-05-Kudremukh-Trek.png",
+        title: "1894m Kudremukh Peak Expedition",
+        caption: "22km high-altitude trail topography, steep ascent details, and checkpoint timings.",
+      },
+      {
+        url: "/henjodi/Henjodi-Stores-06-Plan-Your-Trek.png",
+        title: "Packing Checklist & WhatsApp Handshake",
+        caption: "Instant WhatsApp booking handshake (+91 80731 78851) with automated packing guides.",
+      },
+      {
+        url: "/henjodi/Henjodi-Stores-07-Trailhead-Map.png",
+        title: "GPS Trailhead Navigation",
+        caption: "Accurate GPS coordinates (13.184369° N, 75.319509° E) for base camp navigation.",
+      },
+    ],
   },
   {
     id: "kheti-bazaar",
@@ -138,6 +260,28 @@ export const projects: Project[] = [
     badgeColor: "#10B981",
     accentHex: "#10B981",
     previewImage: "/projects/kheti-bazaar-preview.gif",
+    screenshots: [
+      {
+        url: "/projects/kheti-bazaar-preview.gif",
+        title: "Direct Producer-Buyer Hub",
+        caption: "Real-time marketplace connecting smallholder farmers directly with commercial wholesale buyers.",
+      },
+      {
+        url: "/projects/kheti-bazaar.png",
+        title: "Multi-Role Dashboard & Listings",
+        caption: "Secure role-based views for farmers, commercial buyers, and regional produce administrators.",
+      },
+      {
+        url: "/projects/kheti-bazaar-preview.gif",
+        title: "Live Price Negotiation Engine",
+        caption: "WhatsApp deep-link messaging eliminating predatory middlemen through transparent pricing.",
+      },
+      {
+        url: "/projects/kheti-bazaar.png",
+        title: "Location-Based Crop Discovery",
+        caption: "Proximity filtering by harvest elevation, district, produce freshness, and crop grade.",
+      },
+    ],
   },
 ];
 

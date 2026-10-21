@@ -4,6 +4,7 @@ import { useState } from "react";
 import { skillGroups } from "@/lib/data";
 import { playPop, playTick } from "@/lib/sound";
 import { Cpu, Code2, Server, Database, Wrench, Sparkles, Check } from "lucide-react";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 
 export default function SkillsMatrix() {
   const [activeTab, setActiveTab] = useState<string>("All");
@@ -31,7 +32,7 @@ export default function SkillsMatrix() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-b border-[var(--border-subtle)] pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
-            <span>04 / TECHNICAL ARSENAL</span>
+            <span>05 / TECHNICAL ARSENAL</span>
             <span>✦</span>
             <span>MODERN FULL-STACK CAPABILITIES</span>
           </div>
@@ -68,9 +69,11 @@ export default function SkillsMatrix() {
       {/* Grid of Skill Groups */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredGroups.map((group) => (
-          <div
+          <SpotlightCard
             key={group.category}
-            className="glass-panel p-6 rounded-3xl border border-[var(--border-subtle)] hover:border-indigo-500/30 transition-all duration-300 flex flex-col justify-between"
+            className="glass-panel p-6 border border-[var(--border-subtle)] hover:border-indigo-500/35 transition-all duration-300 flex flex-col justify-between"
+            spotlightColor="rgba(99, 102, 241, 0.12)"
+            borderColor="rgba(129, 140, 248, 0.4)"
           >
             <div>
               <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-[var(--border-subtle)]">
@@ -114,7 +117,7 @@ export default function SkillsMatrix() {
               <span>{group.items.length} TECHNOLOGIES</span>
               <span className="text-emerald-400">100% PRODUCTION TESTED</span>
             </div>
-          </div>
+          </SpotlightCard>
         ))}
       </div>
     </section>

@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.18",
     "lucide-react": "^1.60.0",
     "next": "15.1.6",
     "react": "^19.0.0",
