@@ -12,6 +12,7 @@ import HorizontalGallery from "./HorizontalGallery";
 import StackedCards from "./StackedCards";
 import BentoLightbox from "./BentoLightbox";
 import BetweenProjectsTransition from "./BetweenProjectsTransition";
+import ScrollMovementControls from "./ScrollMovementControls";
 import { Sparkles, ArrowUpRight } from "lucide-react";
 
 if (typeof window !== "undefined") {
@@ -155,6 +156,11 @@ export default function ProjectShowcase({
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Interactive Scroll Movement Engine Options Bar */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-6 pb-2">
+        <ScrollMovementControls />
       </div>
 
       {/* ---------------------------------------------------------------------

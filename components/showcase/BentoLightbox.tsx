@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ShowcaseProject, ShowcaseImage } from "./showcaseData";
 import SplitText from "./SplitText";
 import RevealImage from "./RevealImage";
+import KineticVideoCard from "./KineticVideoCard";
 import {
   ExternalLink,
   Maximize2,
@@ -327,6 +328,20 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
           ref={gridRef}
           className="grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-start"
         >
+          {/* Premier Video 3 with Scroll Movement Effect */}
+          {project.videoUrl && (
+            <div className="bento-item col-span-12 mb-2 rounded-3xl overflow-hidden">
+              <KineticVideoCard
+                videoUrl={project.videoUrl}
+                title={project.title}
+                tagline={project.tagline}
+                accentColor={project.accentColor}
+                badge="1080P KUDREMUKH EXPEDITION DISPATCH"
+                aspectRatio="aspect-[16/9]"
+              />
+            </div>
+          )}
+
           {project.images.map((img, idx) => (
             <div
               key={img.id || idx}

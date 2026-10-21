@@ -440,9 +440,18 @@ export default function Projects() {
                 </span>
               </div>
 
-              {/* Real Project Image with Pan Zoom on hover */}
+              {/* Real Project Video Demo or Image with Pan Zoom on hover */}
               <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-black/40">
-                {project.previewImage ? (
+                {project.videoUrl ? (
+                  <video
+                    src={project.videoUrl}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                ) : project.previewImage ? (
                   <Image
                     src={project.previewImage}
                     alt={project.name}
@@ -453,7 +462,7 @@ export default function Projects() {
                 ) : (
                   <div className={`w-full h-full bg-gradient-to-br ${project.previewGradient}`} />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-85" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-85 pointer-events-none" />
 
                 {/* Overlaid Pill Badge */}
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">

@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ShowcaseProject } from "./showcaseData";
 import SplitText from "./SplitText";
 import RevealImage from "./RevealImage";
+import KineticVideoCard from "./KineticVideoCard";
 import { ExternalLink, ArrowRight, ArrowLeft, Film } from "lucide-react";
 import { GithubIcon } from "@/components/Icons";
 
@@ -304,6 +305,29 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
             ref={trackRef}
             className="flex items-center gap-8 lg:gap-12 pl-8 lg:pl-16 pr-24 will-change-transform h-[70vh]"
           >
+            {/* Premier Video 1 with Scroll Movement Effect */}
+            {project.videoUrl && (
+              <div
+                data-cursor-label="Watch"
+                className="gallery-card relative flex-shrink-0 w-[62vw] lg:w-[48vw] xl:w-[42vw] h-full flex flex-col justify-between group"
+              >
+                <div className="relative w-full flex-1 overflow-hidden rounded-3xl">
+                  <KineticVideoCard
+                    videoUrl={project.videoUrl}
+                    title={project.title}
+                    tagline={project.tagline}
+                    accentColor={project.accentColor}
+                    badge="1080P DEMO WALKTHROUGH"
+                    aspectRatio="aspect-[16/10]"
+                  />
+                </div>
+                <div className="flex items-center justify-between pt-3 px-1 text-xs text-indigo-300 font-mono font-bold">
+                  <span>LIVE ARCHITECTURE DEMO &bull; MALNAD SPEED POST ENGINE</span>
+                  <span className="text-slate-500">VIDEO 01 / 08</span>
+                </div>
+              </div>
+            )}
+
             {project.images.map((img, idx) => (
               <div
                 key={img.id || idx}
@@ -396,6 +420,19 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
           className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
           style={{ scrollSnapType: "x mandatory" }}
         >
+          {project.videoUrl && (
+            <div className="w-[88vw] flex-shrink-0 snap-center rounded-2xl overflow-hidden">
+              <KineticVideoCard
+                videoUrl={project.videoUrl}
+                title={project.title}
+                tagline={project.tagline}
+                accentColor={project.accentColor}
+                badge="1080P DEMO"
+                aspectRatio="aspect-[16/10]"
+              />
+            </div>
+          )}
+
           {project.images.map((img, idx) => (
             <div
               key={img.id || idx}

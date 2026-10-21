@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ShowcaseProject } from "./showcaseData";
 import SplitText from "./SplitText";
 import RevealImage from "./RevealImage";
+import KineticVideoCard from "./KineticVideoCard";
 import { ExternalLink, Layers, Film } from "lucide-react";
 import { GithubIcon } from "@/components/Icons";
 
@@ -254,8 +255,41 @@ export default function StackedCards({ project }: StackedCardsProps) {
           </div>
         </div>
 
-        {/* Vertical Stack of 7 Sticky Cards */}
+        {/* Vertical Stack of Sticky Cards & Video */}
         <div className="space-y-16 md:space-y-24">
+          {/* Premier Sticky Video 2 with Scroll Movement Effect */}
+          {project.videoUrl && (
+            <div
+              style={{ top: "96px" }}
+              className="sticky rounded-3xl bg-[#0D101A] border border-indigo-500/30 shadow-2xl p-4 sm:p-6 md:p-8 transform-gpu will-change-[transform,opacity] transition-shadow duration-300"
+            >
+              <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-white/10 mb-4 sm:mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-400">
+                    VIDEO
+                  </span>
+                  <div className="h-4 w-px bg-white/20" />
+                  <span className="text-xs font-mono font-bold tracking-widest text-indigo-400 uppercase">
+                    1080P CLOUD AUDIO STREAMING DEMO
+                  </span>
+                </div>
+                <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                  LIVE ENGINE
+                </span>
+              </div>
+              <div className="relative w-full rounded-2xl overflow-hidden">
+                <KineticVideoCard
+                  videoUrl={project.videoUrl}
+                  title={project.title}
+                  tagline={project.tagline}
+                  accentColor={project.accentColor}
+                  badge="TUNEXIA 1080P AUDIO ENGINE"
+                  aspectRatio="aspect-[16/9]"
+                />
+              </div>
+            </div>
+          )}
+
           {project.images.map((img, idx) => (
             <div
               key={img.id || idx}
