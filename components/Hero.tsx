@@ -311,16 +311,7 @@ export default function Hero({ profile: initialProfile }: { profile?: any } = {}
       />
 
       {/* Top Controller Dock / Kinetic Stretch Playground */}
-      <div className="w-full max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-panel text-[11px] sm:text-xs font-mono text-[var(--text-muted)] shadow-xs border border-[var(--border-subtle)] w-fit">
-          <span className="pulse-green shrink-0" />
-          <span className="font-bold text-[var(--text-main)]">
-            {profile.isOpenToWork !== false ? "AVAILABLE FOR ROLES" : "CURRENTLY ENGAGED"}
-          </span>
-          <span className="text-[var(--text-faint)]">·</span>
-          <span className="truncate">{(profile.title || "SYSTEMS ENGINEER @ TCS").toUpperCase()}</span>
-        </div>
-
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-center sm:justify-end gap-3 sm:gap-4 mb-4 sm:mb-6">
         {/* Stretch Mode Dock */}
         <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 glass-panel px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl shadow-xs text-xs font-mono border border-[var(--border-subtle)] overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-1.5 shrink-0">
