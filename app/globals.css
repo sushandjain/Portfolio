@@ -66,6 +66,10 @@ html {
   background-color: var(--bg-primary);
   color: var(--text-main);
   font-family: var(--font-b);
+  overflow-x: hidden;
+  width: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -73,12 +77,16 @@ body {
   color: var(--text-main);
   font-family: var(--font-b);
   overflow-x: hidden;
+  width: 100%;
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
+  min-height: 100svh;
   transition: background-color 0.35s ease, color 0.35s ease;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  touch-action: pan-y;
 }
 
 /* Background Subtle Grid Texture */
@@ -447,13 +455,30 @@ button, input, textarea {
 .stretch-title {
   font-family: var(--font-d);
   font-stretch: calc(var(--stretch, 100) * 1%);
-  font-size: clamp(3.2rem, 13vw, 11rem);
+  font-size: clamp(2.1rem, 10.8vw, 11rem);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 0.82;
+  letter-spacing: -0.035em;
+  line-height: 0.86;
   transition: font-stretch 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: font-stretch, transform;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+@media (max-width: 380px) {
+  .stretch-title {
+    font-size: clamp(1.85rem, 9.8vw, 2.2rem);
+    letter-spacing: -0.04em;
+  }
+}
+
+@media (min-width: 640px) {
+  .stretch-title {
+    font-size: clamp(3.4rem, 13vw, 11rem);
+    letter-spacing: -0.02em;
+    line-height: 0.82;
+  }
 }
 
 .stretch-char {
@@ -738,4 +763,23 @@ button, input, textarea {
 
 .animate-fade-in {
   animation: fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Shimmer sweep animation for premium cards */
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.shimmer-active::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer-sweep 3.5s infinite;
+  pointer-events: none;
 }

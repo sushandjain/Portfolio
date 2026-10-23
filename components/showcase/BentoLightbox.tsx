@@ -417,7 +417,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
               <button
                 onClick={() => setLightboxIndex(null)}
                 aria-label="Close Lightbox"
-                className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/15 active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/15 active:scale-95 cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -448,7 +448,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 );
               }}
               aria-label="Previous Image"
-              className="absolute left-2 sm:left-6 z-30 p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all duration-200 active:scale-90"
+              className="absolute left-2 sm:left-6 z-30 w-12 h-12 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all duration-200 active:scale-90 cursor-pointer"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -461,7 +461,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 );
               }}
               aria-label="Next Image"
-              className="absolute right-2 sm:right-6 z-30 p-3 rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all duration-200 active:scale-90"
+              className="absolute right-2 sm:right-6 z-30 w-12 h-12 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-black/60 hover:bg-black/90 text-white border border-white/20 transition-all duration-200 active:scale-90 cursor-pointer"
             >
               <ChevronRight className="w-6 h-6" />
             </button>

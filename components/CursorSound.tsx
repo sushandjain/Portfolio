@@ -86,6 +86,10 @@ export default function CursorSound() {
       const liveLink = target.closest("a[href*='vercel.app'], a[href*='netlify.app']");
       const stretchChar = target.closest(".stretch-char");
       const sayHello = target.closest("#contact a, [data-cta]");
+      const techPill = target.closest(".tech-pill");
+      const skillCard = target.closest(".group\\/item");
+      const navLink = target.closest("header nav a");
+      const slider = target.closest("input[type='range']");
       const interactive = target.closest("a, button, input, [role='button'], .cursor-interactive");
 
       if (projectRow) {
@@ -104,6 +108,18 @@ export default function CursorSound() {
       } else if (sayHello) {
         hoverState.current = "hello";
         setCursorLabel("DISPATCH ↗");
+      } else if (techPill) {
+        hoverState.current = "tech";
+        setCursorLabel("TECH");
+      } else if (skillCard) {
+        hoverState.current = "skill";
+        setCursorLabel("SKILL");
+      } else if (navLink) {
+        hoverState.current = "nav";
+        setCursorLabel("NAV");
+      } else if (slider) {
+        hoverState.current = "slider";
+        setCursorLabel("SLIDE");
       } else if (interactive) {
         hoverState.current = "interactive";
         setCursorLabel("");

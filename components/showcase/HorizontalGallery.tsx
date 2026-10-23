@@ -399,14 +399,14 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
             <button
               onClick={() => scrollMobileTo("prev")}
               aria-label="Previous slide"
-              className="p-2 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-transform"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-transform"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scrollMobileTo("next")}
               aria-label="Next slide"
-              className="p-2 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-transform"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-transform"
             >
               <ArrowRight className="w-4 h-4" />
             </button>

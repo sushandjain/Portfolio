@@ -83,8 +83,11 @@ export default function HeroCanvasMesh() {
 
     const createParticles = () => {
       particles = [];
-      // Dynamic density based on screen area: ~40 on mobile, ~75 on desktop
-      const count = Math.max(35, Math.min(80, Math.floor((width * height) / 14000)));
+      const isMobile = width < 768;
+      // Dynamic density based on screen area: ~22 on mobile, ~75 on desktop for high framerate
+      const count = isMobile
+        ? Math.max(18, Math.min(26, Math.floor((width * height) / 22000)))
+        : Math.max(35, Math.min(80, Math.floor((width * height) / 14000)));
 
       for (let i = 0; i < count; i++) {
         const x = Math.random() * width;
@@ -117,6 +120,21 @@ export default function HeroCanvasMesh() {
     };
 
     const onPointerLeave = () => {
+      mouse.isActive = false;
+      mouse.targetX = -1000;
+      mouse.targetY = -1000;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.targetX = e.touches[0].clientX - rect.left;
+        mouse.targetY = e.touches[0].clientY - rect.top;
+        mouse.isActive = true;
+      }
+    };
+
+    const onTouchEnd = () => {
       mouse.isActive = false;
       mouse.targetX = -1000;
       mouse.targetY = -1000;
@@ -251,11 +269,14 @@ export default function HeroCanvasMesh() {
 
     window.addEventListener("resize", handleResize);
 
-    // Track mouse on hero parent container
+    // Track mouse and touch on hero parent container
     const parent = canvas.parentElement;
     if (parent) {
       parent.addEventListener("mousemove", onPointerMove);
       parent.addEventListener("mouseleave", onPointerLeave);
+      parent.addEventListener("touchstart", onTouchMove, { passive: true });
+      parent.addEventListener("touchmove", onTouchMove, { passive: true });
+      parent.addEventListener("touchend", onTouchEnd, { passive: true });
     }
 
     // IntersectionObserver to pause rendering when scrolled out of view
@@ -278,6 +299,9 @@ export default function HeroCanvasMesh() {
       if (parent) {
         parent.removeEventListener("mousemove", onPointerMove);
         parent.removeEventListener("mouseleave", onPointerLeave);
+        parent.removeEventListener("touchstart", onTouchMove);
+        parent.removeEventListener("touchmove", onTouchMove);
+        parent.removeEventListener("touchend", onTouchEnd);
       }
       observer.disconnect();
     };

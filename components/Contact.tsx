@@ -4,13 +4,11 @@ import { useState, useRef } from "react";
 import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
-import { Mail, Phone, MessageSquare, ArrowUpRight, Copy, Check, Send, Sparkles, MessageCircle } from "lucide-react";
+import { Mail, ArrowUpRight, Copy, Check } from "lucide-react";
 import { GithubIcon, LinkedinIcon, WhatsAppIcon } from "@/components/Icons";
 
 export default function Contact() {
   const [copiedType, setCopiedType] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
   const [ctaHovered, setCtaHovered] = useState(false);
   const [stretchWidth, setStretchWidth] = useState(75);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -41,20 +39,14 @@ export default function Contact() {
     setStretchWidth(calculatedStretch);
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    playSuccess();
-    try {
-      confetti({
-        particleCount: 80,
-        spread: 90,
-        origin: { y: 0.7 },
-        colors: ["#6366F1", "#3B82F6", "#10B981"],
-      });
-    } catch {}
-    const subject = encodeURIComponent(`Portfolio Inquiry from ${name || "a Visitor"}`);
-    const body = encodeURIComponent(`${message}\n\nFrom: ${name || "Visitor"}`);
-    window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
+  const handleTouchMoveCTA = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!ctaRef.current || !e.touches[0]) return;
+    const rect = ctaRef.current.getBoundingClientRect();
+    const relativeX = (e.touches[0].clientX - rect.left) / rect.width;
+    const clamped = Math.max(0, Math.min(1, relativeX));
+    // Safe stretch range for mobile width
+    const calculatedStretch = Math.round(60 + clamped * 65);
+    setStretchWidth(calculatedStretch);
   };
 
   const whatsappUrl = `https://wa.me/918088155097?text=${encodeURIComponent(
@@ -87,6 +79,11 @@ export default function Contact() {
       <div
         ref={ctaRef}
         onMouseMove={handleMouseMoveCTA}
+        onTouchMove={handleTouchMoveCTA}
+        onTouchStart={() => {
+          setCtaHovered(true);
+          playTick(660);
+        }}
         onMouseEnter={() => {
           setCtaHovered(true);
           playTick(660);
@@ -108,6 +105,7 @@ export default function Contact() {
             <span className="pulse-green" /> AVAILABLE FOR NEW PROJECTS & ROLES
           </span>
           <span className="hidden sm:inline">MOVE CURSOR HORIZONTALLY TO STRETCH</span>
+          <span className="sm:hidden text-indigo-400 font-bold">SWIPE TO STRETCH</span>
         </div>
 
         <span
@@ -121,18 +119,18 @@ export default function Contact() {
         </span>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[var(--border-subtle)] text-xs font-mono text-[var(--text-muted)]">
-          <span className="text-indigo-400 font-bold">CLICK ANYWHERE ON BANNER TO DISPATCH EMAIL</span>
+          <span className="text-indigo-400 font-bold">TAP / CLICK BANNER TO DISPATCH EMAIL</span>
           <span className="text-[var(--text-faint)]">Current Variable Width: {stretchWidth}%</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Direct Channels & Quick Copy (6 cols) */}
-        <div className="lg:col-span-6 space-y-4">
-          <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--text-faint)] font-bold mb-4">
-            AUTHENTIC DIRECT CHANNELS
-          </h3>
+      {/* Direct Channels */}
+      <div>
+        <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--text-faint)] font-bold mb-4">
+          AUTHENTIC DIRECT CHANNELS
+        </h3>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Email Card */}
           <div className="glass-panel p-5 rounded-2xl border border-[var(--border-subtle)] hover:border-indigo-500/30 transition-all flex items-center justify-between gap-4">
             <div className="flex items-center gap-3.5 min-w-0">
@@ -152,7 +150,7 @@ export default function Contact() {
             <button
               type="button"
               onClick={() => handleCopy(personalInfo.email, "email")}
-              className="px-3 py-1.5 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] text-xs font-mono text-[var(--text-muted)] hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="px-3.5 py-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] text-xs font-mono text-[var(--text-muted)] hover:text-white transition-colors flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
             >
               {copiedType === "email" ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
               <span>{copiedType === "email" ? "Copied" : "Copy"}</span>
@@ -184,99 +182,60 @@ export default function Contact() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => playPop()}
-              className="px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs font-mono font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="px-4 py-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white text-xs font-mono font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0"
             >
               <span>Chat</span>
               <ArrowUpRight size={13} />
             </a>
           </div>
 
-          {/* Social Profiles Grid */}
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <a
-              href={personalInfo.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => playPop()}
-              className="glass-panel p-4 rounded-2xl border border-[var(--border-subtle)] hover:border-indigo-500/40 transition-all flex items-center justify-between group cursor-pointer"
-            >
-              <div className="flex items-center gap-2.5">
-                <LinkedinIcon size={18} className="text-indigo-400" />
-                <div>
-                  <span className="text-xs font-bold text-[var(--text-main)] block">LinkedIn</span>
-                  <span className="text-[10px] font-mono text-[var(--text-faint)]">/in/sushandjain121</span>
-                </div>
+          {/* Social Profiles: LinkedIn */}
+          <a
+            href={personalInfo.linkedin}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => playPop()}
+            className="glass-panel p-5 rounded-2xl border border-[var(--border-subtle)] hover:border-indigo-500/40 transition-all flex items-center justify-between group cursor-pointer"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                <LinkedinIcon size={18} />
               </div>
-              <ArrowUpRight size={14} className="text-[var(--text-muted)] group-hover:text-white transition-colors" />
-            </a>
-
-            <a
-              href={personalInfo.github}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => playPop()}
-              className="glass-panel p-4 rounded-2xl border border-[var(--border-subtle)] hover:border-indigo-500/40 transition-all flex items-center justify-between group cursor-pointer"
-            >
-              <div className="flex items-center gap-2.5">
-                <GithubIcon size={18} className="text-indigo-400" />
-                <div>
-                  <span className="text-xs font-bold text-[var(--text-main)] block">GitHub</span>
-                  <span className="text-[10px] font-mono text-[var(--text-faint)]">@sushandjain</span>
-                </div>
-              </div>
-              <ArrowUpRight size={14} className="text-[var(--text-muted)] group-hover:text-white transition-colors" />
-            </a>
-          </div>
-        </div>
-
-        {/* Quick Message Form (6 cols) */}
-        <div className="lg:col-span-6">
-          <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-[var(--border-subtle)]">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--text-faint)] font-bold mb-4 flex items-center gap-2">
-              <MessageSquare size={14} className="text-indigo-400" />
-              QUICK DISPATCH NOTE
-            </h3>
-
-            <form onSubmit={handleSendMessage} className="space-y-4">
               <div>
-                <label htmlFor="contact-name" className="text-xs font-mono text-[var(--text-muted)] block mb-1.5">
-                  YOUR NAME OR ORGANIZATION
-                </label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Alex (Engineering Recruiter / Founder)"
-                  className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
-                />
+                <span className="text-[10px] font-mono text-[var(--text-faint)] block uppercase">LINKEDIN PROFILE</span>
+                <span className="font-bold text-sm sm:text-base text-[var(--text-main)] group-hover:text-indigo-400 transition-colors block">
+                  /in/sushandjain121
+                </span>
               </div>
+            </div>
+            <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[var(--bg-secondary)] group-hover:bg-indigo-600 group-hover:text-white text-[var(--text-muted)] flex items-center justify-center transition-all">
+              <ArrowUpRight size={14} />
+            </div>
+          </a>
 
+          {/* Social Profiles: GitHub */}
+          <a
+            href={personalInfo.github}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => playPop()}
+            className="glass-panel p-5 rounded-2xl border border-[var(--border-subtle)] hover:border-indigo-500/40 transition-all flex items-center justify-between group cursor-pointer"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                <GithubIcon size={18} />
+              </div>
               <div>
-                <label htmlFor="contact-message" className="text-xs font-mono text-[var(--text-muted)] block mb-1.5">
-                  MESSAGE / PROJECT INQUIRY
-                </label>
-                <textarea
-                  id="contact-message"
-                  required
-                  rows={4}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tell me about your product requirements, enterprise systems challenges, or upcoming engineering opportunities..."
-                  className="w-full bg-[var(--bg-secondary)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-sm text-[var(--text-main)] placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors resize-none"
-                />
+                <span className="text-[10px] font-mono text-[var(--text-faint)] block uppercase">GITHUB PROFILE</span>
+                <span className="font-bold text-sm sm:text-base text-[var(--text-main)] group-hover:text-indigo-400 transition-colors block">
+                  @sushandjain
+                </span>
               </div>
-
-              <button
-                type="submit"
-                className="w-full magnetic-btn magnetic-btn-primary py-3.5 text-xs font-mono uppercase tracking-wider cursor-pointer"
-              >
-                <span>Dispatch Email Message</span>
-                <Send size={14} />
-              </button>
-            </form>
-          </div>
+            </div>
+            <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[var(--bg-secondary)] group-hover:bg-indigo-600 group-hover:text-white text-[var(--text-muted)] flex items-center justify-center transition-all">
+              <ArrowUpRight size={14} />
+            </div>
+          </a>
         </div>
       </div>
     </section>

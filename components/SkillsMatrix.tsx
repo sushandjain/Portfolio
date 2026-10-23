@@ -2,7 +2,8 @@
 
 import React, { useState, useId } from "react";
 import { skillGroups } from "@/lib/data";
-import { playPop, playTick } from "@/lib/sound";
+import { playPop, playTick, playSuccess } from "@/lib/sound";
+import confetti from "canvas-confetti";
 import {
   Cpu,
   Code2,
@@ -95,6 +96,19 @@ const enrichedSkillGroups = [
       { name: "Render Cloud", level: "Proficient", proficiency: 86, projectUsage: "Containerized Backend Microservice Hosting" },
     ],
   },
+  {
+    category: "AI & LLM Orchestration",
+    icon: Cpu,
+    accent: "#D97757", // Terracotta / Anthropic Accent
+    summary: "Claude 3.5 architecture, prompt design, reasoning engines & evaluation",
+    items: [
+      { name: "Claude 3.5 Sonnet / Opus", level: "Certified", proficiency: 96, projectUsage: "Anthropic Certified Associate, TCS GenAI Track" },
+      { name: "Prompt Architecture", level: "Expert", proficiency: 95, projectUsage: "System Prompts, Delimiters & Multi-Shot Chains" },
+      { name: "Output Evaluation & Grading", level: "Advanced", proficiency: 92, projectUsage: "Model Benchmark Harnesses & Rubrics" },
+      { name: "Extended Thinking & Reasoning", level: "Advanced", proficiency: 91, projectUsage: "Step-by-Step Chain-of-Thought Workflows" },
+      { name: "Responsible AI Engineering", level: "Advanced", proficiency: 94, projectUsage: "Anthropic Safety Guidelines & Bias Mitigation" },
+    ],
+  },
 ];
 
 // Radar spectrum competencies
@@ -168,14 +182,14 @@ export default function SkillsMatrix() {
         </div>
 
         {/* View Switcher Controls */}
-        <div className="flex items-center gap-2 p-1 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)]">
+        <div className="flex items-center gap-1.5 sm:gap-2 p-1 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)] overflow-x-auto no-scrollbar max-w-full">
           <button
             type="button"
             onClick={() => {
               setActiveView("bento");
               playPop();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap min-h-[44px] ${
               activeView === "bento"
                 ? "bg-indigo-600 text-white shadow-sm"
                 : "text-[var(--text-muted)] hover:text-white"
@@ -190,7 +204,7 @@ export default function SkillsMatrix() {
               setActiveView("radar");
               playPop();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap min-h-[44px] ${
               activeView === "radar"
                 ? "bg-indigo-600 text-white shadow-sm"
                 : "text-[var(--text-muted)] hover:text-white"
@@ -205,7 +219,7 @@ export default function SkillsMatrix() {
               setActiveView("search");
               playPop();
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-3 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap min-h-[44px] ${
               activeView === "search"
                 ? "bg-indigo-600 text-white shadow-sm"
                 : "text-[var(--text-muted)] hover:text-white"
@@ -252,25 +266,37 @@ export default function SkillsMatrix() {
           --------------------------------------------------------------------- */}
       {activeView === "bento" && (
         <>
-          {/* Category Filter Pills */}
+          {/* Category Filter Pills with Item Counts */}
           <div className="flex flex-wrap gap-2 mb-8">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => {
-                  setActiveTab(cat);
-                  playPop();
-                }}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all cursor-pointer ${
-                  activeTab === cat
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text-main)] border border-[var(--border-subtle)]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            {categories.map((cat) => {
+              const count = cat === "All"
+                ? allSkills.length
+                : enrichedSkillGroups.find((g) => g.category === cat)?.items.length;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(cat);
+                    playPop();
+                  }}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                    activeTab === cat
+                      ? "bg-indigo-600 text-white shadow-sm ring-1 ring-indigo-400/50"
+                      : "bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text-main)] border border-[var(--border-subtle)] hover:border-indigo-500/30"
+                  }`}
+                >
+                  <span>{cat}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                      activeTab === cat ? "bg-white/20 text-white" : "bg-white/5 text-[var(--text-faint)]"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Bento Grid of Cards */}
@@ -289,7 +315,7 @@ export default function SkillsMatrix() {
                       <div className="flex items-center justify-between pb-4 border-b border-[var(--border-subtle)] mb-5">
                         <div className="flex items-center gap-3">
                           <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center border"
+                            className="w-10 h-10 rounded-xl flex items-center justify-center border transition-transform duration-300 group-hover:scale-105"
                             style={{
                               backgroundColor: `${group.accent}15`,
                               borderColor: `${group.accent}40`,
@@ -323,12 +349,27 @@ export default function SkillsMatrix() {
                         {group.items.map((item, i) => (
                           <div
                             key={item.name}
+                            onClick={() => {
+                              if (item.proficiency >= 94) {
+                                playSuccess();
+                                try {
+                                  confetti({
+                                    particleCount: 40,
+                                    spread: 60,
+                                    origin: { y: 0.6 },
+                                    colors: [group.accent, "#6366F1", "#10B981"],
+                                  });
+                                } catch {}
+                              } else {
+                                playPop();
+                              }
+                            }}
                             onMouseEnter={() => {
                               playTick(720 + i * 35);
                               setHoveredSkill({ ...item, category: group.category });
                             }}
                             onMouseLeave={() => setHoveredSkill(null)}
-                            className="p-3 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-white/5 hover:border-indigo-500/30 transition-all duration-200 cursor-pointer group/item"
+                            className="p-3 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-white/5 hover:border-indigo-500/35 transition-all duration-200 cursor-pointer group/item relative overflow-hidden"
                           >
                             {/* Skill Name, Badge & Percentage */}
                             <div className="flex items-center justify-between mb-2">
@@ -353,13 +394,13 @@ export default function SkillsMatrix() {
                             </div>
 
                             {/* Animated Glowing Progress Bar */}
-                            <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden p-0.5 relative">
                               <div
                                 className="h-full rounded-full transition-all duration-700 ease-out group-hover/item:brightness-125"
                                 style={{
                                   width: `${item.proficiency}%`,
-                                  backgroundColor: group.accent,
-                                  boxShadow: `0 0 8px ${group.accent}70`,
+                                  background: `linear-gradient(90deg, ${group.accent}80, ${group.accent})`,
+                                  boxShadow: `0 0 10px ${group.accent}85`,
                                 }}
                               />
                             </div>
@@ -398,10 +439,10 @@ export default function SkillsMatrix() {
       {activeView === "radar" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center glass-panel p-6 sm:p-10 rounded-3xl border border-indigo-500/25">
           {/* Left: SVG Polar Radar Canvas */}
-          <div className="lg:col-span-6 flex items-center justify-center relative">
+          <div className="lg:col-span-6 flex items-center justify-center relative overflow-hidden sm:overflow-visible py-2">
             <svg
               viewBox="0 0 320 320"
-              className="w-full max-w-[340px] h-auto overflow-visible select-none"
+              className="w-full max-w-[270px] sm:max-w-[340px] h-auto overflow-visible select-none"
             >
               <defs>
                 <radialGradient id="radarGlow" cx="50%" cy="50%" r="50%">

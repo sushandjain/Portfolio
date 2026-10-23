@@ -12,12 +12,12 @@ interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * High-performance Spotlight Card Component
  * Uses CSS variables (--mouse-x, --mouse-y) for 60fps GPU-accelerated cursor illumination
- * without causing React re-renders.
+ * with dual-layer radial bloom without causing React re-renders.
  */
 export default function SpotlightCard({
   children,
   className = "",
-  spotlightColor = "rgba(99, 102, 241, 0.15)",
+  spotlightColor = "rgba(99, 102, 241, 0.16)",
   borderColor = "rgba(129, 140, 248, 0.45)",
   onMouseMove,
   onMouseEnter,
@@ -75,12 +75,21 @@ export default function SpotlightCard({
       }
       {...props}
     >
-      {/* Dynamic Cursor Spotlight Radial Glow */}
+      {/* Dynamic Cursor Spotlight Radial Glow - Ambient Outer Bloom */}
       <div
-        className="pointer-events-none absolute -inset-px rounded-3xl transition-opacity duration-300 z-10"
+        className="pointer-events-none absolute -inset-px rounded-3xl transition-opacity duration-500 z-10"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 60%)`,
+          background: `radial-gradient(650px circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 60%)`,
+        }}
+      />
+
+      {/* Dynamic Cursor Spotlight Radial Glow - Core Focused Specular */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-3xl transition-opacity duration-300 z-15"
+        style={{
+          opacity: isHovered ? 0.75 : 0,
+          background: `radial-gradient(220px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.08), transparent 70%)`,
         }}
       />
 
@@ -89,7 +98,7 @@ export default function SpotlightCard({
         className="pointer-events-none absolute -inset-px rounded-3xl transition-opacity duration-300 z-20"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), var(--border-color), transparent 70%)`,
+          background: `radial-gradient(450px circle at var(--mouse-x) var(--mouse-y), var(--border-color), transparent 65%)`,
           maskImage: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskImage: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           maskComposite: "exclude",

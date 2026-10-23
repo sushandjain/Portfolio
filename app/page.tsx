@@ -3,6 +3,7 @@ import CursorSound from "@/components/CursorSound";
 import ScrollMotion from "@/components/ScrollMotion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import PageLoader from "@/components/ui/PageLoader";
 import Ticker from "@/components/Ticker";
 import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
@@ -14,6 +15,9 @@ import Footer from "@/components/Footer";
 export default function Home() {
   return (
     <>
+      {/* Studio Olimpo-Inspired Editorial Cinematic Shutter Loader */}
+      <PageLoader />
+
       {/* Top Reading Progress Bar */}
       <ProgressBar />
 

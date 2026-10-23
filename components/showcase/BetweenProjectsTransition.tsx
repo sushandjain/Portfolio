@@ -49,6 +49,9 @@ export default function BetweenProjectsTransition({
 
     if (!container || !title) return;
 
+    const isMobile = window.innerWidth < 768;
+    const targetScale = isMobile ? 1.15 : 1.45;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -59,11 +62,11 @@ export default function BetweenProjectsTransition({
         },
       });
 
-      // Title scales up from 0.65 to 1.4, opacity 0.2 -> 1 -> 0.8
+      // Title scales up gracefully without edge clipping on mobile
       tl.fromTo(
         title,
-        { scale: 0.65, opacity: 0.25 },
-        { scale: 1.45, opacity: 1, ease: "power2.out" }
+        { scale: 0.7, opacity: 0.25 },
+        { scale: targetScale, opacity: 1, ease: "power2.out" }
       );
 
       // Glow intensifies as title expands
@@ -71,7 +74,7 @@ export default function BetweenProjectsTransition({
         tl.fromTo(
           glow,
           { opacity: 0, scale: 0.5 },
-          { opacity: 0.45, scale: 1.3, ease: "power2.out" },
+          { opacity: 0.45, scale: isMobile ? 1.05 : 1.3, ease: "power2.out" },
           "<"
         );
       }
@@ -80,7 +83,7 @@ export default function BetweenProjectsTransition({
       if (meta) {
         tl.fromTo(
           meta,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: isMobile ? 15 : 30 },
           { opacity: 1, y: 0, ease: "power2.out" },
           "<0.2"
         );
@@ -93,7 +96,7 @@ export default function BetweenProjectsTransition({
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-[90vh] lg:min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[#06080D] py-24 select-none"
+      className="relative w-full min-h-[90vh] min-h-[90dvh] lg:min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[#06080D] py-16 sm:py-24 select-none"
     >
       {/* Dynamic Ambient Glow Circle */}
       <div

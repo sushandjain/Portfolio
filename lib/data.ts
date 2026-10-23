@@ -291,18 +291,47 @@ export interface Certificate {
   issuer: string;
   date: string;
   badge: string;
-  driveUrl: string;
+  driveUrl?: string;
+  credlyUrl?: string;
+  credlyBadgeId?: string;
+  badgeImage?: string;
+  accentColor?: string;
+  isFeatured?: boolean;
   description: string;
   skillsVerified: string[];
 }
 
 export const certificates: Certificate[] = [
   {
+    id: "claude-certified-associate",
+    title: "Claude Certified Associate — Foundations",
+    issuer: "Anthropic",
+    date: "Oct 2026 – Oct 2027",
+    badge: "Anthropic Certified",
+    credlyUrl: "https://www.credly.com/badges/e66a5b5f-9a91-4a17-80c1-05e949d3df51",
+    credlyBadgeId: "e66a5b5f-9a91-4a17-80c1-05e949d3df51",
+    badgeImage: "/claude-badge.png",
+    accentColor: "#CC5500",
+    isFeatured: true,
+    description:
+      "Official practitioner certification from Anthropic for applying Claude to everyday business and enterprise engineering tasks, evaluating output, selecting optimal models, and deploying responsible AI systems.",
+    skillsVerified: [
+      "Claude 3.5 Sonnet / Opus",
+      "Prompt Architecture",
+      "Output Evaluation",
+      "Model Selection",
+      "Responsible AI",
+      "Enterprise GenAI Delivery",
+    ],
+  },
+  {
     id: "tcs-ai-friday",
     title: "2nd Place — TCS AI-Friday Hackathon",
     issuer: "Tata Consultancy Services (TCS)",
     date: "2026",
-    badge: "Hackathon Winner",
+    badge: "TCS Enterprise Winner",
+    accentColor: "#F59E0B",
+    isFeatured: true,
     driveUrl: "https://drive.google.com/file/d/1YRILSJmNRNpKXfT4Fdv1w9ffTBiSL6Z9/view?usp=drivesdk",
     description:
       "Awarded 2nd Place across TCS for engineering an AI-driven solution that parses unstructured business requirements and converts them into structured engineering data insights.",
@@ -314,6 +343,8 @@ export const certificates: Certificate[] = [
     issuer: "JSpiders (Q/JSpider) Hebbal, Bengaluru",
     date: "July 2025 – Feb 2026",
     badge: "Full Stack Mastery",
+    accentColor: "#10B981",
+    isFeatured: true,
     driveUrl: "https://drive.google.com/file/d/1KqbAk37MIZkDtMHSjcaNrMSw0QUferVj/view?usp=drivesdk",
     description:
       "Intensive practical immersion in modern full-stack development, covering React.js, Node.js, Express.js, MongoDB, RESTful API design, and production deployment.",
@@ -394,6 +425,17 @@ export const education = [
 
 export const achievements = [
   {
+    title: "Claude Certified Associate — Foundations",
+    issuer: "Anthropic",
+    date: "October 2026",
+    description:
+      "Officially accredited by Anthropic for expertise in applying Claude to everyday business workflows, prompt evaluation, model selection across the Claude 3.5 family, and responsible AI system design.",
+    icon: "award",
+    badge: "Anthropic Certified",
+    badgeImage: "/claude-badge.png",
+    credlyUrl: "https://www.credly.com/badges/e66a5b5f-9a91-4a17-80c1-05e949d3df51",
+  },
+  {
     title: "2nd Place — TCS AI-Friday Hackathon",
     issuer: "Tata Consultancy Services",
     date: "2026",
@@ -466,6 +508,16 @@ export const skillGroups: SkillGroup[] = [
       { name: "Vercel", level: "Advanced" },
       { name: "Netlify", level: "Proficient" },
       { name: "Render", level: "Proficient" },
+    ],
+  },
+  {
+    category: "AI & LLM Orchestration",
+    items: [
+      { name: "Claude 3.5 Sonnet / Opus", level: "Certified" },
+      { name: "Prompt Architecture", level: "Expert" },
+      { name: "Output Evaluation & Grading", level: "Advanced" },
+      { name: "Extended Thinking", level: "Advanced" },
+      { name: "Responsible AI", level: "Advanced" },
     ],
   },
 ];
