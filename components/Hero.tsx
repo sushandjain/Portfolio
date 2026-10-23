@@ -44,6 +44,31 @@ export default function Hero() {
     let currentX = -1000;
     let targetY = -1000;
     let currentY = -1000;
+    let isVisible = true;
+
+    // Cached geometry to prevent forced layout reflows (getBoundingClientRect) inside RAF
+    let heroRectLeft = 0;
+    let heroRectTop = 0;
+    let charCenters1: number[] = [];
+    let charCenters2: number[] = [];
+
+    const measureCenters = () => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        heroRectLeft = rect.left;
+        heroRectTop = rect.top;
+      }
+      charCenters1 = charRefs1.current.map((el) => {
+        if (!el) return 0;
+        const r = el.getBoundingClientRect();
+        return r.left + r.width / 2;
+      });
+      charCenters2 = charRefs2.current.map((el) => {
+        if (!el) return 0;
+        const r = el.getBoundingClientRect();
+        return r.left + r.width / 2;
+      });
+    };
 
     const onPointerMove = (e: PointerEvent) => {
       targetX = e.clientX;
@@ -57,12 +82,18 @@ export default function Hero() {
       }, 2500);
     };
 
+    const onPointerEnter = () => {
+      mouseInHero.current = true;
+      measureCenters();
+    };
+
     const onPointerLeave = () => {
       mouseInHero.current = false;
     };
 
     // Mobile touch interaction engine
     const onTouchStart = (e: TouchEvent) => {
+      measureCenters();
       if (e.touches && e.touches.length > 0) {
         targetX = e.touches[0].clientX;
         targetY = e.touches[0].clientY;
@@ -92,6 +123,8 @@ export default function Hero() {
     };
 
     const updateLetterWave = () => {
+      if (!isVisible) return;
+
       const now = performance.now();
       const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
       const radius = isMobile ? 120 : 220; // Mobile-tuned influence field
@@ -100,22 +133,22 @@ export default function Hero() {
       currentX += (targetX - currentX) * (isMobile ? 0.22 : 0.16);
       currentY += (targetY - currentY) * (isMobile ? 0.22 : 0.16);
 
-      // Update dynamic fluid aura
-      if (auraRef.current && heroRef.current) {
-        const heroRect = heroRef.current.getBoundingClientRect();
-        const auraX = currentX - heroRect.left;
-        const auraY = currentY - heroRect.top;
+      // Update dynamic fluid aura using cached hero coordinates (zero reflows)
+      if (auraRef.current && mouseInHero.current && !isIdle.current) {
+        const auraX = currentX - heroRectLeft;
+        const auraY = currentY - heroRectTop;
         auraRef.current.style.transform = `translate3d(${auraX - 250}px, ${auraY - 250}px, 0)`;
-        auraRef.current.style.opacity = mouseInHero.current && !isIdle.current ? "0.65" : "0.2";
+        auraRef.current.style.opacity = "0.65";
+      } else if (auraRef.current) {
+        auraRef.current.style.opacity = "0.15";
       }
 
       if (stretchMode === "wave") {
         if (!isIdle.current && targetX > 0) {
-          // PROXIMITY WAVE: Calculate distance of each letter from touch/cursor
+          // PROXIMITY WAVE: Uses precomputed charCenters (ZERO getBoundingClientRect calls)
           charRefs1.current.forEach((charEl, idx) => {
             if (!charEl) return;
-            const rect = charEl.getBoundingClientRect();
-            const charCenterX = rect.left + rect.width / 2;
+            const charCenterX = charCenters1[idx] || (window.innerWidth / 2);
             const dist = Math.abs(currentX - charCenterX);
 
             // Gaussian bell curve stretch (calibrated to stay within 100vw on 320px+ phones)
@@ -131,8 +164,7 @@ export default function Hero() {
           // Inverse wave for Line 2 (JAIN) - Creates dynamic accordion interplay
           charRefs2.current.forEach((charEl, idx) => {
             if (!charEl) return;
-            const rect = charEl.getBoundingClientRect();
-            const charCenterX = rect.left + rect.width / 2;
+            const charCenterX = charCenters2[idx] || (window.innerWidth / 2);
             const dist = Math.abs(currentX - charCenterX);
 
             const influence = Math.exp(-Math.pow(dist / radius, 2));
@@ -181,9 +213,35 @@ export default function Hero() {
     window.addEventListener("pointerleave", onPointerLeave);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("resize", measureCenters);
+
+    // Pause physics engine when Hero is out of viewport to give 100% CPU to rest of the page
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!isVisible) {
+              isVisible = true;
+              measureCenters();
+              cancelAnimationFrame(rafId);
+              rafId = requestAnimationFrame(updateLetterWave);
+            }
+          } else {
+            isVisible = false;
+            cancelAnimationFrame(rafId);
+          }
+        });
+      },
+      { threshold: 0.02 }
+    );
+
+    if (heroRef.current) observer.observe(heroRef.current);
+
     const startWaveTimer = setTimeout(() => {
+      measureCenters();
       rafId = requestAnimationFrame(updateLetterWave);
-    }, 250);
+    }, 320);
 
     return () => {
       clearTimeout(startWaveTimer);
@@ -192,7 +250,9 @@ export default function Hero() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("resize", measureCenters);
       cancelAnimationFrame(rafId);
+      observer.disconnect();
       if (idleTimer.current) clearTimeout(idleTimer.current);
     };
   }, [stretchMode]);

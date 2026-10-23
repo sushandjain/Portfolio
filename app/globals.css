@@ -444,9 +444,17 @@ button, input, textarea {
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
   transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+  transform: translateZ(0);
 }
 .glass-panel:hover {
   border-color: var(--border-focus);
+}
+
+@media (max-width: 768px) {
+  .glass-panel {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
 
 /* Kinetic Variable Stretch Typography */

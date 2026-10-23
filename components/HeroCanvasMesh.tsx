@@ -141,13 +141,12 @@ export default function HeroCanvasMesh() {
     };
 
     // Animate loop
-    const render = (time: number) => {
-      if (!isVisible) {
-        animationFrameId = requestAnimationFrame(render);
-        return;
-      }
+    const render = () => {
+      if (!isVisible) return;
 
       ctx.clearRect(0, 0, width, height);
+
+      const isMobile = width < 768;
 
       // Smooth mouse lerp
       if (mouse.isActive) {
@@ -158,7 +157,7 @@ export default function HeroCanvasMesh() {
         mouse.y = -1000;
       }
 
-      const connectionDistance = 125;
+      const connectionDistance = isMobile ? 92 : 125;
       const connectionDistanceSq = connectionDistance * connectionDistance;
       const mouseDistanceSq = mouse.radius * mouse.radius;
 
@@ -231,8 +230,12 @@ export default function HeroCanvasMesh() {
           ctx.fillStyle = `${p.color}${(p.currentAlpha * 0.12).toFixed(3)})`;
           ctx.fill();
         }
+      }
 
-        // 2. Connective filaments between adjacent nodes
+      // 2. Batched connective filaments between adjacent nodes (single path & stroke for 60/120fps)
+      ctx.beginPath();
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
@@ -240,18 +243,14 @@ export default function HeroCanvasMesh() {
           const distSq = dx * dx + dy * dy;
 
           if (distSq < connectionDistanceSq) {
-            const dist = Math.sqrt(distSq);
-            const lineAlpha = (1 - dist / connectionDistance) * 0.18;
-
-            ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(165, 180, 252, ${lineAlpha.toFixed(3)})`;
-            ctx.lineWidth = 0.65;
-            ctx.stroke();
           }
         }
       }
+      ctx.strokeStyle = "rgba(165, 180, 252, 0.12)";
+      ctx.lineWidth = 0.65;
+      ctx.stroke();
 
       animationFrameId = requestAnimationFrame(render);
     };
@@ -277,11 +276,20 @@ export default function HeroCanvasMesh() {
       parent.addEventListener("touchend", onTouchEnd, { passive: true });
     }
 
-    // IntersectionObserver to pause rendering when scrolled out of view
+    // IntersectionObserver to truly pause rendering when scrolled out of view (0% CPU/GPU)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          isVisible = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            if (!isVisible) {
+              isVisible = true;
+              cancelAnimationFrame(animationFrameId);
+              animationFrameId = requestAnimationFrame(render);
+            }
+          } else {
+            isVisible = false;
+            cancelAnimationFrame(animationFrameId);
+          }
         });
       },
       { threshold: 0.05 }
@@ -293,7 +301,7 @@ export default function HeroCanvasMesh() {
     const startTimer = setTimeout(() => {
       initDimensions();
       animationFrameId = requestAnimationFrame(render);
-    }, 120);
+    }, 280);
 
     return () => {
       clearTimeout(startTimer);

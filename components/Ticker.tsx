@@ -9,42 +9,31 @@ export default function Ticker() {
   const lastScrollY = useRef(0);
   const lastTime = useRef(performance.now());
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    let rafId = 0;
-    let targetBoost = 1;
-    let currentBoost = 1;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const onScroll = () => {
-      const now = performance.now();
-      const dt = Math.max(1, now - lastTime.current);
-      lastTime.current = now;
+    // Pause ticker on GPU when offscreen to free mobile resources
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (track1Ref.current) {
+            track1Ref.current.style.animationPlayState = entry.isIntersecting ? "running" : "paused";
+          }
+          if (track2Ref.current) {
+            track2Ref.current.style.animationPlayState = entry.isIntersecting ? "running" : "paused";
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
 
-      const deltaY = Math.abs(window.scrollY - lastScrollY.current);
-      lastScrollY.current = window.scrollY;
-
-      const velocity = (deltaY / dt) * 16;
-      targetBoost = Math.min(3.5, 1 + velocity * 0.08);
-    };
-
-    const loop = () => {
-      targetBoost += (1 - targetBoost) * 0.06;
-      currentBoost += (targetBoost - currentBoost) * 0.12;
-
-      if (track1Ref.current) {
-        track1Ref.current.style.animationDuration = `${(32 / currentBoost).toFixed(2)}s`;
-      }
-      if (track2Ref.current) {
-        track2Ref.current.style.animationDuration = `${(38 / currentBoost).toFixed(2)}s`;
-      }
-      rafId = requestAnimationFrame(loop);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    rafId = requestAnimationFrame(loop);
+    observer.observe(container);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(rafId);
+      observer.disconnect();
     };
   }, []);
 
@@ -76,7 +65,10 @@ export default function Ticker() {
   ];
 
   return (
-    <div className="w-full py-8 border-y border-[var(--border-subtle)] bg-[var(--bg-secondary)] overflow-hidden select-none space-y-3">
+    <div
+      ref={containerRef}
+      className="w-full py-8 border-y border-[var(--border-subtle)] bg-[var(--bg-secondary)] overflow-hidden select-none space-y-3"
+    >
       {/* Track 1: Scrolling Left with Dynamic Velocity Acceleration */}
       <div
         ref={track1Ref}

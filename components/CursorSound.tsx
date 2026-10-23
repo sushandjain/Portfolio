@@ -47,10 +47,21 @@ export default function CursorSound() {
 
     // Smooth animation loop for trailing fluid velocity-stretching ring
     let rafId = 0;
+    let isTicking = false;
+
+    const startTick = () => {
+      if (!isTicking) {
+        isTicking = true;
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
     const tick = () => {
       const ease = 0.18;
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * ease;
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * ease;
+      const dx = mousePos.current.x - ringPos.current.x;
+      const dy = mousePos.current.y - ringPos.current.y;
+      ringPos.current.x += dx * ease;
+      ringPos.current.y += dy * ease;
 
       // Calculate fluid stretch based on speed
       const isHovering = !!hoverState.current;
@@ -72,9 +83,20 @@ export default function CursorSound() {
         }
       }
 
+      // If resting and at destination, sleep loop
+      if (Math.abs(dx) < 0.25 && Math.abs(dy) < 0.25 && speed < 0.05) {
+        isTicking = false;
+        return;
+      }
+
       rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
+
+    // Wake up loop on pointer movement
+    const onMouseMoveWithWake = (e: MouseEvent) => {
+      onMouseMove(e);
+      startTick();
+    };
 
     // Detect interactive elements for cursor expansion & contextual labeling
     const onMouseOver = (e: MouseEvent) => {
@@ -129,12 +151,12 @@ export default function CursorSound() {
       }
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseover", onMouseOver);
+    window.addEventListener("mousemove", onMouseMoveWithWake, { passive: true });
+    document.addEventListener("mouseover", onMouseOver, { passive: true });
 
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mousemove", onMouseMoveWithWake);
       document.removeEventListener("mouseover", onMouseOver);
     };
   }, []);

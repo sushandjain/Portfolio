@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import ProgressBar from "@/components/ProgressBar";
 import CursorSound from "@/components/CursorSound";
-import ScrollMotion from "@/components/ScrollMotion";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import PageLoader from "@/components/ui/PageLoader";
@@ -23,9 +22,6 @@ export default function Home() {
 
       {/* Top Reading Progress Bar */}
       <ProgressBar />
-
-      {/* Kinetic Inertia Scroll Skew & Velocity Engine */}
-      <ScrollMotion />
 
       {/* Interactive Velocity-Stretching Cursor & Sound FX */}
       <CursorSound />
