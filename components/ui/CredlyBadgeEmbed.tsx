@@ -29,7 +29,8 @@ export default function CredlyBadgeEmbed({
   const [iframeLoaded, setIframeLoaded] = useState(false);
 
   useEffect(() => {
-    // Inject official Credly script as well for standards compliance
+    // Only load external script if user explicitly toggles to the live embed tab
+    if (activeTab !== "live_embed") return;
     const scriptId = "credly-embed-script";
     let script = document.getElementById(scriptId) as HTMLScriptElement | null;
     if (!script) {
@@ -37,10 +38,10 @@ export default function CredlyBadgeEmbed({
       script.id = scriptId;
       script.type = "text/javascript";
       script.async = true;
-      script.src = "//cdn.credly.com/assets/utilities/embed.js";
+      script.src = "https://cdn.credly.com/assets/utilities/embed.js";
       document.body.appendChild(script);
     }
-  }, []);
+  }, [activeTab]);
 
   const verificationUrl = `${badgeHost}/badges/${badgeId}`;
   const embeddedBadgeUrl = `${badgeHost}/embedded_badge/${badgeId}`;

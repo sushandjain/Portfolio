@@ -11,6 +11,15 @@ export default function ScrollMotion() {
   useEffect(() => {
     let rafId = 0;
 
+    let isRunning = false;
+
+    const startLoop = () => {
+      if (!isRunning) {
+        isRunning = true;
+        rafId = requestAnimationFrame(updateLoop);
+      }
+    };
+
     const onScroll = () => {
       const now = performance.now();
       const dt = Math.max(1, now - lastTime.current);
@@ -20,8 +29,9 @@ export default function ScrollMotion() {
       lastScrollY.current = window.scrollY;
 
       // Calculate scroll velocity (pixels per ms)
-      const rawVelocity = deltaY / dt * 16;
+      const rawVelocity = (deltaY / dt) * 16;
       velocity.current = Math.max(-40, Math.min(40, rawVelocity));
+      startLoop();
     };
 
     const updateLoop = () => {
@@ -31,6 +41,15 @@ export default function ScrollMotion() {
       // Map velocity to a subtle, premium skew angle (-2deg to +2deg)
       const targetSkew = Math.max(-2.2, Math.min(2.2, velocity.current * 0.07));
       currentSkew.current += (targetSkew - currentSkew.current) * 0.14;
+
+      if (Math.abs(currentSkew.current) < 0.01 && Math.abs(velocity.current) < 0.05) {
+        currentSkew.current = 0;
+        velocity.current = 0;
+        document.documentElement.style.setProperty("--scroll-skew", "0deg");
+        document.documentElement.style.setProperty("--scroll-velocity", "0");
+        isRunning = false;
+        return;
+      }
 
       // Update root CSS variable
       document.documentElement.style.setProperty("--scroll-skew", `${currentSkew.current.toFixed(2)}deg`);
@@ -43,7 +62,6 @@ export default function ScrollMotion() {
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    rafId = requestAnimationFrame(updateLoop);
 
     return () => {
       window.removeEventListener("scroll", onScroll);

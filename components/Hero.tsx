@@ -181,10 +181,12 @@ export default function Hero() {
     window.addEventListener("pointerleave", onPointerLeave);
     window.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("touchend", onTouchEnd, { passive: true });
-    rafId = requestAnimationFrame(updateLetterWave);
+    const startWaveTimer = setTimeout(() => {
+      rafId = requestAnimationFrame(updateLetterWave);
+    }, 250);
 
     return () => {
+      clearTimeout(startWaveTimer);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerleave", onPointerLeave);
       window.removeEventListener("touchstart", onTouchStart);

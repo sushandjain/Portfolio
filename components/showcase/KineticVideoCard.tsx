@@ -13,6 +13,7 @@ if (typeof window !== "undefined") {
 
 interface KineticVideoCardProps {
   videoUrl: string;
+  poster?: string;
   title: string;
   tagline: string;
   badge?: string;
@@ -30,9 +31,11 @@ interface KineticVideoCardProps {
  * - 3D physics-based micro-tilt with reflective glare
  * - Continuous ambient autoplay with user sound & play/pause toggles
  * - Live telemetry HUD (1080p, 60fps, timecode, status)
+ * - IntersectionObserver: Zero initial byte buffering until scrolled near view
  */
 export default function KineticVideoCard({
   videoUrl,
+  poster,
   title,
   tagline,
   badge = "1080P DEMO WALKTHROUGH",
@@ -46,9 +49,50 @@ export default function KineticVideoCard({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
+  const [isInView, setIsInView] = useState(false);
   const [currentTime, setCurrentTime] = useState("00:00");
   const [duration, setDuration] = useState("00:00");
   const [progress, setProgress] = useState(0);
+
+  // Auto-detect poster frame if not passed
+  const resolvedPoster =
+    poster ||
+    (videoUrl.includes("henjodi")
+      ? "/henjodi/henjodi-poster.jpg"
+      : videoUrl.includes("malnad")
+      ? "/malnaddirect/malnad-poster.jpg"
+      : videoUrl.includes("tunexia")
+      ? "/tunexia/tunexia-poster.jpg"
+      : "/projects/kheti-bazaar-poster.jpg");
+
+  // Lazy load video only when scrolled within 250px of viewport
+  useEffect(() => {
+    if (!cardRef.current || typeof IntersectionObserver === "undefined") {
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true);
+            if (videoRef.current && isPlaying) {
+              videoRef.current.play().catch(() => {});
+            }
+          } else {
+            if (videoRef.current) {
+              videoRef.current.pause();
+            }
+          }
+        });
+      },
+      { rootMargin: "250px 0px" }
+    );
+
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, [isPlaying]);
 
   // Scroll movement parallax and scale effect
   useEffect(() => {
@@ -156,8 +200,9 @@ export default function KineticVideoCard({
           <div className={`relative w-full ${aspectRatio} overflow-hidden bg-black flex-1`}>
             <video
               ref={videoRef}
-              src={videoUrl}
-              autoPlay
+              src={isInView ? videoUrl : undefined}
+              poster={resolvedPoster}
+              preload="none"
               muted={isMuted}
               loop
               playsInline

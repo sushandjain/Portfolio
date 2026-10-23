@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import ProgressBar from "@/components/ProgressBar";
 import CursorSound from "@/components/CursorSound";
 import ScrollMotion from "@/components/ScrollMotion";
@@ -5,12 +6,14 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import PageLoader from "@/components/ui/PageLoader";
 import Ticker from "@/components/Ticker";
-import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
-import SkillsMatrix from "@/components/SkillsMatrix";
-import Education from "@/components/Education";
-import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+
+// Code-split below-the-fold heavy sections for ultra-fast initial bundle hydration
+const Projects = dynamic(() => import("@/components/Projects"));
+const Experience = dynamic(() => import("@/components/Experience"));
+const SkillsMatrix = dynamic(() => import("@/components/SkillsMatrix"));
+const Education = dynamic(() => import("@/components/Education"));
+const Contact = dynamic(() => import("@/components/Contact"));
 
 export default function Home() {
   return (

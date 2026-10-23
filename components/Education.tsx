@@ -243,6 +243,8 @@ export default function Education() {
                             alt={cert.title}
                             width={44}
                             height={44}
+                            loading="lazy"
+                            decoding="async"
                             className="object-contain"
                           />
                         </div>

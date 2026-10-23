@@ -141,6 +141,8 @@ export default function Experience() {
                           alt={ach.title}
                           width={42}
                           height={42}
+                          loading="lazy"
+                          decoding="async"
                           className="object-contain"
                         />
                       </div>

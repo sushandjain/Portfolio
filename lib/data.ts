@@ -259,10 +259,10 @@ export const projects: Project[] = [
     previewGradient: "from-emerald-950 via-teal-950 to-slate-900",
     badgeColor: "#10B981",
     accentHex: "#10B981",
-    previewImage: "/projects/kheti-bazaar-preview.gif",
+    previewImage: "/projects/kheti-bazaar-poster.jpg",
     screenshots: [
       {
-        url: "/projects/kheti-bazaar-preview.gif",
+        url: "/projects/kheti-bazaar-poster.jpg",
         title: "Direct Producer-Buyer Hub",
         caption: "Real-time marketplace connecting smallholder farmers directly with commercial wholesale buyers.",
       },
@@ -272,7 +272,7 @@ export const projects: Project[] = [
         caption: "Secure role-based views for farmers, commercial buyers, and regional produce administrators.",
       },
       {
-        url: "/projects/kheti-bazaar-preview.gif",
+        url: "/projects/kheti-bazaar-poster.jpg",
         title: "Live Price Negotiation Engine",
         caption: "WhatsApp deep-link messaging eliminating predatory middlemen through transparent pricing.",
       },

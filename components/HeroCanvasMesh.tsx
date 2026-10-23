@@ -256,8 +256,6 @@ export default function HeroCanvasMesh() {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    initDimensions();
-
     // Resize handler
     let resizeTimer: NodeJS.Timeout;
     const handleResize = () => {
@@ -290,9 +288,15 @@ export default function HeroCanvasMesh() {
     );
 
     observer.observe(canvas);
-    animationFrameId = requestAnimationFrame(render);
+
+    // Defer canvas particle calculations until after initial paint
+    const startTimer = setTimeout(() => {
+      initDimensions();
+      animationFrameId = requestAnimationFrame(render);
+    }, 120);
 
     return () => {
+      clearTimeout(startTimer);
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);

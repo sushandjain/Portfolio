@@ -177,8 +177,10 @@ export default function RevealImage({
               src={src}
               alt={alt}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 50vw"
+              sizes="(max-width: 768px) 85vw, 600px"
               priority={priority}
+              loading={priority ? undefined : "lazy"}
+              decoding="async"
               onError={() => setHasError(true)}
               className="object-cover object-top select-none pointer-events-none"
             />

@@ -218,26 +218,32 @@ function ShutterLogoView({ id, accent }: { id: string; accent: string }) {
  * with a high-precision numeric counter and curtain-reveal exit motion.
  */
 export default function PageLoader() {
-  const [progress, setProgress] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [isMounted, setIsMounted] = useState(true);
+  const numberRef = useRef<HTMLSpanElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const statusRef = useRef<HTMLParagraphElement>(null);
   const lastSoundPercent = useRef(0);
   const lastIndex = useRef(0);
 
-  const activeIndex = Math.max(
-    0,
-    Math.min(
-      logoSlides.length - 1,
-      Number.isFinite(progress) ? Math.floor((progress / 100) * logoSlides.length) : 0
-    )
-  );
-
   useEffect(() => {
+    // Skip loader on repeat visits within the same session
+    try {
+      if (sessionStorage.getItem("portfolio_loader_seen") === "1") {
+        setIsMounted(false);
+        return;
+      }
+    } catch {
+      // sessionStorage unavailable
+    }
+
     // Lock body scroll while loader is active
     document.body.style.overflow = "hidden";
 
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     const startTime = performance.now();
-    const duration = 2100; // 2.1s cinematic sweep
+    const duration = isMobile ? 90 : 250; // high-speed camera shutter burst
 
     let animationFrame: number;
 
@@ -256,7 +262,20 @@ export default function PageLoader() {
       }
 
       const calculatedProgress = Math.min(100, Math.floor(easedRatio * 100));
-      setProgress(calculatedProgress);
+
+      if (numberRef.current) {
+        numberRef.current.textContent = calculatedProgress.toString().padStart(2, "0");
+      }
+      if (barRef.current) {
+        barRef.current.style.width = `${calculatedProgress}%`;
+      }
+      if (statusRef.current) {
+        if (calculatedProgress < 25) statusRef.current.textContent = "INITIALIZING CODING & ALGORITHMIC ARCHITECTURE...";
+        else if (calculatedProgress < 50) statusRef.current.textContent = "MOUNTING JAVASCRIPT & ASYNCHRONOUS RUNTIME...";
+        else if (calculatedProgress < 75) statusRef.current.textContent = "CALIBRATING TCS SYSTEMS ENGINEERING PROTOCOLS...";
+        else if (calculatedProgress < 95) statusRef.current.textContent = "SYNCHRONIZING CONTINUOUS LEARNING & AI MODELS...";
+        else statusRef.current.textContent = "SYSTEMS READY · UNVEILING EXPERIENCES";
+      }
 
       // Micro audio tick every 8-10%
       if (calculatedProgress - lastSoundPercent.current >= 9) {
@@ -272,64 +291,71 @@ export default function PageLoader() {
       if (currentIdx !== lastIndex.current) {
         playTick(820 + currentIdx * 40);
         lastIndex.current = currentIdx;
+        setActiveIndex(currentIdx);
       }
 
       if (rawRatio < 1) {
         animationFrame = requestAnimationFrame(tick);
       } else {
-        setProgress(100);
+        if (numberRef.current) numberRef.current.textContent = "100";
+        if (barRef.current) barRef.current.style.width = "100%";
         playSuccess();
 
-        // Brief hold at 100% then trigger smooth curtain slide up
+        try {
+          sessionStorage.setItem("portfolio_loader_seen", "1");
+        } catch {
+          // sessionStorage unavailable
+        }
+
+        // Snappy curtain exit
         setTimeout(() => {
           setIsExiting(true);
-          // Unlock body scroll
           document.body.style.overflow = "";
-
-          // Unmount from DOM after exit transition
           setTimeout(() => {
             setIsMounted(false);
-          }, 850);
-        }, 220);
+          }, 200);
+        }, 20);
       }
     };
 
     animationFrame = requestAnimationFrame(tick);
 
+    // Guaranteed unmount fallback after compositor animation completes
+    const fallbackTimer = setTimeout(() => {
+      document.body.style.overflow = "";
+      setIsMounted(false);
+    }, isMobile ? 500 : 850);
+
     return () => {
+      clearTimeout(fallbackTimer);
       cancelAnimationFrame(animationFrame);
       document.body.style.overflow = "";
     };
   }, []);
 
   const handleSkip = () => {
-    setProgress(100);
+    try {
+      sessionStorage.setItem("portfolio_loader_seen", "1");
+    } catch {
+      // sessionStorage unavailable
+    }
+    if (numberRef.current) numberRef.current.textContent = "100";
+    if (barRef.current) barRef.current.style.width = "100%";
     setIsExiting(true);
     document.body.style.overflow = "";
     setTimeout(() => {
       setIsMounted(false);
-    }, 400);
+    }, 150);
   };
 
   if (!isMounted) return null;
 
   const currentSlide = logoSlides[activeIndex] || logoSlides[0];
 
-  // Dynamic status text based on progress
-  const getStatusText = () => {
-    if (progress < 25) return "INITIALIZING CODING & ALGORITHMIC ARCHITECTURE...";
-    if (progress < 50) return "MOUNTING JAVASCRIPT & ASYNCHRONOUS RUNTIME...";
-    if (progress < 75) return "CALIBRATING TCS SYSTEMS ENGINEERING PROTOCOLS...";
-    if (progress < 95) return "SYNCHRONIZING CONTINUOUS LEARNING & AI MODELS...";
-    return "SYSTEMS READY · UNVEILING EXPERIENCES";
-  };
-
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col justify-between p-4 sm:p-8 lg:p-12 bg-[#08090E] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] will-change-transform ${
-        isExiting
-          ? "-translate-y-full opacity-90 shadow-2xl shadow-black pointer-events-none"
-          : "translate-y-0 opacity-100"
+      className={`fixed inset-0 z-[9999] flex flex-col justify-between p-4 sm:p-8 lg:p-12 bg-[#08090E] text-white select-none will-change-transform shutter-curtain-auto shadow-2xl shadow-black ${
+        isExiting ? "-translate-y-full opacity-0 pointer-events-none" : ""
       }`}
       style={{
         backgroundImage: `radial-gradient(circle at 50% 50%, rgba(${currentSlide.accentRgb}, 0.12) 0%, rgba(8, 9, 14, 0.98) 75%)`,
@@ -359,7 +385,7 @@ export default function PageLoader() {
             className="text-3xl sm:text-5xl lg:text-6xl font-black font-mono tracking-tighter text-white tabular-nums leading-none"
             style={{ fontFamily: "var(--font-d)" }}
           >
-            {progress.toString().padStart(2, "0")}
+            <span ref={numberRef}>00</span>
             <span
               className="text-sm sm:text-2xl font-bold ml-1 transition-colors duration-200"
               style={{ color: currentSlide.accent }}
@@ -450,8 +476,8 @@ export default function PageLoader() {
 
         {/* Current Loading Step Subtitle */}
         <div className="mt-4 sm:mt-6 text-center max-w-sm px-4">
-          <p className="text-[10px] sm:text-xs font-mono text-zinc-400 tracking-wider">
-            {getStatusText()}
+          <p ref={statusRef} className="text-[10px] sm:text-xs font-mono text-zinc-400 tracking-wider">
+            INITIALIZING CODING &amp; ALGORITHMIC ARCHITECTURE...
           </p>
         </div>
       </div>
@@ -461,9 +487,10 @@ export default function PageLoader() {
         {/* Real-time 2px razor line with active accent color */}
         <div className="w-full h-[2px] bg-white/10 rounded-full overflow-hidden relative">
           <div
-            className="h-full transition-all duration-100 ease-out"
+            ref={barRef}
+            className="h-full transition-all duration-75 ease-out"
             style={{
-              width: `${progress}%`,
+              width: "0%",
               background: `linear-gradient(90deg, #06B6D4 0%, ${currentSlide.accent} 100%)`,
             }}
           />

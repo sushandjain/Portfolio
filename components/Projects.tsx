@@ -28,8 +28,105 @@ import { GithubIcon } from "@/components/Icons";
 import ProjectShowcase from "@/components/showcase/ProjectShowcase";
 import SpotlightCard from "@/components/ui/SpotlightCard";
 import TiltCard from "@/components/ui/TiltCard";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+const projectPosters: Record<string, string> = {
+  "malnad-direct": "/malnaddirect/malnad-poster.jpg",
+  "henjodi-stores": "/henjodi/henjodi-poster.jpg",
+  "tunexia": "/tunexia/tunexia-poster.jpg",
+  "kheti-bazaar": "/projects/kheti-bazaar-poster.jpg",
+};
+
+function DeferredCardMedia({ project }: { project: Project }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const poster = projectPosters[project.id] || project.previewImage;
+
+  useEffect(() => {
+    if (!project.videoUrl) return;
+
+    const el = containerRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoadVideo(true);
+            if (videoRef.current) {
+              videoRef.current.play().catch(() => {});
+            }
+          } else {
+            if (videoRef.current) {
+              videoRef.current.pause();
+            }
+          }
+        });
+      },
+      { rootMargin: "300px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [project.videoUrl]);
+
+  return (
+    <div ref={containerRef} className="relative h-64 sm:h-72 w-full overflow-hidden bg-black/40">
+      {project.videoUrl ? (
+        <video
+          ref={videoRef}
+          src={shouldLoadVideo ? project.videoUrl : undefined}
+          poster={poster}
+          preload="none"
+          autoPlay={shouldLoadVideo}
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+        />
+      ) : project.previewImage ? (
+        <Image
+          src={project.previewImage}
+          alt={project.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      ) : (
+        <div className={`w-full h-full bg-gradient-to-br ${project.previewGradient}`} />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-85 pointer-events-none" />
+
+      {/* Overlaid Pill Badge */}
+      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+        <span
+          className="px-3 py-1 rounded-full text-xs font-mono font-bold backdrop-blur-md"
+          style={{
+            backgroundColor: `${project.badgeColor}25`,
+            color: project.badgeColor,
+            border: `1px solid ${project.badgeColor}50`,
+          }}
+        >
+          {project.category}
+        </span>
+
+        <div className="flex items-center gap-2">
+          {project.videoUrl && (
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-indigo-600/85 backdrop-blur-md text-white flex items-center gap-1 shadow-sm">
+              <Film size={11} /> 1 VIDEO
+            </span>
+          )}
+          {project.screenshots && project.screenshots.length > 0 && (
+            <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-black/75 backdrop-blur-md text-emerald-300 border border-emerald-500/30">
+              {project.screenshots.length} SCREENS
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -322,8 +419,9 @@ export default function Projects() {
                         src={project.previewImage}
                         alt={project.name}
                         fill
+                        sizes="96px"
+                        loading="lazy"
                         className="object-cover object-top"
-                        unoptimized
                       />
                     </div>
                   )}
@@ -441,56 +539,7 @@ export default function Projects() {
               </div>
 
               {/* Real Project Video Demo or Image with Pan Zoom on hover */}
-              <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-black/40">
-                {project.videoUrl ? (
-                  <video
-                    src={project.videoUrl}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                  />
-                ) : project.previewImage ? (
-                  <Image
-                    src={project.previewImage}
-                    alt={project.name}
-                    fill
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                    unoptimized
-                  />
-                ) : (
-                  <div className={`w-full h-full bg-gradient-to-br ${project.previewGradient}`} />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-85 pointer-events-none" />
-
-                {/* Overlaid Pill Badge */}
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-mono font-bold backdrop-blur-md"
-                    style={{
-                      backgroundColor: `${project.badgeColor}25`,
-                      color: project.badgeColor,
-                      border: `1px solid ${project.badgeColor}50`,
-                    }}
-                  >
-                    {project.category}
-                  </span>
-
-                  <div className="flex items-center gap-2">
-                    {project.videoUrl && (
-                      <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-indigo-600/85 backdrop-blur-md text-white flex items-center gap-1 shadow-sm">
-                        <Film size={11} /> 1 VIDEO
-                      </span>
-                    )}
-                    {project.screenshots && project.screenshots.length > 0 && (
-                      <span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold bg-black/75 backdrop-blur-md text-emerald-300 border border-emerald-500/30">
-                        {project.screenshots.length} SCREENS
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <DeferredCardMedia project={project} />
 
               {/* Project Details */}
               <div className="p-6">
@@ -558,8 +607,9 @@ export default function Projects() {
                 src={hoveredProject.previewImage}
                 alt={hoveredProject.name}
                 fill
+                sizes="384px"
+                loading="lazy"
                 className="object-cover object-top"
-                unoptimized
               />
             ) : (
               <div className={`w-full h-full bg-gradient-to-br ${hoveredProject.previewGradient}`} />
@@ -843,8 +893,8 @@ export default function Projects() {
                           src={spotlight.url}
                           alt={spotlight.title}
                           fill
+                          sizes="(max-width: 1024px) 100vw, 1024px"
                           className="object-contain p-2"
-                          unoptimized
                         />
 
                         {/* Architectural Caption Pill */}
@@ -927,6 +977,8 @@ export default function Projects() {
                         <div className="relative h-44 w-full bg-black overflow-hidden flex items-center justify-center">
                           <video
                             src={selectedProject.videoUrl}
+                            poster={projectPosters[selectedProject.id]}
+                            preload="none"
                             playsInline
                             muted
                             className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-500"
@@ -974,8 +1026,9 @@ export default function Projects() {
                               src={screenshot.url}
                               alt={screenshot.title}
                               fill
+                              sizes="(max-width: 768px) 100vw, 300px"
+                              loading="lazy"
                               className="object-cover object-top group-hover/card:scale-105 transition-transform duration-500"
-                              unoptimized
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-70" />
 
