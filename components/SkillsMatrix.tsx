@@ -121,21 +121,66 @@ const radarCompetencies = [
   { label: "Algorithms & OOP", score: 88, angle: 300 },
 ];
 
-export default function SkillsMatrix() {
+const categoryMeta: Record<string, { icon: any; accent: string; summary: string }> = {
+  Languages: { icon: Code2, accent: "#F59E0B", summary: "Core algorithmic foundations & type-safe application architecture" },
+  Frontend: { icon: Layers, accent: "#6366F1", summary: "High-frame-rate responsive UI and kinetic micro-interactions" },
+  "Backend & APIs": { icon: Server, accent: "#10B981", summary: "High-throughput RESTful services and secure authentication" },
+  Databases: { icon: Database, accent: "#06B6D4", summary: "Data modeling, schema optimization, and document caching" },
+  "Tools & Deployment": { icon: Wrench, accent: "#EC4899", summary: "CI/CD pipelines, containerized deployments, and observability" },
+  "AI & LLM Orchestration": { icon: Sparkles, accent: "#F97316", summary: "Anthropic Claude 3.5 architectures, prompt grading & model evaluation" },
+};
+
+function levelToProficiency(level: string): number {
+  switch (level?.toLowerCase()) {
+    case "expert": return 96;
+    case "certified": return 95;
+    case "advanced": return 90;
+    case "proficient": return 84;
+    default: return 78;
+  }
+}
+
+export default function SkillsMatrix({ skills: initialSkills }: { skills?: any[] } = {}) {
+  const activeSkillGroups = (initialSkills && initialSkills.length > 0
+    ? initialSkills
+        .filter((g) => g.published !== false)
+        .map((g) => {
+          const meta = categoryMeta[g.category] || {
+            icon: Cpu,
+            accent: "#8B5CF6",
+            summary: "Technical architecture & core tooling",
+          };
+          return {
+            category: g.category,
+            icon: meta.icon,
+            accent: meta.accent,
+            summary: meta.summary,
+            items: (g.items || []).map((item: any) => ({
+              name: item.name,
+              level: item.level,
+              proficiency: levelToProficiency(item.level),
+              category: g.category,
+            })),
+          };
+        })
+    : enrichedSkillGroups);
+
   const [activeTab, setActiveTab] = useState<string>("All");
   const [activeView, setActiveView] = useState<"bento" | "radar" | "search">("bento");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [hoveredSkill, setHoveredSkill] = useState<SkillWithMeta | null>(null);
 
-  const categories = ["All", ...enrichedSkillGroups.map((g) => g.category)];
+  if (activeSkillGroups.length === 0) return null;
+
+  const categories = ["All", ...activeSkillGroups.map((g) => g.category)];
 
   const filteredGroups = activeTab === "All"
-    ? enrichedSkillGroups
-    : enrichedSkillGroups.filter((g) => g.category === activeTab);
+    ? activeSkillGroups
+    : activeSkillGroups.filter((g) => g.category === activeTab);
 
   // All flattened skills for search mode
-  const allSkills: SkillWithMeta[] = enrichedSkillGroups.flatMap((g) =>
-    g.items.map((i) => ({ ...i, category: g.category }))
+  const allSkills: SkillWithMeta[] = activeSkillGroups.flatMap((g) =>
+    g.items.map((i: any) => ({ ...i, category: g.category }))
   );
 
   const searchedSkills = allSkills.filter(
@@ -346,7 +391,7 @@ export default function SkillsMatrix() {
 
                       {/* Interactive Skill Items with Animated Proficiency Progress Bars */}
                       <div className="space-y-4">
-                        {group.items.map((item, i) => (
+                        {(group.items || []).map((item: any, i: number) => (
                           <div
                             key={item.name}
                             onClick={() => {

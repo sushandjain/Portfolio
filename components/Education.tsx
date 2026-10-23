@@ -95,7 +95,19 @@ const getCertTheme = (cert: Certificate) => {
   };
 };
 
-export default function Education() {
+export default function Education({
+  education: initialEdu,
+  certificates: initialCerts,
+}: {
+  education?: any[];
+  certificates?: Certificate[];
+} = {}) {
+  const certsList = (initialCerts && initialCerts.length > 0 ? initialCerts : certificates).filter(
+    (c: any) => c.published !== false
+  );
+  const eduList = (initialEdu && initialEdu.length > 0 ? initialEdu : education).filter(
+    (e: any) => e.published !== false
+  );
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
 
@@ -108,6 +120,8 @@ export default function Education() {
     setSelectedCert(null);
     playPop();
   };
+
+  if (certsList.length === 0 && eduList.length === 0) return null;
 
   return (
     <section id="education" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -148,7 +162,7 @@ export default function Education() {
                   : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
               }`}
             >
-              All ({certificates.length + education.length})
+              All ({certsList.length + eduList.length})
             </button>
             <button
               type="button"
@@ -162,7 +176,7 @@ export default function Education() {
                   : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
               }`}
             >
-              Certificates ({certificates.length})
+              Certificates ({certsList.length})
             </button>
             <button
               type="button"
@@ -176,19 +190,19 @@ export default function Education() {
                   : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
               }`}
             >
-              Degrees ({education.length})
+              Degrees ({eduList.length})
             </button>
           </div>
         </div>
       </div>
 
       {/* Part 1: Verified Certifications */}
-      {(activeTab === "all" || activeTab === "certs") && (
+      {(activeTab === "all" || activeTab === "certs") && certsList.length > 0 && (
         <div className="mb-16">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-indigo-400 font-bold flex items-center gap-2">
               <ShieldCheck size={16} />
-              AUTHENTICATED INDUSTRY CERTIFICATIONS ({certificates.length})
+              AUTHENTICATED INDUSTRY CERTIFICATIONS ({certsList.length})
             </h3>
             <span className="text-[11px] font-mono text-[var(--text-faint)] hidden sm:inline">
               VERIFIED VIA CREDLY &amp; GOOGLE DRIVE
@@ -201,7 +215,7 @@ export default function Education() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {certificates.map((cert) => {
+            {certsList.map((cert) => {
               const theme = getCertTheme(cert);
               return (
                 <SpotlightCard
@@ -330,12 +344,12 @@ export default function Education() {
       )}
 
       {/* Part 2: Academic Degrees */}
-      {(activeTab === "all" || activeTab === "degrees") && (
+      {(activeTab === "all" || activeTab === "degrees") && eduList.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xs font-mono uppercase tracking-widest text-[var(--text-faint)] font-bold flex items-center gap-2">
               <GraduationCap size={16} className="text-amber-400" />
-              FORMAL ACADEMIC DEGREES ({education.length})
+              FORMAL ACADEMIC DEGREES ({eduList.length})
             </h3>
             <span className="text-[11px] font-mono text-[var(--text-faint)] hidden sm:inline">
               COMPUTER SCIENCE FOUNDATION
@@ -343,7 +357,7 @@ export default function Education() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {education.map((item, idx) => (
+            {eduList.map((item, idx) => (
               <SpotlightCard
                 key={idx}
                 className="glass-panel p-6 sm:p-7 border border-[var(--border-subtle)] hover:border-amber-500/35 transition-all duration-300 flex flex-col justify-between group"

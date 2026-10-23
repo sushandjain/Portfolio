@@ -23,7 +23,11 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-export default function Header() {
+export default function Header({ profile: initialProfile }: { profile?: any } = {}) {
+  const profile = initialProfile || personalInfo;
+  const headerName = (profile?.shortName || profile?.name || "SUSHAN JAIN").toUpperCase();
+  const headerTitle = (profile?.title || "SYSTEMS ENGINEER @ TCS").toUpperCase();
+  const headerAvatar = profile?.avatarUrl || "/sushan.jpg";
   const [time, setTime] = useState("");
   const [soundOn, setSoundOn] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
@@ -131,8 +135,8 @@ export default function Header() {
             >
               <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden ring-2 ring-indigo-500/40 group-hover:ring-amber-400 shadow-md shadow-indigo-500/20 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3 shrink-0">
                 <Image
-                  src="/sushan.jpg"
-                  alt="Sushan D Jain"
+                  src={headerAvatar}
+                  alt={profile.name || "Sushan D Jain"}
                   fill
                   sizes="40px"
                   className="object-cover object-top"
@@ -147,12 +151,11 @@ export default function Header() {
                     fontStretch: logoHovered ? "135%" : "95%",
                   }}
                 >
-                  SUSHAN JAIN
+                  {headerName}
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono tracking-wider text-[var(--text-muted)] flex items-center gap-1.5 truncate">
                   <span className="pulse-green shrink-0" />
-                  <span className="hidden sm:inline truncate">SYSTEMS ENGINEER @ TCS</span>
-                  <span className="sm:hidden truncate">TCS ENGINEER</span>
+                  <span className="truncate">{headerTitle}</span>
                 </span>
               </div>
             </a>

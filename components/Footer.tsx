@@ -3,25 +3,37 @@
 import { playPop } from "@/lib/sound";
 import { ArrowUp, Heart, Code2 } from "lucide-react";
 
-export default function Footer() {
+export default function Footer({
+  settings,
+  profile,
+}: {
+  settings?: any;
+  profile?: any;
+} = {}) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     playPop();
   };
+
+  const nameUpper = (profile?.name || "SUSHAN D JAIN").toUpperCase();
+  const footerText = settings?.footerText || "Engineered with Next.js 15 & Stretch Motion";
+  const locationText = profile?.coordinates
+    ? `${profile.location || "Bengaluru, India"} (${profile.coordinates})`
+    : "Bengaluru, India (12.9716° N, 77.5946° E)";
 
   return (
     <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-secondary)]/60 py-12 px-4 sm:px-6 lg:px-8 mt-20 select-none">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-[var(--text-muted)]">
         {/* Left: Identity */}
         <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-          <span className="font-bold text-[var(--text-main)]">© 2026 SUSHAN D JAIN</span>
+          <span className="font-bold text-[var(--text-main)]">© {new Date().getFullYear()} {nameUpper}</span>
           <span className="hidden sm:inline text-[var(--text-faint)]">·</span>
-          <span>Bengaluru, India (12.9716° N, 77.5946° E)</span>
+          <span>{locationText}</span>
         </div>
 
         {/* Center: Tech note */}
         <div className="flex items-center gap-1.5 text-[var(--text-faint)]">
-          <span>Engineered with Next.js 15 &amp; Stretch Motion</span>
+          <span>{footerText}</span>
         </div>
 
         {/* Right: Back to Top */}

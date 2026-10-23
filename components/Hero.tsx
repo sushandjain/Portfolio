@@ -4,9 +4,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
-import { ArrowDown, Copy, Check, Briefcase, Sliders, Waves, ArrowUpRight, Trophy, Award, Code2 } from "lucide-react";
+import { ArrowDown, Copy, Check, Briefcase, Sliders, Waves, ArrowUpRight, Trophy, Award, Code2, FileText } from "lucide-react";
 
-export default function Hero() {
+export default function Hero({ profile: initialProfile }: { profile?: any } = {}) {
+  const profile = initialProfile || personalInfo;
   const [copied, setCopied] = useState(false);
   const [stretchValue, setStretchValue] = useState<number>(100);
   const [stretchMode, setStretchMode] = useState<"wave" | "elastic" | "wide" | "compact" | "manual">("wave");
@@ -20,8 +21,9 @@ export default function Hero() {
   const isIdle = useRef(false);
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const line1 = "SUSHAN".split("");
-  const line2 = "JAIN".split("");
+  const nameParts: string[] = String(profile?.shortName || profile?.name || "SUSHAN JAIN").trim().split(" ");
+  const line1: string[] = (nameParts[0] || "SUSHAN").toUpperCase().split("");
+  const line2: string[] = (nameParts.slice(1).join(" ") || "JAIN").toUpperCase().split("");
 
   // Update overall title stretch
   const applyGlobalStretch = useCallback((val: number) => {
@@ -312,9 +314,11 @@ export default function Hero() {
       <div className="w-full max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-panel text-[11px] sm:text-xs font-mono text-[var(--text-muted)] shadow-xs border border-[var(--border-subtle)] w-fit">
           <span className="pulse-green shrink-0" />
-          <span className="font-bold text-[var(--text-main)]">AVAILABLE FOR ROLES</span>
+          <span className="font-bold text-[var(--text-main)]">
+            {profile.isOpenToWork !== false ? "AVAILABLE FOR ROLES" : "CURRENTLY ENGAGED"}
+          </span>
           <span className="text-[var(--text-faint)]">·</span>
-          <span className="truncate">SYSTEMS ENGINEER @ TCS</span>
+          <span className="truncate">{(profile.title || "SYSTEMS ENGINEER @ TCS").toUpperCase()}</span>
         </div>
 
         {/* Stretch Mode Dock */}
@@ -454,16 +458,20 @@ export default function Hero() {
           {/* Subtitle / Focus Callout */}
           <div className="max-w-md space-y-2 text-left md:text-right self-start md:self-end md:pb-4 mt-2 sm:mt-0">
             <p className="text-xs sm:text-base text-[var(--text-muted)] font-medium leading-relaxed">
-              <span className="text-[var(--text-main)] font-semibold">Systems Engineer at TCS</span> &amp;{" "}
-              <span className="text-indigo-400 font-semibold">Full-Stack Architect</span> crafting high-throughput REST APIs, progressive streaming engines, and resilient e-commerce platforms.
+              {profile.bio || (
+                <>
+                  <span className="text-[var(--text-main)] font-semibold">Systems Engineer at TCS</span> &amp;{" "}
+                  <span className="text-indigo-400 font-semibold">Full-Stack Architect</span> crafting high-throughput REST APIs, progressive streaming engines, and resilient e-commerce platforms.
+                </>
+              )}
             </p>
             <div className="flex items-center justify-start md:justify-end gap-2.5 text-[11px] sm:text-xs font-mono text-[var(--text-faint)]">
               <span className="flex items-center gap-1.5 text-emerald-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                BENGALURU, INDIA
+                {(profile.location || "BENGALURU, INDIA").toUpperCase()}
               </span>
               <span>✦</span>
-              <span>12.9716° N, 77.5946° E</span>
+              <span>{profile.coordinates || "12.9716° N, 77.5946° E"}</span>
             </div>
           </div>
         </div>
@@ -490,6 +498,16 @@ export default function Hero() {
             <Briefcase size={14} className="text-indigo-400 shrink-0" />
             <span>Career &amp; Honors</span>
           </a>
+
+          <a
+            href={profile.resumeUrl || "/uploads/SUSHAN_D_JAIN_RESUME.pdf"}
+            download={profile.resumeFileName || "SUSHAN_D_JAIN_RESUME.pdf"}
+            onClick={() => playPop()}
+            className="magnetic-btn magnetic-btn-ghost text-xs flex items-center justify-center gap-2 py-3 sm:py-2.5 active:scale-95 transition-transform col-span-2 sm:col-span-1"
+          >
+            <FileText size={14} className="text-amber-400 shrink-0" />
+            <span>Resume ↗</span>
+          </a>
         </div>
 
         {/* Right: Quick Copy Email Pill */}
@@ -507,7 +525,7 @@ export default function Hero() {
             ) : (
               <>
                 <Copy size={13} className="text-indigo-400" />
-                <span className="truncate">{personalInfo.email}</span>
+                <span className="truncate">{profile.email || personalInfo.email}</span>
                 <span className="text-[10px] text-[var(--text-faint)] uppercase shrink-0">(Copy)</span>
               </>
             )}

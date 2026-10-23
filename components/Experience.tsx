@@ -7,7 +7,22 @@ import { Briefcase, Trophy, Award, CheckCircle2, ChevronRight, Building, Sparkle
 import SpotlightCard from "@/components/ui/SpotlightCard";
 import TiltCard from "@/components/ui/TiltCard";
 
-export default function Experience() {
+export default function Experience({
+  experience: initialExp,
+  achievements: initialAch,
+}: {
+  experience?: any[];
+  achievements?: any[];
+} = {}) {
+  const expList = (initialExp && initialExp.length > 0 ? initialExp : experience).filter(
+    (e: any) => e.published !== false
+  );
+  const achList = (initialAch && initialAch.length > 0 ? initialAch : achievements).filter(
+    (a: any) => a.published !== false
+  );
+
+  if (expList.length === 0 && achList.length === 0) return null;
+
   return (
     <section id="experience" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header */}
@@ -38,8 +53,8 @@ export default function Experience() {
             CURRENT ENTERPRISE ROLE
           </h3>
 
-          {experience.map((exp, idx) => (
-            <TiltCard key={idx} maxTilt={4} scale={1.01} className="w-full">
+          {expList.map((exp: any, idx: number) => (
+            <TiltCard key={exp.id || idx} maxTilt={4} scale={1.01} className="w-full">
               <SpotlightCard
                 className="glass-panel p-6 sm:p-8 border border-indigo-500/25 hover:border-indigo-500/50 transition-all duration-300 relative overflow-hidden"
                 spotlightColor="rgba(99, 102, 241, 0.18)"
@@ -72,7 +87,7 @@ export default function Experience() {
 
                 {/* Responsibilities list */}
                 <div className="space-y-3 mb-6">
-                  {exp.highlights.map((h, i) => (
+                  {(exp.highlights || []).map((h: string, i: number) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-[var(--text-muted)]">
                       <CheckCircle2 size={15} className="text-indigo-400 shrink-0 mt-0.5" />
                       <span>{h}</span>
@@ -82,7 +97,7 @@ export default function Experience() {
 
                 {/* Tech tags */}
                 <div className="flex flex-wrap gap-2 pt-2 border-t border-[var(--border-subtle)]">
-                  {exp.tags.map((tag) => (
+                  {(exp.tags || []).map((tag: string) => (
                     <span key={tag} className="tech-pill text-[11px] py-1 px-3">
                       {tag}
                     </span>
@@ -101,8 +116,8 @@ export default function Experience() {
           </h3>
 
           <div className="space-y-4">
-            {achievements.map((ach, idx) => (
-              <TiltCard key={idx} maxTilt={5} scale={1.015} className="w-full">
+            {achList.map((ach, idx) => (
+              <TiltCard key={ach.id || idx} maxTilt={5} scale={1.015} className="w-full">
                 <SpotlightCard
                   className={`glass-panel p-6 border transition-all duration-300 group ${
                     "credlyUrl" in ach && ach.credlyUrl

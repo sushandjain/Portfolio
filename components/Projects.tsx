@@ -128,7 +128,10 @@ function DeferredCardMedia({ project }: { project: Project }) {
   );
 }
 
-export default function Projects() {
+export default function Projects({ projects: initialProjects }: { projects?: any[] } = {}) {
+  const allProjects = (initialProjects && initialProjects.length > 0 ? (initialProjects as Project[]) : projects).filter(
+    (p) => (p as any).published !== false
+  );
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -144,7 +147,7 @@ export default function Projects() {
 
   const categories = ["All", "Live Production", "E-Commerce & Logistics", "Media & Cloud"];
 
-  const filteredProjects = projects.filter((p) => {
+  const filteredProjects = allProjects.filter((p) => {
     if (activeCategory === "All") return true;
     if (activeCategory === "Live Production") return p.status === "Live Production";
     if (activeCategory === "E-Commerce & Logistics")
@@ -152,6 +155,8 @@ export default function Projects() {
     if (activeCategory === "Media & Cloud") return p.category.includes("Media");
     return true;
   });
+
+  if (allProjects.length === 0) return null;
 
   // Lock body scroll when modal is open
   useEffect(() => {
