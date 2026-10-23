@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { playPop } from "@/lib/sound";
-import { ArrowUp, Heart, Code2 } from "lucide-react";
+import { ArrowUp, Lock } from "lucide-react";
 
 export default function Footer({
   settings,
@@ -10,10 +13,25 @@ export default function Footer({
   settings?: any;
   profile?: any;
 } = {}) {
+  const router = useRouter();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     playPop();
   };
+
+  // Secret keyboard shortcut: Ctrl+Shift+A or Cmd+Shift+A opens admin panel
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        playPop();
+        router.push("/admin");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [router]);
 
   const nameUpper = (profile?.name || "SUSHAN D JAIN").toUpperCase();
   const footerText = settings?.footerText || "Engineered with Next.js 15 & Stretch Motion";
@@ -26,9 +44,28 @@ export default function Footer({
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-[var(--text-muted)]">
         {/* Left: Identity */}
         <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
-          <span className="font-bold text-[var(--text-main)]">© {new Date().getFullYear()} {nameUpper}</span>
+          <span className="font-bold text-[var(--text-main)] flex items-center gap-1.5">
+            <Link
+              href="/admin"
+              className="text-inherit hover:text-indigo-400 transition-colors cursor-default"
+              title="Admin Portal"
+            >
+              ©
+            </Link>
+            <span>{new Date().getFullYear()} {nameUpper}</span>
+          </span>
           <span className="hidden sm:inline text-[var(--text-faint)]">·</span>
           <span>{locationText}</span>
+
+          {/* Discreet Hidden Admin Button */}
+          <Link
+            href="/admin"
+            aria-label="Admin Portal"
+            className="inline-flex items-center gap-1 p-1 rounded-md opacity-25 hover:opacity-100 hover:bg-white/5 text-[var(--text-faint)] hover:text-indigo-400 transition-all cursor-pointer"
+            title="Admin Portal"
+          >
+            <Lock size={11} />
+          </Link>
         </div>
 
         {/* Center: Tech note */}
