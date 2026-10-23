@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { saveMessage } from "@/lib/server/db";
 import { checkRateLimit } from "@/lib/server/rateLimit";
+import { sendContactNotification } from "@/lib/server/mailer";
 
 function sanitize(str: string): string {
   return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").trim();
@@ -48,11 +49,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const cleanName = sanitize(name).slice(0, 100);
+    const cleanEmail = sanitize(email).slice(0, 150);
+    const cleanSubject = subject ? sanitize(subject).slice(0, 150) : "Portfolio Contact Inquiry";
+    const cleanMessage = sanitize(message).slice(0, 5000);
+
     const saved = saveMessage({
-      name: sanitize(name).slice(0, 100),
-      email: sanitize(email).slice(0, 150),
-      subject: subject ? sanitize(subject).slice(0, 150) : "Portfolio Contact Inquiry",
-      message: sanitize(message).slice(0, 5000),
+      name: cleanName,
+      email: cleanEmail,
+      subject: cleanSubject,
+      message: cleanMessage,
+    });
+
+    // Dispatch automated email notification to admin if configured
+    await sendContactNotification({
+      name: cleanName,
+      email: cleanEmail,
+      subject: cleanSubject,
+      message: cleanMessage,
+      ip,
     });
 
     return NextResponse.json({
