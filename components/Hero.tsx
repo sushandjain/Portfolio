@@ -5,7 +5,6 @@ import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
 import { ArrowDown, Copy, Check, Briefcase, Sliders, Waves, ArrowUpRight, Trophy, Award, Code2 } from "lucide-react";
-import HeroCanvasMesh from "@/components/HeroCanvasMesh";
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
@@ -303,18 +302,11 @@ export default function Hero() {
       ref={heroRef}
       className="relative min-h-[92vh] min-h-[92dvh] min-h-[92svh] flex flex-col justify-between pt-20 sm:pt-28 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden touch-manipulation"
     >
-      {/* Interactive Ambient Particle Constellation Canvas */}
-      <HeroCanvasMesh />
-
       {/* Dynamic Cursor/Touch-Tracking Fluid Lighting Aura */}
       <div
         ref={auraRef}
         className="pointer-events-none absolute top-0 left-0 w-[420px] sm:w-[500px] h-[420px] sm:h-[500px] rounded-full bg-gradient-to-r from-indigo-500/20 via-cyan-500/15 to-transparent blur-3xl -z-10 transition-opacity duration-500 will-change-transform"
       />
-
-      {/* Background ambient lighting anchors */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[340px] sm:w-[700px] h-[240px] sm:h-[350px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-4 sm:right-10 w-[240px] sm:w-[350px] h-[240px] sm:h-[350px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
       {/* Top Controller Dock / Kinetic Stretch Playground */}
       <div className="w-full max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">

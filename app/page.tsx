@@ -3,6 +3,7 @@ import ProgressBar from "@/components/ProgressBar";
 import CursorSound from "@/components/CursorSound";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import HeroCanvasMesh from "@/components/HeroCanvasMesh";
 import PageLoader from "@/components/ui/PageLoader";
 import Ticker from "@/components/Ticker";
 import Footer from "@/components/Footer";
@@ -19,6 +20,9 @@ export default function Home() {
     <>
       {/* Studio Olimpo-Inspired Editorial Cinematic Shutter Loader */}
       <PageLoader />
+
+      {/* Global Interactive Constellation Mesh & Ambient Glowing Background */}
+      <HeroCanvasMesh />
 
       {/* Top Reading Progress Bar */}
       <ProgressBar />
