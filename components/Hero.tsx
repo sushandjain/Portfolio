@@ -372,8 +372,8 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Floating Live Engineering Metrics - Horizontal Touch Scrollable on Mobile */}
-      <div className="w-full max-w-7xl mx-auto flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 overflow-x-auto no-scrollbar py-1 -mx-4 px-4 sm:mx-auto sm:px-0 sm:flex-wrap">
+      {/* Floating Live Engineering Metrics - Responsive Wrap on Mobile so all 3 badges stay fully visible */}
+      <div className="w-full max-w-7xl mx-auto flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4 py-1">
         {/* 1. Anthropic Claude Certified */}
         <a
           href="https://www.credly.com/badges/e66a5b5f-9a91-4a17-80c1-05e949d3df51"
