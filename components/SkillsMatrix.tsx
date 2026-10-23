@@ -279,9 +279,8 @@ export default function SkillsMatrix({ skills: initialSkills }: { skills?: any[]
       {/* ---------------------------------------------------------------------
           ENTERPRISE TELEMETRY STRIP (High-Impact Proof Points)
           --------------------------------------------------------------------- */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-10 sm:mb-12">
         {[
-          { label: "PRODUCTION SLA", val: "99.9% UPTIME", note: "TCS Systems Engineer Enterprise SLA", accent: "#10B981" },
           { label: "CORE SPECIALIZATION", val: "MERN + NEXT 15", note: "Full-Stack TypeScript & React 19", accent: "#6366F1" },
           { label: "RESTFUL ARCHITECTURE", val: "14+ ENDPOINTS", note: "Speed Post, Cloudinary & Permits", accent: "#06B6D4" },
           { label: "VERIFIED HONORS", val: "2ND PLACE TCS", note: "AI-Friday National Hackathon 2026", accent: "#F59E0B" },
