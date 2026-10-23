@@ -6,7 +6,7 @@ import crypto from "crypto";
 
 const SESSION_COOKIE_NAME = "portfolio_session";
 const DEFAULT_EMAIL = (process.env.ADMIN_EMAIL || "sushandjain@gmail.com").toLowerCase().trim();
-const DEFAULT_PASSWORD = process.env.ADMIN_PASSWORD || "SushanAdmin@2026!";
+const DEFAULT_PASSWORD = process.env.ADMIN_PASSWORD || "Sushandjain@123";
 const JWT_SECRET_STRING = process.env.JWT_SECRET || "super_secret_portfolio_jwt_key_sushan_jain_2026_secure_key_32chars";
 const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_STRING);
 const MAX_FAILED_ATTEMPTS = 5;
