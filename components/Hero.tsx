@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import Link from "next/link";
 import { personalInfo } from "@/lib/data";
 import { playPop, playSuccess, playTick } from "@/lib/sound";
 import confetti from "canvas-confetti";
-import { ArrowDown, Copy, Check, Briefcase, Sliders, Waves, ArrowUpRight, Trophy, Award, Code2, FileText } from "lucide-react";
+import { ArrowDown, Copy, Check, Briefcase, Sliders, Waves, ArrowUpRight, Trophy, Award, Code2, FileText, Lock } from "lucide-react";
 
 export default function Hero({ profile: initialProfile }: { profile?: any } = {}) {
   const profile = initialProfile || personalInfo;
@@ -311,7 +312,17 @@ export default function Hero({ profile: initialProfile }: { profile?: any } = {}
       />
 
       {/* Top Controller Dock / Kinetic Stretch Playground */}
-      <div className="w-full max-w-7xl mx-auto flex items-center justify-center sm:justify-end gap-3 sm:gap-4 mb-4 sm:mb-6">
+      <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+        {/* Discreet Admin Portal Button */}
+        <Link
+          href="/admin"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-panel text-[11px] font-mono text-[var(--text-muted)] hover:text-indigo-400 hover:border-indigo-500/40 transition-all shadow-xs cursor-pointer group shrink-0"
+          title="Admin Panel"
+        >
+          <Lock size={12} className="text-indigo-400 group-hover:scale-110 transition-transform" />
+          <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)] group-hover:text-indigo-300">Admin</span>
+        </Link>
+
         {/* Stretch Mode Dock */}
         <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 glass-panel px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl shadow-xs text-xs font-mono border border-[var(--border-subtle)] overflow-x-auto no-scrollbar">
           <div className="flex items-center gap-1.5 shrink-0">

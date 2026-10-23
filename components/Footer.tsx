@@ -57,14 +57,15 @@ export default function Footer({
           <span className="hidden sm:inline text-[var(--text-faint)]">·</span>
           <span>{locationText}</span>
 
-          {/* Discreet Hidden Admin Button */}
+          {/* Discreet Admin Portal Button */}
           <Link
             href="/admin"
             aria-label="Admin Portal"
-            className="inline-flex items-center gap-1 p-1 rounded-md opacity-25 hover:opacity-100 hover:bg-white/5 text-[var(--text-faint)] hover:text-indigo-400 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 hover:bg-indigo-600/20 border border-white/10 hover:border-indigo-500/40 text-[var(--text-muted)] hover:text-indigo-300 transition-all cursor-pointer text-[10px] font-mono group"
             title="Admin Portal"
           >
-            <Lock size={11} />
+            <Lock size={11} className="text-indigo-400 group-hover:scale-110 transition-transform" />
+            <span className="tracking-widest uppercase">Admin</span>
           </Link>
         </div>
 
