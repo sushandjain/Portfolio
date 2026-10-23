@@ -24,9 +24,9 @@
     "status": "Available for high-impact opportunities",
     "isOpenToWork": true,
     "avatarUrl": "/sushan.jpg",
-    "resumeUrl": "/media_1792777986693.pdf",
-    "resumeFileName": "SUSHAN_D_JAIN_RESUME.pdf",
-    "resumeUpdatedAt": "2026-10-23",
+    "resumeUrl": "/uploads/sushanjain_resume_1792795515834.pdf",
+    "resumeFileName": "sushanjain_resume.pdf",
+    "resumeUpdatedAt": "2026-10-23T22:45:15.837Z",
     "heroStretchPreset": "wave"
   },
   "projects": [
@@ -506,6 +506,34 @@
       "published": true
     },
     {
+      "id": "skill-group-5",
+      "category": "Tools & Deployment",
+      "items": [
+        {
+          "name": "Git & GitHub",
+          "level": "Advanced"
+        },
+        {
+          "name": "Postman",
+          "level": "Expert"
+        },
+        {
+          "name": "Vercel",
+          "level": "Advanced"
+        },
+        {
+          "name": "Netlify",
+          "level": "Proficient"
+        },
+        {
+          "name": "Render",
+          "level": "Proficient"
+        }
+      ],
+      "order": 3,
+      "published": true
+    },
+    {
       "id": "skill-group-3",
       "category": "Backend & APIs",
       "items": [
@@ -530,7 +558,7 @@
           "level": "Proficient"
         }
       ],
-      "order": 3,
+      "order": 4,
       "published": true
     },
     {
@@ -548,34 +576,6 @@
         {
           "name": "Mongoose ODM",
           "level": "Advanced"
-        }
-      ],
-      "order": 4,
-      "published": true
-    },
-    {
-      "id": "skill-group-5",
-      "category": "Tools & Deployment",
-      "items": [
-        {
-          "name": "Git & GitHub",
-          "level": "Advanced"
-        },
-        {
-          "name": "Postman",
-          "level": "Expert"
-        },
-        {
-          "name": "Vercel",
-          "level": "Advanced"
-        },
-        {
-          "name": "Netlify",
-          "level": "Proficient"
-        },
-        {
-          "name": "Render",
-          "level": "Proficient"
         }
       ],
       "order": 5,
@@ -765,5 +765,5 @@
       "contact": true
     }
   },
-  "lastUpdatedAt": "2026-10-23T21:36:02.208Z"
+  "lastUpdatedAt": "2026-10-23T22:54:53.408Z"
 }

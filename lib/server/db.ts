@@ -190,15 +190,32 @@ function ensureDataDir() {
 
 // Atomic file write to prevent corrupted files on unexpected interrupts
 function writeAtomicJson(filePath: string, data: any) {
-  ensureDataDir();
-  const tempPath = `${filePath}.tmp.${Date.now()}.${Math.random().toString(36).substring(2, 6)}`;
-  fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), "utf8");
-  fs.renameSync(tempPath, filePath);
+  try {
+    ensureDataDir();
+    const tempPath = `${filePath}.tmp.${Date.now()}.${Math.random().toString(36).substring(2, 6)}`;
+    fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), "utf8");
+    fs.renameSync(tempPath, filePath);
+  } catch (err: any) {
+    console.warn(`[DB] Direct write to ${filePath} failed (serverless environment):`, err?.message);
+    try {
+      const tmpPath = path.join("/tmp", path.basename(filePath));
+      fs.writeFileSync(tmpPath, JSON.stringify(data, null, 2), "utf8");
+    } catch {}
+  }
 }
 
 // Read JSON with safe fallback
 function readJson<T>(filePath: string, fallback: T): T {
   try {
+    // Check /tmp first for recent serverless updates
+    const tmpPath = path.join("/tmp", path.basename(filePath));
+    if (fs.existsSync(tmpPath)) {
+      try {
+        const tmpContent = fs.readFileSync(tmpPath, "utf8");
+        return JSON.parse(tmpContent) as T;
+      } catch {}
+    }
+
     ensureDataDir();
     if (!fs.existsSync(filePath)) {
       return fallback;
