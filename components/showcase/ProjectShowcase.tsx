@@ -101,11 +101,11 @@ export default function ProjectShowcase({
     switch (project.galleryVariant) {
       case "stacked":
         return <StackedCards project={project} />;
-      case "horizontal":
-        return <HorizontalGallery project={project} />;
       case "bento":
-      default:
         return <BentoLightbox project={project} />;
+      case "horizontal":
+      default:
+        return <HorizontalGallery project={project} />;
     }
   };
 
@@ -127,7 +127,7 @@ export default function ProjectShowcase({
             {/* Pill Header */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 mb-4 sm:mb-6">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>PROJECT SHOWCASE &bull; 03 KINETIC CASE STUDIES</span>
+              <span>PROJECT SHOWCASE &bull; PINNED HORIZONTAL GALLERIES</span>
             </div>
 
             {/* Main Header Reveal */}
@@ -140,8 +140,8 @@ export default function ProjectShowcase({
             </SplitText>
 
             <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-[var(--text-muted)] max-w-2xl font-body leading-relaxed">
-              Three flagship software engineering architectures. Explore pinned horizontal scrub,
-              modular bento matrices, and fullscreen interactive lightboxes.
+              Three flagship software engineering architectures. Scroll to experience
+              pinned horizontal scrub galleries with high-resolution production frames.
             </p>
           </div>
 

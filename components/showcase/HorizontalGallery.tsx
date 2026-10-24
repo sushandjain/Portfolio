@@ -329,9 +329,9 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                     aspectRatio="aspect-[16/10]"
                   />
                 </div>
-                <div className="flex items-center justify-between pt-3 px-1 text-xs text-indigo-300 font-mono font-bold">
-                  <span>LIVE ARCHITECTURE DEMO &bull; MALNAD SPEED POST ENGINE</span>
-                  <span className="text-slate-500">VIDEO 01 / 08</span>
+                <div className="flex items-center justify-between pt-3 px-1 text-xs font-mono font-bold" style={{ color: project.accentColor }}>
+                  <span className="truncate max-w-[75%]">LIVE ARCHITECTURE DEMO &bull; {project.title.toUpperCase()}</span>
+                  <span className="text-[var(--text-faint)]">01 / {String(project.images.length + 1).padStart(2, "0")}</span>
                 </div>
               </div>
             )}
@@ -343,7 +343,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 className="gallery-card relative flex-shrink-0 w-[58vw] lg:w-[46vw] xl:w-[40vw] h-full flex flex-col justify-between group"
               >
                 {/* Image Component with Clip Reveal and Inner Parallax */}
-                <div className="relative w-full flex-1 overflow-hidden rounded-2xl border border-white/10 bg-[#0F121C]">
+                <div className="relative w-full flex-1 overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-secondary)]">
                   <RevealImage
                     src={img.url}
                     alt={img.alt}
@@ -358,12 +358,12 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 </div>
 
                 {/* Subtitle / Caption row under each card */}
-                <div className="flex items-center justify-between pt-3 px-1 text-xs text-slate-400 font-mono">
-                  <span className="truncate max-w-[70%] text-slate-300">
+                <div className="flex items-center justify-between pt-3 px-1 text-xs text-[var(--text-muted)] font-mono">
+                  <span className="truncate max-w-[70%] text-[var(--text-main)]">
                     {img.caption}
                   </span>
-                  <span className="text-slate-500">
-                    0{idx + 1} &mdash; 0{project.images.length}
+                  <span className="text-[var(--text-faint)]">
+                    {String(idx + 1).padStart(2, "0")} &mdash; {String(project.images.length).padStart(2, "0")}
                   </span>
                 </div>
               </div>
@@ -373,7 +373,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
 
         {/* Thin Scroll-Progress Line at the bottom */}
         <div className="absolute bottom-6 left-8 right-8 z-30">
-          <div className="relative w-full h-[2px] bg-white/10 rounded-full overflow-hidden">
+          <div className="relative w-full h-[2px] bg-[var(--border-subtle)] rounded-full overflow-hidden">
             <div
               className="absolute left-0 top-0 bottom-0 rounded-full transition-all duration-150 ease-out"
               style={{
