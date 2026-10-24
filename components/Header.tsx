@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { personalInfo } from "@/lib/data";
 import { isSoundEnabled, toggleSound, playPop, playTick } from "@/lib/sound";
@@ -277,15 +278,24 @@ export default function Header({ profile: initialProfile }: { profile?: any } = 
               <div className="space-y-1.5 py-1">
                 {navItems.map((item) => {
                   const Icon = item.icon;
+                  const mobileRouteMap: Record<string, string> = {
+                    work: "/work",
+                    experience: "/experience",
+                    education: "/credentials",
+                    stack: "/arsenal",
+                    contact: "/contact",
+                  };
+                  const routeHref = mobileRouteMap[item.id] || item.href;
+
                   return (
-                    <a
+                    <Link
                       key={item.label}
-                      href={item.href}
+                      href={routeHref}
                       onClick={() => {
                         playTick(780);
                         setMobileMenuOpen(false);
                       }}
-                      className="flex items-center justify-between p-3 rounded-2xl transition-all active:scale-[0.98] hover:bg-[var(--bg-secondary)] text-[var(--text-main)] border border-transparent hover:border-[var(--border-subtle)]"
+                      className="flex items-center justify-between p-3 rounded-2xl transition-all active:scale-[0.98] hover:bg-[var(--bg-secondary)] text-[var(--text-main)] border border-transparent hover:border-[var(--border-subtle)] cursor-pointer"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-[var(--bg-secondary)] text-indigo-400 border border-[var(--border-subtle)]">
@@ -301,7 +311,7 @@ export default function Header({ profile: initialProfile }: { profile?: any } = 
                         </div>
                       </div>
                       <ChevronRight size={14} className="text-[var(--text-faint)] shrink-0" />
-                    </a>
+                    </Link>
                   );
                 })}
               </div>
