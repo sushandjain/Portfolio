@@ -169,28 +169,28 @@ export default function KineticVideoCard({
     <div ref={cardRef} className={`relative w-full h-full will-change-transform ${className}`}>
       <TiltCard maxTilt={5} scale={1.015} glare={true} className="w-full h-full">
         <SpotlightCard
-          className="relative rounded-3xl overflow-hidden border border-white/15 bg-[#090C15] shadow-2xl flex flex-col justify-between group h-full"
+          className="relative rounded-3xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-secondary)] text-[var(--text-main)] shadow-2xl flex flex-col justify-between group h-full"
           spotlightColor={`${accentColor}25`}
           borderColor={`${accentColor}60`}
         >
           {/* Top Browser Frame HUD */}
-          <div className="p-3 sm:p-4 bg-white/5 border-b border-white/10 flex items-center justify-between z-20">
+          <div className="p-3 sm:p-4 bg-[var(--bg-card)] border-b border-[var(--border-subtle)] flex items-center justify-between z-20">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 animate-pulse" />
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-white ml-2 flex items-center gap-1.5">
+              <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-main)] ml-2 flex items-center gap-1.5">
                 <Film size={12} style={{ color: accentColor }} />
                 <span>{badge}</span>
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold">
+              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold">
                 <Activity size={10} className="animate-spin" />
                 <span>60 FPS SCROLL-LINKED</span>
               </span>
-              <span className="text-[10px] font-mono text-slate-400 font-bold bg-white/10 px-2 py-0.5 rounded">
+              <span className="text-[10px] font-mono text-[var(--text-muted)] font-bold bg-[var(--bg-secondary)] border border-[var(--border-subtle)] px-2 py-0.5 rounded">
                 {currentTime} / {duration}
               </span>
             </div>

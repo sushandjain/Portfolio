@@ -140,7 +140,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
   };
 
   return (
-    <div className="relative w-full border-t border-white/10 bg-[#090B10]">
+    <div className="relative w-full border-t border-[var(--border-subtle)] bg-[var(--bg-primary)] text-[var(--text-main)] transition-colors duration-300">
       {/* ---------------------------------------------------------------------
           INTRO BLOCK
           --------------------------------------------------------------------- */}
@@ -158,7 +158,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
             >
               {project.index}
             </span>
-            <span className="text-xs uppercase tracking-widest font-mono text-slate-400">
+            <span className="text-xs uppercase tracking-widest font-mono text-[var(--text-muted)]">
               PROJECT {project.index} &bull; PINNED HORIZONTAL GALLERY
             </span>
           </div>
@@ -170,9 +170,14 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 href={project.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-indigo-300 bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
+                style={{
+                  color: project.accentColor,
+                  backgroundColor: `${project.accentColor}18`,
+                  borderColor: `${project.accentColor}40`,
+                }}
               >
-                <Film className="w-3.5 h-3.5 text-indigo-400" />
+                <Film className="w-3.5 h-3.5" style={{ color: project.accentColor }} />
                 <span>1080p Video</span>
               </a>
             )}
@@ -181,10 +186,10 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <span>Live Deploy</span>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                <ExternalLink className="w-3.5 h-3.5 text-[var(--text-faint)]" />
               </a>
             )}
             {project.githubUrl && (
@@ -192,7 +197,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>Source</span>
@@ -205,13 +210,16 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
         <SplitText
           as="h2"
           type="lines"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 uppercase font-display"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 uppercase font-display"
         >
           {project.title}
         </SplitText>
 
         {/* Tagline / Subtitle */}
-        <p className="text-lg md:text-xl text-indigo-300 font-medium tracking-wide mb-8 max-w-3xl">
+        <p
+          className="text-lg md:text-xl font-medium tracking-wide mb-8 max-w-3xl"
+          style={{ color: project.accentColor }}
+        >
           {project.tagline}
         </p>
 
@@ -220,47 +228,47 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
           <SplitText
             as="p"
             type="words"
-            className="text-base sm:text-lg text-slate-300 leading-relaxed font-body"
+            className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed font-body"
           >
             {project.description}
           </SplitText>
         </div>
 
         {/* Meta Row: Role / Year / Tools / Client */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[var(--border-subtle)]">
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Role
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.role}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.role}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Timeline
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.year}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.year}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Client
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.client}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.client}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Core Tech
             </span>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {project.tools.slice(0, 3).map((tool, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 border border-white/10 text-slate-300"
+                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-muted)]"
                 >
                   {tool}
                 </span>
               ))}
               {project.tools.length > 3 && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-400">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--text-faint)]">
                   +{project.tools.length - 3}
                 </span>
               )}
@@ -274,27 +282,27 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
           --------------------------------------------------------------------- */}
       <div
         ref={sectionRef}
-        className="hidden md:block relative w-full h-screen overflow-hidden bg-[#07090E]"
+        className="hidden md:block relative w-full h-screen overflow-hidden bg-[var(--bg-secondary)] transition-colors duration-300"
       >
         {/* Gallery Top Navigation HUD */}
         <div className="absolute top-6 left-8 right-8 z-30 flex items-center justify-between pointer-events-none">
           <div className="flex items-center gap-4">
             {/* Live Counter (01/07) */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-white font-mono text-xs font-bold tracking-widest shadow-lg">
-              <span className="text-indigo-400">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-card)] backdrop-blur-md border border-[var(--border-subtle)] text-[var(--text-main)] font-mono text-xs font-bold tracking-widest shadow-lg">
+              <span style={{ color: project.accentColor }}>
                 {String(activeIndex).padStart(2, "0")}
               </span>
-              <span className="text-slate-500">/</span>
-              <span className="text-slate-400">
+              <span className="text-[var(--text-faint)]">/</span>
+              <span className="text-[var(--text-muted)]">
                 {String(project.images.length).padStart(2, "0")}
               </span>
             </div>
-            <span className="text-xs uppercase tracking-widest font-mono text-slate-400">
+            <span className="text-xs uppercase tracking-widest font-mono text-[var(--text-muted)]">
               SCROLL HORIZONTALLY &bull; DRAG TO EXPLORE
             </span>
           </div>
 
-          <div className="text-xs font-mono text-slate-400 hidden lg:block">
+          <div className="text-xs font-mono text-[var(--text-muted)] hidden lg:block">
             {project.images[activeIndex - 1]?.caption || project.title}
           </div>
         </div>
@@ -381,15 +389,15 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
       {/* ---------------------------------------------------------------------
           MOBILE: TOUCH SWIPE CAROUSEL (< 768px)
           --------------------------------------------------------------------- */}
-      <div className="md:hidden relative w-full px-4 pb-16 bg-[#07090E]">
+      <div className="md:hidden relative w-full px-4 pb-16 bg-[var(--bg-secondary)] transition-colors duration-300">
         {/* Mobile Header & Live Counter */}
         <div className="flex items-center justify-between mb-4 px-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-white font-mono text-xs font-bold">
-            <span className="text-indigo-400">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-card)] backdrop-blur-md border border-[var(--border-subtle)] text-[var(--text-main)] font-mono text-xs font-bold">
+            <span style={{ color: project.accentColor }}>
               {String(activeIndex).padStart(2, "0")}
             </span>
-            <span className="text-slate-500">/</span>
-            <span className="text-slate-400">
+            <span className="text-[var(--text-faint)]">/</span>
+            <span className="text-[var(--text-muted)]">
               {String(project.images.length).padStart(2, "0")}
             </span>
           </div>
@@ -399,14 +407,14 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
             <button
               onClick={() => scrollMobileTo("prev")}
               aria-label="Previous slide"
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-transform"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] active:scale-95 transition-transform"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scrollMobileTo("next")}
               aria-label="Next slide"
-              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-transform"
+              className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] active:scale-95 transition-transform"
             >
               <ArrowRight className="w-4 h-4" />
             </button>

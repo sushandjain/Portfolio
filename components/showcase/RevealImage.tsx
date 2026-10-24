@@ -144,7 +144,7 @@ export default function RevealImage({
       ref={containerRef}
       onClick={onClick}
       data-cursor-label={cursorLabel}
-      className={`group relative overflow-hidden rounded-2xl bg-[#0F121C] border border-white/10 ${
+      className={`group relative overflow-hidden rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)] shadow-md transition-colors duration-300 ${
         onClick ? "cursor-pointer" : ""
       } ${className}`}
       role={onClick ? "button" : undefined}

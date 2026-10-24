@@ -88,7 +88,7 @@ export default function StackedCards({ project }: StackedCardsProps) {
   }, [project.images.length]);
 
   return (
-    <div className="relative w-full border-t border-white/10 bg-[#090B10]">
+    <div className="relative w-full border-t border-[var(--border-subtle)] bg-[var(--bg-primary)] text-[var(--text-main)] transition-colors duration-300">
       {/* ---------------------------------------------------------------------
           INTRO BLOCK
           --------------------------------------------------------------------- */}
@@ -106,7 +106,7 @@ export default function StackedCards({ project }: StackedCardsProps) {
             >
               {project.index}
             </span>
-            <span className="text-xs uppercase tracking-widest font-mono text-slate-400">
+            <span className="text-xs uppercase tracking-widest font-mono text-[var(--text-muted)]">
               PROJECT {project.index} &bull; STICKY STACKED CARDS
             </span>
           </div>
@@ -118,9 +118,14 @@ export default function StackedCards({ project }: StackedCardsProps) {
                 href={project.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-indigo-300 bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
+                style={{
+                  color: project.accentColor,
+                  backgroundColor: `${project.accentColor}18`,
+                  borderColor: `${project.accentColor}40`,
+                }}
               >
-                <Film className="w-3.5 h-3.5 text-indigo-400" />
+                <Film className="w-3.5 h-3.5" style={{ color: project.accentColor }} />
                 <span>1080p Video</span>
               </a>
             )}
@@ -129,10 +134,10 @@ export default function StackedCards({ project }: StackedCardsProps) {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <span>Live Deploy</span>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                <ExternalLink className="w-3.5 h-3.5 text-[var(--text-faint)]" />
               </a>
             )}
             {project.githubUrl && (
@@ -140,7 +145,7 @@ export default function StackedCards({ project }: StackedCardsProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>Source</span>
@@ -153,13 +158,16 @@ export default function StackedCards({ project }: StackedCardsProps) {
         <SplitText
           as="h2"
           type="lines"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 uppercase font-display"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 uppercase font-display"
         >
           {project.title}
         </SplitText>
 
         {/* Tagline / Subtitle */}
-        <p className="text-lg md:text-xl text-amber-300 font-medium tracking-wide mb-8 max-w-3xl">
+        <p
+          className="text-lg md:text-xl font-medium tracking-wide mb-8 max-w-3xl"
+          style={{ color: project.accentColor }}
+        >
           {project.tagline}
         </p>
 
@@ -168,47 +176,47 @@ export default function StackedCards({ project }: StackedCardsProps) {
           <SplitText
             as="p"
             type="words"
-            className="text-base sm:text-lg text-slate-300 leading-relaxed font-body"
+            className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed font-body"
           >
             {project.description}
           </SplitText>
         </div>
 
         {/* Meta Row: Role / Year / Tools / Client */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[var(--border-subtle)]">
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Role
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.role}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.role}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Timeline
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.year}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.year}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Client
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.client}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.client}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Core Tech
             </span>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {project.tools.slice(0, 3).map((tool, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 border border-white/10 text-slate-300"
+                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-muted)]"
                 >
                   {tool}
                 </span>
               ))}
               {project.tools.length > 3 && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-400">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--text-faint)]">
                   +{project.tools.length - 3}
                 </span>
               )}
@@ -225,25 +233,25 @@ export default function StackedCards({ project }: StackedCardsProps) {
         className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-32"
       >
         {/* Sticky HUD: Slide counter and Thin Progress Line */}
-        <div className="sticky top-20 z-40 mb-8 py-3 px-4 rounded-2xl bg-black/70 backdrop-blur-xl border border-white/15 flex items-center justify-between shadow-2xl">
+        <div className="sticky top-20 z-40 mb-8 py-3 px-4 rounded-2xl bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--border-subtle)] text-[var(--text-main)] flex items-center justify-between shadow-2xl transition-colors duration-300">
           <div className="flex items-center gap-3">
-            <Layers className="w-4 h-4 text-amber-400" />
-            <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-white tracking-wider">
-              <span className="text-amber-400">
+            <Layers className="w-4 h-4" style={{ color: project.accentColor }} />
+            <div className="flex items-center gap-1.5 font-mono text-xs font-bold tracking-wider">
+              <span style={{ color: project.accentColor }}>
                 {String(activeIndex).padStart(2, "0")}
               </span>
-              <span className="text-slate-500">/</span>
-              <span className="text-slate-400">
+              <span className="text-[var(--text-faint)]">/</span>
+              <span className="text-[var(--text-muted)]">
                 {String(project.images.length).padStart(2, "0")}
               </span>
             </div>
-            <span className="text-[11px] uppercase tracking-wider font-mono text-slate-400 hidden sm:inline">
+            <span className="text-[11px] uppercase tracking-wider font-mono text-[var(--text-muted)] hidden sm:inline">
               STACKED PERSPECTIVES &bull; SCROLL DOWN
             </span>
           </div>
 
           {/* Thin scroll-progress line inside HUD */}
-          <div className="w-32 sm:w-48 h-1.5 bg-white/10 rounded-full overflow-hidden ml-4">
+          <div className="w-32 sm:w-48 h-1.5 bg-[var(--border-subtle)] rounded-full overflow-hidden ml-4">
             <div
               className="h-full rounded-full transition-all duration-150 ease-out"
               style={{
@@ -261,19 +269,19 @@ export default function StackedCards({ project }: StackedCardsProps) {
           {project.videoUrl && (
             <div
               style={{ top: "96px" }}
-              className="sticky rounded-3xl bg-[#0D101A] border border-indigo-500/30 shadow-2xl p-4 sm:p-6 md:p-8 transform-gpu will-change-[transform,opacity] transition-shadow duration-300"
+              className="sticky rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)] shadow-2xl p-4 sm:p-6 md:p-8 transform-gpu will-change-[transform,opacity] transition-all duration-300"
             >
-              <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-white/10 mb-4 sm:mb-6">
+              <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-[var(--border-subtle)] mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-400">
+                  <span className="text-2xl sm:text-3xl font-extrabold font-mono text-indigo-500 dark:text-indigo-400">
                     VIDEO
                   </span>
-                  <div className="h-4 w-px bg-white/20" />
-                  <span className="text-xs font-mono font-bold tracking-widest text-indigo-400 uppercase">
+                  <div className="h-4 w-px bg-[var(--border-subtle)]" />
+                  <span className="text-xs font-mono font-bold tracking-widest text-indigo-500 dark:text-indigo-400 uppercase">
                     1080P CLOUD AUDIO STREAMING DEMO
                   </span>
                 </div>
-                <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-mono text-emerald-500 dark:text-emerald-400 font-bold bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full">
                   LIVE ENGINE
                 </span>
               </div>
@@ -299,20 +307,23 @@ export default function StackedCards({ project }: StackedCardsProps) {
               style={{
                 top: `${110 + idx * 12}px`, // Slight top cascade
               }}
-              className="sticky rounded-3xl bg-[#0D101A] border border-white/15 shadow-2xl p-4 sm:p-6 md:p-8 transform-gpu will-change-[transform,opacity] transition-shadow duration-300"
+              className="sticky rounded-3xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-main)] shadow-2xl p-4 sm:p-6 md:p-8 transform-gpu will-change-[transform,opacity] transition-all duration-300"
             >
               {/* Card Header: Number & Tag */}
-              <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-white/10 mb-4 sm:mb-6">
+              <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-[var(--border-subtle)] mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl sm:text-3xl font-extrabold font-mono text-white/90">
+                  <span className="text-2xl sm:text-3xl font-extrabold font-mono text-[var(--text-main)]">
                     0{idx + 1}
                   </span>
-                  <div className="h-4 w-px bg-white/20" />
-                  <span className="text-xs font-mono font-bold tracking-widest text-amber-400 uppercase">
+                  <div className="h-4 w-px bg-[var(--border-subtle)]" />
+                  <span
+                    className="text-xs font-mono font-bold tracking-widest uppercase"
+                    style={{ color: project.accentColor }}
+                  >
                     {img.tag || `STAGE 0${idx + 1}`}
                   </span>
                 </div>
-                <span className="text-xs font-mono text-slate-400">
+                <span className="text-xs font-mono text-[var(--text-muted)]">
                   {idx + 1} of {project.images.length}
                 </span>
               </div>

@@ -178,7 +178,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
     lightboxIndex !== null ? project.images[lightboxIndex] : null;
 
   return (
-    <div className="relative w-full border-t border-white/10 bg-[#090B10]">
+    <div className="relative w-full border-t border-[var(--border-subtle)] bg-[var(--bg-primary)] text-[var(--text-main)] transition-colors duration-300">
       {/* ---------------------------------------------------------------------
           INTRO BLOCK
           --------------------------------------------------------------------- */}
@@ -196,7 +196,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
             >
               {project.index}
             </span>
-            <span className="text-xs uppercase tracking-widest font-mono text-slate-400">
+            <span className="text-xs uppercase tracking-widest font-mono text-[var(--text-muted)]">
               PROJECT {project.index} &bull; BENTO GRID &amp; LIGHTBOX
             </span>
           </div>
@@ -208,7 +208,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 href={project.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
                 style={{
                   color: project.accentColor,
                   backgroundColor: `${project.accentColor}18`,
@@ -224,10 +224,10 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <span>Live Deploy</span>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                <ExternalLink className="w-3.5 h-3.5 text-[var(--text-faint)]" />
               </a>
             )}
             {project.githubUrl && (
@@ -235,7 +235,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>Source</span>
@@ -248,13 +248,16 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
         <SplitText
           as="h2"
           type="lines"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-6 uppercase font-display"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 uppercase font-display"
         >
           {project.title}
         </SplitText>
 
         {/* Tagline / Subtitle */}
-        <p className="text-lg md:text-xl text-emerald-400 font-medium tracking-wide mb-8 max-w-3xl">
+        <p
+          className="text-lg md:text-xl font-medium tracking-wide mb-8 max-w-3xl"
+          style={{ color: project.accentColor }}
+        >
           {project.tagline}
         </p>
 
@@ -263,47 +266,47 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
           <SplitText
             as="p"
             type="words"
-            className="text-base sm:text-lg text-slate-300 leading-relaxed font-body"
+            className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed font-body"
           >
             {project.description}
           </SplitText>
         </div>
 
         {/* Meta Row: Role / Year / Tools / Client */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[var(--border-subtle)]">
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Role
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.role}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.role}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Timeline
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.year}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.year}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Client
             </span>
-            <p className="text-sm font-semibold text-slate-200">{project.client}</p>
+            <p className="text-sm font-semibold text-[var(--text-main)]">{project.client}</p>
           </div>
           <div>
-            <span className="block text-xs font-mono uppercase tracking-wider text-slate-500 mb-1">
+            <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Core Tech
             </span>
             <div className="flex flex-wrap gap-1.5 mt-1">
               {project.tools.slice(0, 3).map((tool, i) => (
                 <span
                   key={i}
-                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-white/5 border border-white/10 text-slate-300"
+                  className="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-muted)]"
                 >
                   {tool}
                 </span>
               ))}
               {project.tools.length > 3 && (
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-slate-400">
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--text-faint)]">
                   +{project.tools.length - 3}
                 </span>
               )}
@@ -317,14 +320,14 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
           --------------------------------------------------------------------- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pb-32">
         {/* Bento Grid Header HUD */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
             <LayoutGrid className="w-4 h-4" style={{ color: project.accentColor }} />
-            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-main)]">
               EXPLORATORY BENTO MATRIX
             </span>
           </div>
-          <span className="text-xs font-mono text-slate-400">
+          <span className="text-xs font-mono text-[var(--text-muted)]">
             CLICK ANY CARD TO EXPAND FULLSCREEN
           </span>
         </div>
@@ -358,7 +361,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
               onClick={() => setLightboxIndex(idx)}
               className={`bento-item ${getBentoSpan(
                 idx
-              )} group relative cursor-pointer rounded-2xl overflow-hidden border border-white/10 bg-[#0F121C] transition-all duration-300 hover:border-white/30 hover:shadow-2xl`}
+              )} group relative cursor-pointer rounded-2xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-secondary)] transition-all duration-300 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10`}
             >
               <RevealImage
                 src={img.url}

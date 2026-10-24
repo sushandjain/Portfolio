@@ -117,7 +117,7 @@ export default function ProjectShowcase({
     <section
       ref={showcaseContainerRef}
       id={id}
-      className={`relative w-full bg-[#090B10] text-slate-100 overflow-hidden ${className}`}
+      className={`relative w-full bg-[var(--bg-primary)] text-[var(--text-main)] transition-colors duration-300 overflow-hidden ${className}`}
     >
       {/* Morphing "View" / "Drag" Floating Cursor */}
       <ShowcaseCursor />
@@ -125,11 +125,11 @@ export default function ProjectShowcase({
       {/* ---------------------------------------------------------------------
           SECTION MASTHEAD
           --------------------------------------------------------------------- */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-28 pb-16 lg:pt-36 lg:pb-20 border-b border-white/10">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-28 pb-16 lg:pt-36 lg:pb-20 border-b border-[var(--border-subtle)]">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
             {/* Pill Header */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-widest text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 mb-6">
               <Sparkles className="w-3.5 h-3.5" />
               <span>PROJECT SHOWCASE &bull; 03 KINETIC CASE STUDIES</span>
             </div>
@@ -138,12 +138,12 @@ export default function ProjectShowcase({
             <SplitText
               as="h2"
               type="lines"
-              className="text-4xl sm:text-6xl lg:text-7xl font-black font-display tracking-tight text-white uppercase"
+              className="text-4xl sm:text-6xl lg:text-7xl font-black font-display tracking-tight text-[var(--text-main)] uppercase"
             >
               SELECTED WORKS
             </SplitText>
 
-            <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl font-body leading-relaxed">
+            <p className="mt-4 text-base sm:text-lg text-[var(--text-muted)] max-w-2xl font-body leading-relaxed">
               Three flagship software engineering architectures. Scroll to experience
               pinned horizontal scrub, exploratory bento matrices, and fullscreen interactive lightboxes.
             </p>
@@ -155,7 +155,7 @@ export default function ProjectShowcase({
               <button
                 key={proj.id}
                 onClick={() => scrollToProject(proj.id)}
-                className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all flex items-center gap-2 active:scale-95"
+                className="px-3.5 py-2 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] shadow-sm transition-all flex items-center gap-2 active:scale-95"
               >
                 <span
                   className="w-2 h-2 rounded-full"
@@ -163,7 +163,7 @@ export default function ProjectShowcase({
                 />
                 <span className="font-bold">{proj.index}</span>
                 <span className="hidden sm:inline">{proj.title.split(" ")[0]}</span>
-                <ArrowUpRight className="w-3 h-3 text-slate-500" />
+                <ArrowUpRight className="w-3 h-3 text-[var(--text-faint)]" />
               </button>
             ))}
           </div>
@@ -229,14 +229,14 @@ export default function ProjectShowcase({
       {/* ---------------------------------------------------------------------
           SHOWCASE FOOTER HUD
           --------------------------------------------------------------------- */}
-      <div className="relative border-t border-white/10 py-12 px-6 lg:px-12 bg-[#06080D]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs font-mono text-slate-500">
+      <div className="relative border-t border-[var(--border-subtle)] py-12 px-6 lg:px-12 bg-[var(--bg-secondary)] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs font-mono text-[var(--text-muted)]">
           <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
             <span>3 FLAGSHIP EXPERIENCES &bull; 21 HI-RES PRODUCTION FRAMES</span>
           </div>
 
-          <div className="flex items-center gap-4 text-slate-400">
+          <div className="flex items-center gap-4 text-[var(--text-faint)]">
             <span>GSAP 3 + ScrollTrigger</span>
             <span>&bull;</span>
             <span>Lenis Engine</span>

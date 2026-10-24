@@ -95,25 +95,25 @@ export default function ScrollMovementControls({
 
   return (
     <div
-      className={`relative z-30 select-none py-3 px-4 rounded-2xl bg-[#090C15]/90 backdrop-blur-xl border border-white/15 shadow-2xl transition-all duration-300 ${className}`}
+      className={`relative z-30 select-none py-3 px-4 rounded-2xl bg-[var(--bg-card)] backdrop-blur-xl border border-[var(--border-subtle)] text-[var(--text-main)] shadow-xl shadow-black/5 dark:shadow-black/40 transition-all duration-300 ${className}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
         {/* Left: Engine Mode Title & Toggle Button */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-indigo-400 font-bold tracking-wider">
+          <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-bold tracking-wider">
             <Compass size={14} className="animate-spin" />
             <span className="hidden sm:inline">SCROLL MOVEMENT ENGINE:</span>
           </div>
 
           {/* Mode Tabs */}
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-white/5 border border-white/10">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)]">
             <button
               type="button"
               onClick={() => handleSelectMode("kinetic")}
               className={`px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer ${
                 scrollMode === "kinetic"
                   ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
               }`}
             >
               Kinetic Inertia
@@ -124,7 +124,7 @@ export default function ScrollMovementControls({
               className={`px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer flex items-center gap-1 ${
                 scrollMode === "autoglide"
                   ? "bg-gradient-to-r from-emerald-600 to-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
               }`}
             >
               <Zap size={11} className={autoScrollPlaying ? "text-amber-300 animate-pulse" : ""} />
@@ -136,7 +136,7 @@ export default function ScrollMovementControls({
               className={`px-2.5 py-1 rounded-lg font-bold uppercase transition-all cursor-pointer hidden md:inline-block ${
                 scrollMode === "snap"
                   ? "bg-indigo-600 text-white shadow-sm"
-                  : "text-slate-400 hover:text-white"
+                  : "text-[var(--text-muted)] hover:text-[var(--text-main)]"
               }`}
             >
               Step Snap
@@ -148,11 +148,11 @@ export default function ScrollMovementControls({
         <div className="flex items-center gap-3">
           {/* If Auto-Glide is active: Play/Pause and Speed Toggle */}
           {scrollMode === "autoglide" && (
-            <div className="flex items-center gap-2 pr-2 border-r border-white/10">
+            <div className="flex items-center gap-2 pr-2 border-r border-[var(--border-subtle)]">
               <button
                 type="button"
                 onClick={toggleAutoPlay}
-                className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+                className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-500/30 font-bold flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
               >
                 {autoScrollPlaying ? (
                   <>
@@ -177,7 +177,7 @@ export default function ScrollMovementControls({
                     className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
                       speedMultiplier === spd
                         ? "bg-indigo-500 text-white"
-                        : "text-slate-500 hover:text-slate-300"
+                        : "text-[var(--text-faint)] hover:text-[var(--text-muted)]"
                     }`}
                   >
                     {spd}x
@@ -189,7 +189,7 @@ export default function ScrollMovementControls({
 
           {/* Parallax Depth Intensity Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-slate-400 uppercase hidden lg:inline">
+            <span className="text-[10px] text-[var(--text-faint)] uppercase hidden lg:inline">
               Parallax Depth:
             </span>
             <div className="flex items-center gap-1">
@@ -204,8 +204,8 @@ export default function ScrollMovementControls({
                   onClick={() => handleParallaxChange(p.depth)}
                   className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all cursor-pointer ${
                     parallaxDepth === p.depth
-                      ? "bg-indigo-500/30 text-indigo-300 border border-indigo-500/50"
-                      : "text-slate-400 hover:text-white bg-white/5 border border-white/10"
+                      ? "bg-indigo-500/30 text-indigo-600 dark:text-indigo-300 border border-indigo-500/50"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] border border-[var(--border-subtle)]"
                   }`}
                 >
                   {p.label}

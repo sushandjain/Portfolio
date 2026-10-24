@@ -591,7 +591,7 @@ export default function Projects({ projects: initialProjects }: { projects?: any
 
       {/* View Mode 3: Kinetic Motion Showcase (Awwwards Moving Image Scroll, Stacked Cards, Bento Matrix) */}
       {viewMode === "showcase" && (
-        <div className="mt-8 w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#090B10]">
+        <div className="mt-8 w-full rounded-3xl overflow-hidden border border-[var(--border-subtle)] shadow-2xl bg-[var(--bg-primary)] text-[var(--text-main)] transition-colors duration-300">
           <ProjectShowcase enableLenis={false} id="kinetic-works" />
         </div>
       )}

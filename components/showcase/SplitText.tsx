@@ -79,9 +79,40 @@ export default function SplitText({
 
     // Initial state before reveal
     if (type === "lines") {
-      gsap.set(items, { yPercent: 120, opacity: 1 });
+      gsap.set(items, { yPercent: 120 });
     } else {
       gsap.set(items, { y: 18, opacity: 0 });
+    }
+
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      if (type === "lines") {
+        gsap.to(items, {
+          yPercent: 0,
+          duration,
+          delay,
+          stagger: computedStagger,
+          ease: customEase,
+          clearProps: "transform",
+        });
+      } else {
+        gsap.to(items, {
+          y: 0,
+          opacity: 1,
+          duration: duration * 0.85,
+          delay,
+          stagger: computedStagger,
+          ease: customEase,
+          clearProps: "transform,opacity",
+        });
+      }
+    };
+
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= (typeof window !== "undefined" ? window.innerHeight * 0.95 : 800) && rect.bottom >= 0) {
+      reveal();
     }
 
     const ctx = gsap.context(() => {
@@ -89,30 +120,18 @@ export default function SplitText({
         trigger: el,
         start: triggerStart,
         once: true,
-        onEnter: () => {
-          if (type === "lines") {
-            gsap.to(items, {
-              yPercent: 0,
-              duration,
-              delay,
-              stagger: computedStagger,
-              ease: customEase,
-            });
-          } else {
-            gsap.to(items, {
-              y: 0,
-              opacity: 1,
-              duration: duration * 0.85,
-              delay,
-              stagger: computedStagger,
-              ease: customEase,
-            });
-          }
-        },
+        onEnter: reveal,
       });
     }, el);
 
-    return () => ctx.revert();
+    const fallbackTimer = setTimeout(() => {
+      reveal();
+    }, 600);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      ctx.revert();
+    };
   }, [reducedMotion, type, delay, stagger, duration, triggerStart, children]);
 
   // If user prefers reduced motion, render clean markup without hidden spans
@@ -138,7 +157,6 @@ export default function SplitText({
           >
             <span
               className="split-target inline-block will-change-transform"
-              style={{ transform: "translateY(120%)" }}
             >
               {line}
             </span>
@@ -171,7 +189,6 @@ export default function SplitText({
               className={`split-target inline-block will-change-[transform,opacity] ${
                 isHighlight ? highlightClassName : ""
               }`}
-              style={{ opacity: 0, transform: "translateY(18px)" }}
             >
               {word}
             </span>

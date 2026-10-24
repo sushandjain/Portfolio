@@ -96,7 +96,7 @@ export default function BetweenProjectsTransition({
   return (
     <div
       ref={containerRef}
-      className="relative w-full min-h-[90vh] min-h-[90dvh] lg:min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[#06080D] py-16 sm:py-24 select-none"
+      className="relative w-full min-h-[90vh] min-h-[90dvh] lg:min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-[var(--bg-secondary)] text-[var(--text-main)] transition-colors duration-300 py-16 sm:py-24 select-none"
     >
       {/* Dynamic Ambient Glow Circle */}
       <div
@@ -109,21 +109,21 @@ export default function BetweenProjectsTransition({
       />
 
       {/* Grid Pattern Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none opacity-40" />
+      <div className="absolute inset-0 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none opacity-40" />
 
       {/* Transitional Label */}
       <div className="relative z-10 flex items-center gap-3 mb-6">
-        <span className="w-8 h-px bg-white/20" />
-        <span className="text-xs uppercase font-mono tracking-widest text-slate-400">
+        <span className="w-8 h-px bg-[var(--border-subtle)]" />
+        <span className="text-xs uppercase font-mono tracking-widest text-[var(--text-muted)]">
           TRANSITIONING TO PROJECT {nextIndex}
         </span>
-        <span className="w-8 h-px bg-white/20" />
+        <span className="w-8 h-px bg-[var(--border-subtle)]" />
       </div>
 
       {/* Scaling Next Project Title: Screen Takeover */}
       <h2
         ref={titleRef}
-        className="relative z-10 text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-display tracking-tighter text-center uppercase text-white px-4 will-change-[transform,opacity]"
+        className="relative z-10 text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black font-display tracking-tighter text-center uppercase text-[var(--text-main)] px-4 will-change-[transform,opacity]"
         style={{
           textShadow: `0 0 60px ${accentColor}44`,
         }}
@@ -136,13 +136,13 @@ export default function BetweenProjectsTransition({
         ref={metaRef}
         className="relative z-10 flex flex-col items-center mt-8 text-center px-4"
       >
-        <p className="text-sm sm:text-base md:text-lg text-slate-300 font-medium max-w-xl">
+        <p className="text-sm sm:text-base md:text-lg text-[var(--text-muted)] font-medium max-w-xl">
           {nextTagline}
         </p>
 
-        <div className="mt-8 flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-slate-400">
+        <div className="mt-8 flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[var(--text-faint)]">
           <span>KEEP SCROLLING</span>
-          <ArrowDown className="w-3.5 h-3.5 animate-bounce text-white" />
+          <ArrowDown className="w-3.5 h-3.5 animate-bounce text-[var(--text-main)]" />
         </div>
       </div>
     </div>
