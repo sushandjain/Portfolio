@@ -123,7 +123,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     tools: ["React", "Node.js", "Express", "MongoDB", "Cloudinary CDN", "JWT", "Tailwind CSS"],
     client: "SoundStream Media Group",
     accentColor: "#6366F1",
-    galleryVariant: "stacked",
+    galleryVariant: "bento",
     liveUrl: "https://tunexia.vercel.app/",
     githubUrl: "https://github.com/sushandjain",
     videoUrl: "/tunexia/tunexia-intro.mp4",

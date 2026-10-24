@@ -208,9 +208,14 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 href={project.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-amber-300 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors"
+                style={{
+                  color: project.accentColor,
+                  backgroundColor: `${project.accentColor}18`,
+                  borderColor: `${project.accentColor}40`,
+                }}
               >
-                <Film className="w-3.5 h-3.5 text-amber-400" />
+                <Film className="w-3.5 h-3.5" style={{ color: project.accentColor }} />
                 <span>1080p Video</span>
               </a>
             )}
@@ -314,7 +319,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
         {/* Bento Grid Header HUD */}
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <LayoutGrid className="w-4 h-4 text-emerald-400" />
+            <LayoutGrid className="w-4 h-4" style={{ color: project.accentColor }} />
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
               EXPLORATORY BENTO MATRIX
             </span>
@@ -328,7 +333,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
           ref={gridRef}
           className="grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-start"
         >
-          {/* Premier Video 3 with Scroll Movement Effect */}
+          {/* Premier Video with Scroll Movement Effect */}
           {project.videoUrl && (
             <div className="bento-item col-span-12 mb-2 rounded-3xl overflow-hidden">
               <KineticVideoCard
@@ -336,7 +341,11 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 title={project.title}
                 tagline={project.tagline}
                 accentColor={project.accentColor}
-                badge="1080P KUDREMUKH EXPEDITION DISPATCH"
+                badge={
+                  project.id.includes("tunexia") || project.title.toLowerCase().includes("tunexia")
+                    ? "1080P AUDIO STREAMING ARCHITECTURE"
+                    : "1080P KUDREMUKH EXPEDITION DISPATCH"
+                }
                 aspectRatio="aspect-[16/9]"
               />
             </div>
@@ -349,7 +358,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
               onClick={() => setLightboxIndex(idx)}
               className={`bento-item ${getBentoSpan(
                 idx
-              )} group relative cursor-pointer rounded-2xl overflow-hidden border border-white/10 bg-[#0F121C] transition-all duration-300 hover:border-emerald-500/40 hover:shadow-2xl hover:shadow-emerald-500/10`}
+              )} group relative cursor-pointer rounded-2xl overflow-hidden border border-white/10 bg-[#0F121C] transition-all duration-300 hover:border-white/30 hover:shadow-2xl`}
             >
               <RevealImage
                 src={img.url}
@@ -395,7 +404,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
             <div className="flex items-center gap-4">
               {/* Live Counter */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 font-mono text-xs font-bold text-white tracking-widest shadow-lg">
-                <span className="text-emerald-400">
+                <span style={{ color: project.accentColor }}>
                   {String(lightboxIndex + 1).padStart(2, "0")}
                 </span>
                 <span className="text-slate-500">/</span>
@@ -498,12 +507,13 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
             {/* Thin Progress Line */}
             <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden self-center sm:self-auto">
               <div
-                className="h-full bg-emerald-400 rounded-full transition-all duration-200"
+                className="h-full rounded-full transition-all duration-200"
                 style={{
                   width: `${
                     ((lightboxIndex + 1) / project.images.length) * 100
                   }%`,
-                  boxShadow: "0 0 10px #10B981",
+                  backgroundColor: project.accentColor,
+                  boxShadow: `0 0 10px ${project.accentColor}`,
                 }}
               />
             </div>

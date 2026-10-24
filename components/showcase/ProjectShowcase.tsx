@@ -101,6 +101,18 @@ export default function ProjectShowcase({
     el.scrollIntoView({ behavior: "smooth" });
   };
 
+  const renderProjectGallery = (project: ShowcaseProject) => {
+    switch (project.galleryVariant) {
+      case "stacked":
+        return <StackedCards project={project} />;
+      case "horizontal":
+        return <HorizontalGallery project={project} />;
+      case "bento":
+      default:
+        return <BentoLightbox project={project} />;
+    }
+  };
+
   return (
     <section
       ref={showcaseContainerRef}
@@ -133,7 +145,7 @@ export default function ProjectShowcase({
 
             <p className="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl font-body leading-relaxed">
               Three flagship software engineering architectures. Scroll to experience
-              pinned horizontal scrub, sticky card stacking, and interactive bento matrix.
+              pinned horizontal scrub, exploratory bento matrices, and fullscreen interactive lightboxes.
             </p>
           </div>
 
@@ -164,11 +176,11 @@ export default function ProjectShowcase({
       </div>
 
       {/* ---------------------------------------------------------------------
-          PROJECT 1: PINNED HORIZONTAL GALLERY
+          PROJECT 1
           --------------------------------------------------------------------- */}
       {p1 && (
         <div id={p1.id}>
-          <HorizontalGallery project={p1} />
+          {renderProjectGallery(p1)}
         </div>
       )}
 
@@ -185,11 +197,11 @@ export default function ProjectShowcase({
       )}
 
       {/* ---------------------------------------------------------------------
-          PROJECT 2: STICKY STACKED CARDS
+          PROJECT 2 (TUNEXIA)
           --------------------------------------------------------------------- */}
       {p2 && (
         <div id={p2.id}>
-          <StackedCards project={p2} />
+          {renderProjectGallery(p2)}
         </div>
       )}
 
@@ -206,11 +218,11 @@ export default function ProjectShowcase({
       )}
 
       {/* ---------------------------------------------------------------------
-          PROJECT 3: ASYMMETRIC BENTO GRID + FULLSCREEN LIGHTBOX
+          PROJECT 3 (HENJODI STORES)
           --------------------------------------------------------------------- */}
       {p3 && (
         <div id={p3.id}>
-          <BentoLightbox project={p3} />
+          {renderProjectGallery(p3)}
         </div>
       )}
 
