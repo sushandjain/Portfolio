@@ -23,7 +23,6 @@ import {
   MessageCircle,
   Mail,
   ChevronRight,
-  Lock,
 } from "lucide-react";
 
 export default function Header({ profile: initialProfile }: { profile?: any } = {}) {
@@ -144,7 +143,7 @@ export default function Header({ profile: initialProfile }: { profile?: any } = 
           <div className="flex items-center gap-3">
             <a
               href="#"
-              className="group flex items-center gap-2.5 text-decoration-none"
+              className="group flex items-center gap-2.5 text-decoration-none select-none touch-manipulation cursor-pointer"
               onMouseEnter={() => setLogoHovered(true)}
               onMouseLeave={() => setLogoHovered(false)}
               onClick={handleAvatarClick}
@@ -351,21 +350,6 @@ export default function Header({ profile: initialProfile }: { profile?: any } = 
                 >
                   <Mail size={14} />
                   <span>Direct Mail</span>
-                </a>
-              </div>
-
-              {/* Subtle Admin Portal Link in Mobile Drawer */}
-              <div className="pt-2 flex justify-center">
-                <a
-                  href="/admin"
-                  onClick={() => {
-                    playPop();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-mono text-[var(--text-faint)] hover:text-indigo-400 border border-white/5 hover:border-indigo-500/30 transition-all opacity-75 hover:opacity-100"
-                >
-                  <Lock size={11} className="text-indigo-400" />
-                  <span>Admin Panel</span>
                 </a>
               </div>
             </div>

@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowUpRight, Sparkles, Layers, Briefcase, Cpu, Award, Send, MapPin, CheckCircle2 } from "lucide-react";
 import { playPop } from "@/lib/sound";
 
@@ -13,12 +14,27 @@ interface MobileHomeHubProps {
 }
 
 export default function MobileHomeHub({ profile, projects = [], experience = [] }: MobileHomeHubProps) {
+  const router = useRouter();
+  const avatarClicksRef = useRef<number[]>([]);
   const avatar = profile?.avatarUrl || "/sushan.jpg";
   const name = profile?.name || "Sushan D Jain";
   const title = profile?.title || "Systems Engineer @ TCS";
   const tagline =
     profile?.bio ||
     "Full-Stack Architect & Systems Engineer crafting high-performance distributed web architectures, high-throughput REST APIs, and Anthropic Claude AI integrations.";
+
+  const handleAvatarClick = (e: React.MouseEvent) => {
+    try {
+      playPop();
+    } catch {}
+    const now = Date.now();
+    avatarClicksRef.current = [...avatarClicksRef.current.filter((t) => now - t < 1500), now];
+    if (avatarClicksRef.current.length >= 3) {
+      avatarClicksRef.current = [];
+      e.preventDefault();
+      router.push("/admin");
+    }
+  };
 
   return (
     <div className="pt-20 px-4 space-y-6">
@@ -30,14 +46,17 @@ export default function MobileHomeHub({ profile, projects = [], experience = [] 
         <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex items-center gap-4 mb-4">
-          <div className="relative w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-indigo-500/30 shrink-0 shadow-md">
+          <div
+            onClick={handleAvatarClick}
+            className="relative w-16 h-16 rounded-2xl overflow-hidden ring-2 ring-indigo-500/30 shrink-0 shadow-md cursor-pointer select-none touch-manipulation active:scale-95 transition-transform"
+          >
             <Image
               src={avatar}
               alt={name}
               fill
               sizes="64px"
               priority
-              className="object-cover object-top"
+              className="object-cover object-top pointer-events-none"
             />
           </div>
           <div>
