@@ -11,7 +11,6 @@ import PageLoader from "@/components/ui/PageLoader";
 import Ticker from "@/components/Ticker";
 import Footer from "@/components/Footer";
 import MobileBottomNav from "@/components/MobileBottomNav";
-import MobileHomeHub from "@/components/mobile/MobileHomeHub";
 
 // Dynamic imports for performance
 const Projects = dynamic(() => import("@/components/Projects"), { ssr: true });
@@ -121,56 +120,16 @@ export default function PortfolioView({ activeSection = "home", content }: Portf
               {/* 2. Kinetic Marquee Ticker */}
               <Ticker />
 
-              {/* 3. Featured Projects Showcase Banner (Excluded from landing page -> links to dedicated /work) */}
-              <div className="px-4 py-6">
-                <div className="p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-                      <span>SELECTED WORKS &bull; 03 FLAGSHIPS</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-[var(--text-faint)]">DEDICATED PAGE</span>
-                  </div>
-
-                  <h3 className="text-xl font-black text-[var(--text-main)] font-display uppercase tracking-tight mb-2">
-                    Client Projects &amp; Apps
-                  </h3>
-                  <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-4">
-                    Malnad Direct D2C logistics, TuneXIA progressive audio CDN, and Henjodi mountain expedition booking portal with horizontal scroll walkthroughs.
-                  </p>
-
-                  <div className="grid grid-cols-3 gap-2 mb-4">
-                    {content.projects.slice(0, 3).map((p: any, i: number) => (
-                      <a
-                        key={p.id || i}
-                        href="/work"
-                        className="p-2.5 rounded-xl bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-center block group active:scale-95 transition-all"
-                      >
-                        <span
-                          className="w-2 h-2 rounded-full mx-auto block mb-1.5"
-                          style={{ backgroundColor: p.accentHex || p.accentColor || "#6366F1" }}
-                        />
-                        <span className="text-[10px] font-mono font-bold text-[var(--text-main)] block truncate">
-                          0{i + 1} {p.name?.split(" ")[0]}
-                        </span>
-                      </a>
-                    ))}
-                  </div>
-
-                  <a
-                    href="/work"
-                    className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-mono text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/25 active:scale-95 transition-all cursor-pointer"
-                  >
-                    <span>View Projects with Horizontal Scroll &rarr;</span>
-                  </a>
+              {/* 3. Flagship Selected Works (Live Projects with Stitch Tab Switcher) */}
+              {visibility.work !== false && (
+                <div id="work">
+                  <Projects projects={content.projects} />
                 </div>
-              </div>
+              )}
 
-              {/* 4. Enterprise Experience & Honors (Remaining on landing page) */}
+              {/* 4. Enterprise Experience & Honors */}
               {visibility.experience !== false && (
-                <div id="experience" className="pt-2">
+                <div id="experience">
                   <Experience
                     experience={content.experience}
                     achievements={content.achievements}
@@ -178,9 +137,16 @@ export default function PortfolioView({ activeSection = "home", content }: Portf
                 </div>
               )}
 
-              {/* 5. Academic Foundation & Credentials (Remaining on landing page) */}
+              {/* 5. Technical Skills Arsenal (Cyber Bento & Telemetry) */}
+              {visibility.arsenal !== false && (
+                <div id="stack">
+                  <SkillsMatrix skills={content.skills} />
+                </div>
+              )}
+
+              {/* 6. Academic Foundation & Credentials */}
               {visibility.credentials !== false && (
-                <div id="education" className="pt-2">
+                <div id="education">
                   <Education
                     education={content.education}
                     certificates={content.certificates}
@@ -188,44 +154,9 @@ export default function PortfolioView({ activeSection = "home", content }: Portf
                 </div>
               )}
 
-              {/* 6. Technical Skills Spotlight Banner (Excluded from landing page -> links to dedicated /arsenal) */}
-              <div className="px-4 py-6">
-                <div className="p-6 rounded-3xl bg-[var(--bg-card)] border border-[var(--border-subtle)] shadow-xl relative overflow-hidden">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-                      <span>TECHNICAL ARSENAL</span>
-                    </div>
-                    <span className="text-[10px] font-mono text-[var(--text-faint)]">DEDICATED PAGE</span>
-                  </div>
-
-                  <h3 className="text-xl font-black text-[var(--text-main)] font-display uppercase tracking-tight mb-2">
-                    Skills Matrix &amp; Stack
-                  </h3>
-                  <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-4">
-                    Frontend, Backend, Cloud &amp; Databases, DevOps &amp; Distributed Systems proficiency meters and telemetry.
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {["Next.js 15", "React 19", "Node.js", "TypeScript", "MongoDB", "Tailwind CSS", "Redis", "Claude AI"].map((tech) => (
-                      <span key={tech} className="px-2.5 py-1 rounded-lg text-[11px] font-mono bg-[var(--bg-secondary)] border border-[var(--border-subtle)] text-[var(--text-muted)]">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  <a
-                    href="/arsenal"
-                    className="w-full py-3 rounded-xl bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] text-[var(--text-main)] font-mono text-xs font-bold flex items-center justify-center gap-2 active:scale-95 transition-all shadow-sm cursor-pointer"
-                  >
-                    <span>Open Interactive Skills Matrix &rarr;</span>
-                  </a>
-                </div>
-              </div>
-
-              {/* 7. Contact & Dispatch (Remaining on landing page) */}
+              {/* 7. Contact & Dispatch */}
               {visibility.contact !== false && (
-                <div id="contact" className="pt-2">
+                <div id="contact">
                   <Contact profile={content.profile} />
                 </div>
               )}

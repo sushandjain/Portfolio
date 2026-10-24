@@ -277,22 +277,20 @@ export default function Header({ profile: initialProfile }: { profile?: any } = 
               <div className="space-y-1.5 py-1">
                 {navItems.map((item) => {
                   const Icon = item.icon;
-                  const mobileRouteMap: Record<string, string> = {
-                    work: "/work",
-                    experience: "/experience",
-                    education: "/credentials",
-                    stack: "/arsenal",
-                    contact: "/contact",
-                  };
-                  const routeHref = mobileRouteMap[item.id] || item.href;
-
                   return (
-                    <Link
+                    <a
                       key={item.label}
-                      href={routeHref}
-                      onClick={() => {
+                      href={`/#${item.id}`}
+                      onClick={(e) => {
                         playTick(780);
                         setMobileMenuOpen(false);
+                        if (typeof window !== "undefined" && window.location.pathname === "/") {
+                          const target = document.getElementById(item.id);
+                          if (target) {
+                            e.preventDefault();
+                            target.scrollIntoView({ behavior: "smooth" });
+                          }
+                        }
                       }}
                       className="flex items-center justify-between p-3 rounded-2xl transition-all active:scale-[0.98] hover:bg-[var(--bg-secondary)] text-[var(--text-main)] border border-transparent hover:border-[var(--border-subtle)] cursor-pointer"
                     >
@@ -310,7 +308,7 @@ export default function Header({ profile: initialProfile }: { profile?: any } = 
                         </div>
                       </div>
                       <ChevronRight size={14} className="text-[var(--text-faint)] shrink-0" />
-                    </Link>
+                    </a>
                   );
                 })}
               </div>

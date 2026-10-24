@@ -311,7 +311,7 @@ export default function SkillsMatrix({ skills: initialSkills }: { skills?: any[]
       {activeView === "bento" && (
         <>
           {/* Category Filter Pills with Item Counts */}
-          <div className="flex flex-wrap gap-2 mb-8">
+          <div className="flex items-center gap-2 mb-6 sm:mb-8 overflow-x-auto no-scrollbar pb-1.5 sm:flex-wrap touch-manipulation">
             {categories.map((cat) => {
               const count = cat === "All"
                 ? allSkills.length
@@ -324,7 +324,7 @@ export default function SkillsMatrix({ skills: initialSkills }: { skills?: any[]
                     setActiveTab(cat);
                     playPop();
                   }}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold tracking-wider transition-all cursor-pointer flex items-center gap-2 shrink-0 active:scale-95 ${
                     activeTab === cat
                       ? "bg-indigo-600 text-white shadow-sm ring-1 ring-indigo-400/50"
                       : "bg-[var(--bg-card)] text-[var(--text-muted)] hover:text-[var(--text-main)] border border-[var(--border-subtle)] hover:border-indigo-500/30"
