@@ -9,9 +9,9 @@ import { playPop } from "@/lib/sound";
 const NAV_TABS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Work", href: "/work", icon: Layers },
-  { label: "Exp", href: "/experience", icon: Briefcase },
-  { label: "Arsenal", href: "/arsenal", icon: Cpu },
-  { label: "Contact", href: "/contact", icon: Send },
+  { label: "Skills", href: "/arsenal", icon: Cpu },
+  { label: "Exp", href: "/#experience", icon: Briefcase },
+  { label: "Contact", href: "/#contact", icon: Send },
 ];
 
 export default function MobileBottomNav() {
@@ -24,13 +24,31 @@ export default function MobileBottomNav() {
     if (href === "/work") {
       return pathname === "/work" || pathname === "/projects";
     }
-    if (href === "/experience") {
-      return pathname === "/experience" || pathname === "/credentials";
-    }
     if (href === "/arsenal") {
       return pathname === "/arsenal" || pathname === "/skills";
     }
-    return pathname.startsWith(href);
+    if (href === "/#experience") {
+      return pathname === "/experience" || pathname === "/credentials";
+    }
+    if (href === "/#contact") {
+      return pathname === "/contact";
+    }
+    return pathname === href;
+  };
+
+  const handleNavClick = (href: string, e: React.MouseEvent) => {
+    try {
+      playPop();
+    } catch {}
+
+    if (href.startsWith("/#") && pathname === "/") {
+      const id = href.replace("/#", "");
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -45,13 +63,9 @@ export default function MobileBottomNav() {
 
           return (
             <Link
-              key={tab.href}
+              key={tab.label}
               href={tab.href}
-              onClick={() => {
-                try {
-                  playPop();
-                } catch {}
-              }}
+              onClick={(e) => handleNavClick(tab.href, e)}
               className={`relative flex-1 py-1.5 px-1 rounded-xl flex flex-col items-center justify-center gap-1 transition-all active:scale-95 cursor-pointer ${
                 active
                   ? "text-indigo-400 font-bold bg-indigo-500/15 shadow-xs"
