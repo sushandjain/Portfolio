@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { playPop } from "@/lib/sound";
-import { ArrowUp, Lock } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 
 export default function Footer({
   settings,
@@ -45,28 +44,11 @@ export default function Footer({
         {/* Left: Identity */}
         <div className="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
           <span className="font-bold text-[var(--text-main)] flex items-center gap-1.5">
-            <Link
-              href="/admin"
-              className="text-inherit hover:text-indigo-400 transition-colors cursor-default"
-              title="Admin Portal"
-            >
-              ©
-            </Link>
+            <span>©</span>
             <span>{new Date().getFullYear()} {nameUpper}</span>
           </span>
           <span className="hidden sm:inline text-[var(--text-faint)]">·</span>
           <span>{locationText}</span>
-
-          {/* Discreet Admin Portal Button */}
-          <Link
-            href="/admin"
-            aria-label="Admin Portal"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 hover:bg-indigo-600/20 border border-white/10 hover:border-indigo-500/40 text-[var(--text-muted)] hover:text-indigo-300 transition-all cursor-pointer text-[10px] font-mono group"
-            title="Admin Portal"
-          >
-            <Lock size={11} className="text-indigo-400 group-hover:scale-110 transition-transform" />
-            <span className="tracking-widest uppercase">Admin</span>
-          </Link>
         </div>
 
         {/* Center: Tech note */}
