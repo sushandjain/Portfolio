@@ -144,9 +144,9 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
       {/* ---------------------------------------------------------------------
           INTRO BLOCK
           --------------------------------------------------------------------- */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-24 pb-16 lg:pt-32 lg:pb-20">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-10 pb-8 sm:pt-20 sm:pb-12 lg:pt-32 lg:pb-20">
         {/* Project Header Tag & Live Indicator */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 sm:mb-6">
           <div className="inline-flex items-center gap-3">
             <span
               className="inline-flex items-center justify-center w-8 h-8 rounded-full text-xs font-mono font-bold border"
@@ -164,13 +164,13 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
           </div>
 
           {/* External links */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {project.videoUrl && (
               <a
                 href={project.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
                 style={{
                   color: project.accentColor,
                   backgroundColor: `${project.accentColor}18`,
@@ -186,7 +186,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <span>Live Deploy</span>
                 <ExternalLink className="w-3.5 h-3.5 text-[var(--text-faint)]" />
@@ -197,7 +197,7 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>Source</span>
@@ -210,32 +210,32 @@ export default function HorizontalGallery({ project }: HorizontalGalleryProps) {
         <SplitText
           as="h2"
           type="lines"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 uppercase font-display"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-4 sm:mb-6 uppercase font-display"
         >
           {project.title}
         </SplitText>
 
         {/* Tagline / Subtitle */}
         <p
-          className="text-lg md:text-xl font-medium tracking-wide mb-8 max-w-3xl"
+          className="text-base sm:text-lg md:text-xl font-medium tracking-wide mb-4 sm:mb-8 max-w-3xl"
           style={{ color: project.accentColor }}
         >
           {project.tagline}
         </p>
 
         {/* Description: Word-by-word fade-up */}
-        <div className="max-w-3xl mb-12">
+        <div className="max-w-3xl mb-6 sm:mb-12">
           <SplitText
             as="p"
             type="words"
-            className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed font-body"
+            className="text-sm sm:text-base md:text-lg text-[var(--text-muted)] leading-relaxed font-body"
           >
             {project.description}
           </SplitText>
         </div>
 
         {/* Meta Row: Role / Year / Tools / Client */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[var(--border-subtle)]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-[var(--border-subtle)]">
           <div>
             <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Role

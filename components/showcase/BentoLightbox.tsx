@@ -16,6 +16,8 @@ import {
   ChevronRight,
   LayoutGrid,
   Film,
+  ArrowLeft,
+  ArrowRight,
 } from "lucide-react";
 import { GithubIcon } from "@/components/Icons";
 
@@ -31,8 +33,8 @@ interface BentoLightboxProps {
  * PROJECT 3: ASYMMETRIC BENTO GRID + FULLSCREEN LIGHTBOX
  *
  * - Intro block with masked title line reveals, word-by-word fade-up description, and meta row.
- * - 7 images arranged in an asymmetrical Bento grid with varied spans and aspect ratios.
- * - Staggered fade and scale-in entrance on scroll.
+ * - Desktop: 7 images arranged in an asymmetrical Bento grid with varied spans and aspect ratios.
+ * - Mobile: Fluid horizontal touch-swipe snap carousel eliminating vertical scroll trapping.
  * - Fullscreen Lightbox with shared-element transition feel:
  *   - Arrow-key navigation (Left/Right)
  *   - Drag-to-swipe on touch & mouse
@@ -42,10 +44,35 @@ interface BentoLightboxProps {
  */
 export default function BentoLightbox({ project }: BentoLightboxProps) {
   const gridRef = useRef<HTMLDivElement | null>(null);
+  const mobileBentoScrollRef = useRef<HTMLDivElement | null>(null);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState(1);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const [dragDeltaX, setDragDeltaX] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Mobile carousel scroll observer
+  const handleMobileBentoScroll = () => {
+    const el = mobileBentoScrollRef.current;
+    if (!el) return;
+    const scrollLeft = el.scrollLeft;
+    const cardWidth = el.offsetWidth * 0.85;
+    const index = Math.min(
+      project.images.length,
+      Math.max(1, Math.round(scrollLeft / cardWidth) + 1)
+    );
+    setMobileActiveIndex(index);
+  };
+
+  const scrollMobileBentoTo = (direction: "prev" | "next") => {
+    const el = mobileBentoScrollRef.current;
+    if (!el) return;
+    const cardWidth = el.offsetWidth * 0.85;
+    el.scrollBy({
+      left: direction === "next" ? cardWidth : -cardWidth,
+      behavior: "smooth",
+    });
+  };
 
   // Staggered Bento Grid Entrance on Scroll
   useEffect(() => {
@@ -182,9 +209,9 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
       {/* ---------------------------------------------------------------------
           INTRO BLOCK
           --------------------------------------------------------------------- */}
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-24 pb-16 lg:pt-32 lg:pb-20">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pt-10 pb-8 sm:pt-20 sm:pb-12 lg:pt-32 lg:pb-20">
         {/* Project Header Tag & Live Indicator */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 sm:mb-6">
           <div className="inline-flex items-center gap-3">
             <span
               className="inline-flex items-center justify-center w-8 h-8 rounded-full text-xs font-mono font-bold border"
@@ -202,13 +229,13 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
           </div>
 
           {/* External links */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {project.videoUrl && (
               <a
                 href={project.videoUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors shadow-sm"
                 style={{
                   color: project.accentColor,
                   backgroundColor: `${project.accentColor}18`,
@@ -224,7 +251,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <span>Live Deploy</span>
                 <ExternalLink className="w-3.5 h-3.5 text-[var(--text-faint)]" />
@@ -235,7 +262,7 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] shadow-sm transition-colors"
               >
                 <GithubIcon className="w-3.5 h-3.5" />
                 <span>Source</span>
@@ -248,32 +275,32 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
         <SplitText
           as="h2"
           type="lines"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-6 uppercase font-display"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--text-main)] mb-4 sm:mb-6 uppercase font-display"
         >
           {project.title}
         </SplitText>
 
         {/* Tagline / Subtitle */}
         <p
-          className="text-lg md:text-xl font-medium tracking-wide mb-8 max-w-3xl"
+          className="text-base sm:text-lg md:text-xl font-medium tracking-wide mb-4 sm:mb-8 max-w-3xl"
           style={{ color: project.accentColor }}
         >
           {project.tagline}
         </p>
 
         {/* Description: Word-by-word fade-up */}
-        <div className="max-w-3xl mb-12">
+        <div className="max-w-3xl mb-6 sm:mb-12">
           <SplitText
             as="p"
             type="words"
-            className="text-base sm:text-lg text-[var(--text-muted)] leading-relaxed font-body"
+            className="text-sm sm:text-base md:text-lg text-[var(--text-muted)] leading-relaxed font-body"
           >
             {project.description}
           </SplitText>
         </div>
 
         {/* Meta Row: Role / Year / Tools / Client */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[var(--border-subtle)]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-[var(--border-subtle)]">
           <div>
             <span className="block text-xs font-mono uppercase tracking-wider text-[var(--text-faint)] mb-1">
               Role
@@ -316,11 +343,11 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
       </div>
 
       {/* ---------------------------------------------------------------------
-          ASYMMETRIC BENTO GRID (7 Images)
+          ASYMMETRIC BENTO GRID (7 Images) & MOBILE CAROUSEL
           --------------------------------------------------------------------- */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pb-32">
-        {/* Bento Grid Header HUD */}
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-subtle)]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 pb-12 sm:pb-20 lg:pb-32">
+        {/* Bento Grid Header HUD (Desktop) */}
+        <div className="hidden md:flex items-center justify-between mb-8 pb-4 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
             <LayoutGrid className="w-4 h-4" style={{ color: project.accentColor }} />
             <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-main)]">
@@ -332,9 +359,105 @@ export default function BentoLightbox({ project }: BentoLightboxProps) {
           </span>
         </div>
 
+        {/* Mobile touch carousel (< 768px): Fluid swipe with live counter */}
+        <div className="md:hidden">
+          {/* Mobile Video Card */}
+          {project.videoUrl && (
+            <div className="mb-4 rounded-2xl overflow-hidden">
+              <KineticVideoCard
+                videoUrl={project.videoUrl}
+                title={project.title}
+                tagline={project.tagline}
+                accentColor={project.accentColor}
+                badge={
+                  project.id.includes("tunexia") || project.title.toLowerCase().includes("tunexia")
+                    ? "1080P AUDIO STREAMING ARCHITECTURE"
+                    : "1080P KUDREMUKH EXPEDITION DISPATCH"
+                }
+                aspectRatio="aspect-[16/10]"
+              />
+            </div>
+          )}
+
+          {/* Mobile Header & Live Counter */}
+          <div className="flex items-center justify-between mb-3 px-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-card)] backdrop-blur-md border border-[var(--border-subtle)] text-[var(--text-main)] font-mono text-xs font-bold">
+              <span style={{ color: project.accentColor }}>
+                {String(mobileActiveIndex).padStart(2, "0")}
+              </span>
+              <span className="text-[var(--text-faint)]">/</span>
+              <span className="text-[var(--text-muted)]">
+                {String(project.images.length).padStart(2, "0")}
+              </span>
+            </div>
+
+            {/* Swipe arrows */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollMobileBentoTo("prev")}
+                aria-label="Previous slide"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] active:scale-95 transition-transform cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollMobileBentoTo("next")}
+                aria-label="Next slide"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-card)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-main)] active:scale-95 transition-transform cursor-pointer"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Touch Track with snap */}
+          <div
+            ref={mobileBentoScrollRef}
+            onScroll={handleMobileBentoScroll}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4"
+            style={{ scrollSnapType: "x mandatory" }}
+          >
+            {project.images.map((img, idx) => (
+              <div
+                key={img.id || idx}
+                onClick={() => setLightboxIndex(idx)}
+                className="w-[85vw] flex-shrink-0 snap-center rounded-2xl overflow-hidden cursor-pointer"
+              >
+                <RevealImage
+                  src={img.url}
+                  alt={img.alt}
+                  caption={img.caption}
+                  tag={img.tag || `FRAME 0${idx + 1}`}
+                  index={idx + 1}
+                  aspectRatio="aspect-[16/10]"
+                  parallaxPercent={0}
+                  className="w-full"
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Dots Indicator */}
+          <div className="flex items-center justify-center gap-1.5 mt-2">
+            {project.images.map((_, idx) => (
+              <div
+                key={idx}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  mobileActiveIndex === idx + 1
+                    ? "w-6 bg-indigo-500"
+                    : "w-1.5 bg-[var(--border-subtle)]"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Asymmetric Bento Matrix (>= 768px) */}
         <div
           ref={gridRef}
-          className="grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-start"
+          className="hidden md:grid grid-cols-12 gap-4 sm:gap-6 lg:gap-8 items-start"
         >
           {/* Premier Video with Scroll Movement Effect */}
           {project.videoUrl && (

@@ -297,9 +297,9 @@ export default function Projects({ projects: initialProjects }: { projects?: any
   const spotlight = getActiveSpotlightMedia();
 
   return (
-    <section id="work" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" onMouseMove={handleMouseMove}>
+    <section id="work" className="py-12 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" onMouseMove={handleMouseMove}>
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[var(--border-subtle)] pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-6 sm:mb-12 border-b border-[var(--border-subtle)] pb-6 sm:pb-8">
         <div>
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-indigo-400 font-bold mb-2">
             <span>02 / SELECTED WORKS</span>
@@ -307,7 +307,7 @@ export default function Projects({ projects: initialProjects }: { projects?: any
             <span>LIVE PRODUCTION &amp; MEDIA</span>
           </div>
           <h2
-            className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-[var(--text-main)]"
+            className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-[var(--text-main)]"
             style={{ fontFamily: "var(--font-d)" }}
           >
             CLIENT PROJECTS &amp; APPS
@@ -325,14 +325,14 @@ export default function Projects({ projects: initialProjects }: { projects?: any
                 playPop();
               }}
               title="Stretch Typography View"
-              className={`p-2 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`py-2 px-2.5 sm:px-3 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 ${
                 viewMode === "list"
                   ? "bg-indigo-600 text-white shadow-sm"
                   : "text-[var(--text-muted)] hover:text-white"
               }`}
             >
               <List size={14} />
-              <span className="hidden sm:inline">Stretch List</span>
+              <span>List</span>
             </button>
             <button
               type="button"
@@ -341,13 +341,14 @@ export default function Projects({ projects: initialProjects }: { projects?: any
                 playPop();
               }}
               title="Visual Screenshot & Media Showcase"
-              className={`p-2 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`py-2 px-2.5 sm:px-3 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 ${
                 viewMode === "grid"
                   ? "bg-indigo-600 text-white shadow-sm"
                   : "text-[var(--text-muted)] hover:text-white"
               }`}
             >
               <LayoutGrid size={14} />
+              <span className="sm:hidden">Media</span>
               <span className="hidden sm:inline">Visual Media</span>
             </button>
             <button
@@ -362,13 +363,14 @@ export default function Projects({ projects: initialProjects }: { projects?: any
                 }, 150);
               }}
               title="Kinetic Scroll Showcase (Awwwards Moving Reel & Stacked Cards)"
-              className={`p-2 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`py-2 px-2.5 sm:px-3 rounded-lg text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 ${
                 viewMode === "showcase"
                   ? "bg-gradient-to-r from-indigo-600 to-emerald-600 text-white shadow-sm shadow-indigo-500/25 font-bold"
                   : "text-[var(--text-muted)] hover:text-white"
               }`}
             >
               <Sparkles size={14} className={viewMode === "showcase" ? "text-amber-300 animate-pulse" : "text-indigo-400"} />
+              <span className="sm:hidden">Showcase</span>
               <span className="hidden sm:inline">Kinetic Showcase</span>
             </button>
           </div>

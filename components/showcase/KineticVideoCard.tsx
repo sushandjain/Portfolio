@@ -99,7 +99,7 @@ export default function KineticVideoCard({
     if (typeof window === "undefined" || !cardRef.current) return;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    if (prefersReduced || window.innerWidth < 768) return;
 
     const el = cardRef.current;
 
